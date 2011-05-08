@@ -1,0 +1,897 @@
+# Czech translation for me-tv
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the me-tv package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: me-tv\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-04-04 17:54-0400\n"
+"PO-Revision-Date: 2011-04-05 08:56+0000\n"
+"Last-Translator: David Štancl <Unknown>\n"
+"Language-Team: Czech <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2011-04-06 04:55+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
+
+#: ../client/me-tv.ui.h:1
+msgid " hours"
+msgstr " hodin"
+
+#: ../client/me-tv.ui.h:2
+msgid "00:00"
+msgstr "00:00"
+
+#: ../client/me-tv.ui.h:3
+msgid "<b>Device:</b>"
+msgstr "<b>Zařízení:</b>"
+
+#: ../client/me-tv.ui.h:4
+msgid ""
+"A channels.conf file is a common file format for storing channels and can be "
+"read by many applications.  You may have one of these from another DVB "
+"application. The <i>scan</i> command line application is the most common way "
+"to generate a channels.conf file."
+msgstr ""
+"Soubor channels.conf se obvykle používá pro ukládání kanálů a čte jej mnoho "
+"programů. Možná nějaký už máte z jiného DVB programu. Pro vytvoření se "
+"většinou používá program <i>scan</i>, který se spouští z příkazové řádky."
+
+#: ../client/me-tv.ui.h:5
+msgid ""
+"An initial scan file is used to seed the tuner with some initial parameters "
+"to help it find DVB services.  Many popular initial scan files are available "
+"from the LinuxTV dvb-apps package which is included in most Linux "
+"distributions.  Look for <i>dvb-apps</i> in your package management system."
+msgstr ""
+"Počáteční soubor hledání se používá na 'nakrmení' tuneru s nějakými "
+"počátečními parametry na pomoc při hledání služeb DVB. Spousta oblíbených "
+"počátečních souborů hledání je dostupná z balíčku LinuxTV dvb-apps, který je "
+"k dispozici ve většině linuxových distribucí. Hledejte <i>dvb-apps</i> ve "
+"vašem správci balíků."
+
+#: ../client/me-tv.ui.h:6
+msgid "Auto scan"
+msgstr "Automatické hledání"
+
+#: ../client/me-tv.ui.h:7
+msgid "Copyright © Michael Lamothe"
+msgstr "Copyright © Michael Lamothe"
+
+#: ../client/me-tv.ui.h:8
+msgid "Device Text"
+msgstr "Text zařízení"
+
+#: ../client/me-tv.ui.h:9
+msgid "Drag and drop the channels to reorder them."
+msgstr "Chytněte a přetáhněte kanály, které chcete přeskupit."
+
+#: ../client/me-tv.ui.h:10
+msgid "EPG Event Search"
+msgstr "Hledání v programu"
+
+#: ../client/me-tv.ui.h:11
+msgid "EPG event information"
+msgstr "Informace o události z EPG"
+
+#: ../client/me-tv.ui.h:12
+msgid ""
+"EPG event titles that contain the following entries will be automatically "
+"recorded.  The order is important, programs that are higher in the list get "
+"priority over the lower ones."
+msgstr ""
+"Automaticky se nahrají programy, jejichž názvy obsahují následující položky. "
+"Pořadí je důležité: čím výše je program umístěn, tím má vyšší prioritu."
+
+#: ../client/me-tv.ui.h:13
+msgid "EPG page size: "
+msgstr "Velikost stránky EPG: "
+
+#: ../client/me-tv.ui.h:14
+msgid "EPG span: "
+msgstr "Rozsah EPG: "
+
+#: ../client/me-tv.ui.h:15
+msgid "Fullscreen"
+msgstr "Celá obrazovka"
+
+#. TRANSLATORS: See the directions on translating the license http://www.gnu.org/licenses/translations.html
+#: ../client/me-tv.ui.h:17
+msgid ""
+"GNU General Public License:\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under\n"
+"the terms of the GNU General Public License as published by the Free "
+"Software\n"
+"Foundation; either version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY\n"
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A\n"
+"PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"On Debian systems, the complete text of the GNU General Public License can "
+"be\n"
+"found in /usr/share/common-licenses/GPL file."
+msgstr ""
+"GNU General Public License:\n"
+"\n"
+"Tento překlad licence je neformální a není oficiálně schválen Nadací pro \n"
+"svobodný software jako platný. Pokud si chcete být naprosto jisti, co je \n"
+"a není dovoleno, nahlédněte níže do původního znění.\n"
+"\n"
+"Tento program je volný software; můžete jej šířit a modifikovat podle \n"
+"ustanovení Obecné veřejné licence GNU, vydávané Free Software Foundation; \n"
+"a to buď verze 2 této licence anebo (podle vašeho uvážení) kterékoli \n"
+"pozdější verze.\n"
+"\n"
+"Tento program je rozšiřován v naději, že bude užitečný, avšak BEZ JAKÉKOLI \n"
+"ZÁRUKY; neposkytují se ani odvozené záruky PRODEJNOSTI anebo VHODNOSTI \n"
+"PRO URČITÝ ÚČEL. Další podrobnosti hledejte v Obecné veřejné licenci GNU.\n"
+"\n"
+"Kopii Obecné veřejné licence GNU jste měl obdržet spolu s tímto programem; \n"
+"pokud se tak nestalo, napište o ni Free Software Foundation, Inc., \n"
+"51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.\n"
+"\n"
+"V systémech Debian bývá úplný text GNU General Public License k nalezení\n"
+"v souboru /usr/share/common-licenses/GPL.\n"
+"\n"
+"Původní znění:\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under\n"
+"the terms of the GNU General Public License as published by the Free "
+"Software\n"
+"Foundation; either version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY\n"
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A\n"
+"PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"On Debian systems, the complete text of the GNU General Public License can "
+"be\n"
+"found in /usr/share/common-licenses/GPL file."
+
+#: ../client/me-tv.ui.h:30
+msgid "Import a channels.conf"
+msgstr "Importovat soubor channels.conf"
+
+#: ../client/me-tv.ui.h:31
+msgid "Me TV - About"
+msgstr "O aplikaci Me TV"
+
+#: ../client/me-tv.ui.h:32
+msgid "Me TV - Auto Record"
+msgstr "Me TV - Automatické zaznamenávání"
+
+#: ../client/me-tv.ui.h:33
+msgid "Me TV - Channels Editor"
+msgstr "Me TV - Konfigurace kanálů"
+
+#: ../client/me-tv.ui.h:34
+msgid "Me TV - EPG Event Search"
+msgstr "Me TV - hledání v EPG"
+
+#: ../client/me-tv.ui.h:35
+msgid "Me TV - It's TV for me computer"
+msgstr "Me TV - televize pro můj počítač"
+
+#: ../client/me-tv.ui.h:36
+msgid "Me TV - Main Window"
+msgstr "Me TV - Hlavní okno"
+
+#: ../client/me-tv.ui.h:37
+msgid "Me TV - Preferences Window"
+msgstr "Me TV - Okno možností"
+
+#: ../client/me-tv.ui.h:38
+msgid "Me TV - Program Details"
+msgstr "Me TV - Podrobnosti programu"
+
+#: ../client/me-tv.ui.h:39
+msgid "Me TV - Scan Wizard"
+msgstr "Me TV - Průvodce laděním"
+
+#: ../client/me-tv.ui.h:40
+msgid "Me TV - Scheduled Recordings"
+msgstr "Me TV - Plánování záznamů"
+
+#: ../client/me-tv.ui.h:41
+msgid "Me TV is a Digital Television (DVB) viewer for GNOME"
+msgstr "Me TV je přehrávač digitálního televizního vysílání (DVB) pro GNOME"
+
+#: ../client/me-tv.ui.h:42
+msgid "Me TV project website"
+msgstr "Stránky projektu Me TV"
+
+#: ../client/me-tv.ui.h:43
+msgid "Next"
+msgstr "Další"
+
+#: ../client/me-tv.ui.h:44
+msgid "Next Day"
+msgstr "Následující den"
+
+#: ../client/me-tv.ui.h:45
+msgid "Now"
+msgstr "Nyní"
+
+#: ../client/me-tv.ui.h:46
+msgid "Page:"
+msgstr "Stránka:"
+
+#: ../client/me-tv.ui.h:47
+msgid "Previous"
+msgstr "Předchozí"
+
+#: ../client/me-tv.ui.h:48
+msgid "Previous Day"
+msgstr "Předchozí den"
+
+#: ../client/me-tv.ui.h:49
+msgid "Recording directory: "
+msgstr "Adresář pro nahrávání: "
+
+#: ../client/me-tv.ui.h:50
+msgid "Remove colon from recording filenames"
+msgstr "Odstranit dvojtečku z názvu souborů"
+
+#: ../client/me-tv.ui.h:51
+msgid "Scan Progress"
+msgstr "Průběh ladění"
+
+#: ../client/me-tv.ui.h:52
+msgid "Scan using an initial scan file"
+msgstr "Skenovat za použití souboru"
+
+#: ../client/me-tv.ui.h:53
+msgid "Scanning/Importing"
+msgstr "Ladím/Importuji"
+
+#: ../client/me-tv.ui.h:54
+msgid "Scheduled Recordings"
+msgstr "Plán nahrávání"
+
+#: ../client/me-tv.ui.h:55
+msgid "Search description"
+msgstr "Hledat v popisech"
+
+#: ../client/me-tv.ui.h:56
+msgid "Search:"
+msgstr "Hledat:"
+
+#: ../client/me-tv.ui.h:57
+msgid "See https://launchpad.net/me-tv"
+msgstr ""
+"Aktivní překladatelé:\n"
+"Luboš Staněk <lubek@users.sourceforge.net>, 2008\n"
+"\n"
+"Přispěli:\n"
+"Jiří Andrys <Unknown>"
+
+#: ../client/me-tv.ui.h:58
+msgid "Select A Recording Directory"
+msgstr "Vyberte adresář pro nahrávání"
+
+#: ../client/me-tv.ui.h:59
+msgid "Select Scan File"
+msgstr "Zvolte ladící soubor"
+
+#: ../client/me-tv.ui.h:60
+msgid "Select a channels.conf file"
+msgstr "Vyberte soubor channels.conf"
+
+#: ../client/me-tv.ui.h:61
+msgid "Select a file"
+msgstr "Zvolte soubor"
+
+#: ../client/me-tv.ui.h:62
+msgid "Set \"Always on Top\" at startup"
+msgstr "Při spuštění nastavit \"Vždy navrchu\""
+
+#: ../client/me-tv.ui.h:63
+msgid "Show EPG header"
+msgstr "Zobrazit záhlaví EPG"
+
+#: ../client/me-tv.ui.h:64
+msgid "Show channel number"
+msgstr "Zobrazit číslo kanálu"
+
+#: ../client/me-tv.ui.h:65
+msgid "Show time on EPG event buttons"
+msgstr "Zobrazit čas na tlačítkách událostí EPG"
+
+#: ../client/me-tv.ui.h:66
+msgid "Show tooltips for EPG event buttons"
+msgstr "Zobrazovat bubliny pro tlačítka událostí EPG"
+
+#: ../client/me-tv.ui.h:67
+msgid "Text encoding:"
+msgstr "Kódování textu:"
+
+#: ../client/me-tv.ui.h:68
+msgid ""
+"This option will only work if your DVB setup supports auto scanning.  "
+"Currently, this feature is only supported on DVB-T and ATSC devices."
+msgstr ""
+"Tato volba funguje pouze pokud Váš DVB adaptér podporuje automatické "
+"skanovaní. V současné době je tato volba podporována pouze při použití DVB-T "
+"a ATSC zařízení."
+
+#: ../client/me-tv.ui.h:69
+msgid "This program is scheduled for recording."
+msgstr "V tomto programu je naplánováno nahrávání."
+
+#: ../client/me-tv.ui.h:70
+msgid "View Schedule"
+msgstr "Zobrazit plánování"
+
+#: ../client/me-tv.ui.h:71
+msgid "Watch Now"
+msgstr "Sledovat"
+
+#: ../client/me-tv.ui.h:72
+msgid "What's on now"
+msgstr "Aktuální program"
+
+#: ../client/me-tv.ui.h:73
+msgid "channels"
+msgstr "kanály"
+
+#: ../client/auto_record_dialog.cc:41 ../client/epg_event_search_dialog.cc:62
+msgid "Title"
+msgstr "Název"
+
+#: ../client/auto_record_dialog.cc:94
+msgid "No row selected"
+msgstr "Není zvolen žádný řádek"
+
+#: ../client/channels_dialog.cc:54
+msgid "Channel Name"
+msgstr "Název kanálu"
+
+#: ../client/channels_dialog.cc:57
+msgid "Record Before"
+msgstr "Nahrávat před"
+
+#: ../client/channels_dialog.cc:60
+msgid "Record After"
+msgstr "Nahrávat po"
+
+#: ../client/epg_event_search_dialog.cc:61
+msgid " "
+msgstr " "
+
+#: ../client/epg_event_search_dialog.cc:63
+#: ../client/scheduled_recordings_dialog.cc:45
+msgid "Channel"
+msgstr "Kanál"
+
+#: ../client/epg_event_search_dialog.cc:64
+#: ../client/scheduled_recordings_dialog.cc:46
+msgid "Start Time"
+msgstr "Čas začátku"
+
+#: ../client/epg_event_search_dialog.cc:65
+#: ../client/scheduled_recordings_dialog.cc:47
+msgid "Duration"
+msgstr "Doba trvání"
+
+#: ../client/epg_event_search_dialog.cc:81
+msgid "No search text specified"
+msgstr "Nebyl zadán text, který se má najít"
+
+#: ../client/epg_event_search_dialog.cc:134
+msgid "No results"
+msgstr "Žádné výsledky"
+
+#: ../client/epg_event_search_dialog.cc:146
+msgid "No EPG event selected"
+msgstr "Nebyla vybrána událost z EPG"
+
+#: ../client/epg_thread.cc:71 ../server/epg_thread.cc:70
+msgid "No demuxers"
+msgstr "Žádné demultiplexory"
+
+#: ../client/epg_thread.cc:210 ../server/epg_thread.cc:209
+#, c-format
+msgid "Unknown source_id %u"
+msgstr "Neznámé source_id %u"
+
+#: ../client/main_window.cc:539
+msgid "Failed to start engine: Engine has already been started"
+msgstr "Selhalo spuštění knihovny přehrávače: knihovna již byla spuštěna"
+
+#: ../client/main_window.cc:1033 ../client/main_window.cc:1105
+msgid "-"
+msgstr "-"
+
+#: ../client/main_window.cc:1033 ../client/main_window.cc:1105
+msgid "Unknown program"
+msgstr "Neznámý program"
+
+#: ../client/me-tv-client.cc:34 ../server/me-tv-server.cc:40
+msgid "Me TV is a digital television viewer for GTK"
+msgstr "Me TV je digitální televize pro GTK"
+
+#: ../client/me-tv-client.cc:35 ../server/me-tv-server.cc:41
+msgid ""
+"Me TV was developed for the modern digital lounge room with a PC for a media "
+"centre that is capable of normal PC tasks (web surfing, word processing and "
+"watching TV).\n"
+msgstr ""
+"Me TV byl vyvinut pro moderní digitální obývací pokoj s PC jako "
+"multimediálním centrem, které je schopné plnit i běžné úkoly PC (prohlížení "
+"internetu, zpracování textu, sledování televize).\n"
+
+#: ../client/me-tv-client.cc:96 ../server/me-tv-server.cc:447
+msgid "Enable verbose messages"
+msgstr "Povolit podrobná hlášení"
+
+#: ../client/me-tv-client.cc:101
+msgid "Start in safe mode"
+msgstr "Spustit v bezpečném režimu"
+
+#: ../client/me-tv-client.cc:106
+msgid "Start minimised in notification area"
+msgstr "Spustit minimalizovaně v oznamovací oblasti"
+
+#: ../client/me-tv-client.cc:110 ../server/me-tv-server.cc:451
+msgid "Disable the EPG thread.  Me TV will stop collecting EPG events."
+msgstr "Vypne EPG vlákno. Me TV přestane sbírat EPG události."
+
+#: ../client/me-tv-client.cc:114
+msgid "Stops the rendering of the EPG event buttons on the UI."
+msgstr "Zastaví renderování EPG tlačítek v UI."
+
+#: ../client/me-tv-client.cc:119
+msgid "Specify engine type xine, gstreamer or vlc (default: vlc)."
+msgstr ""
+"Vyberte knihovnu přehrávače: xine, gstreamer, nebo vlc (výchozí: vlc)."
+
+#: ../client/me-tv-client.cc:123
+msgid ""
+"Tells Me TV not to call the screensaver Inhibit/UnInhibit methods for GNOME "
+"Screensaver."
+msgstr ""
+"Me TV nebude používat metody Inhibit/UnInhibit šetřiče obrazovky v GNOME."
+
+#: ../client/me-tv-client.cc:127 ../server/me-tv-server.cc:455
+msgid ""
+"Only use the specified frontend devices (e.g. --"
+"devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"
+msgstr ""
+"Použít jen vyjmenovaná zařízení frontendu (např. --"
+"devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"
+
+#: ../client/me-tv-client.cc:131
+msgid "Me TV server host (default: localhost)"
+msgstr "Me TV server počítač (výchozí: localhost)"
+
+#: ../client/me-tv-client.cc:135
+msgid "Me TV server port (default: 1999)"
+msgstr "Me TV server port (výchozí: 1999)"
+
+#: ../client/me-tv-client.cc:139 ../server/me-tv-server.cc:459
+msgid ""
+"How long to wait (in seconds) before timing out while waiting for data from "
+"demuxer (default 5)."
+msgstr ""
+"Jak dlouho čekat (v sekundách) na vypršení časového limitu pro čekání na "
+"data z demultiplexoru (výchozí: 5s)."
+
+#: ../client/me-tv-client.cc:141
+msgid "Show Me TV help options"
+msgstr "Zobrazit možnosti nápovědy Me TV"
+
+#: ../client/me-tv-client.cc:216
+msgid "_File"
+msgstr "_Soubor"
+
+#: ../client/me-tv-client.cc:217
+msgid "_View"
+msgstr "_Zobrazit"
+
+#: ../client/me-tv-client.cc:218
+msgid "_Video"
+msgstr "_Video"
+
+#: ../client/me-tv-client.cc:219
+msgid "_Audio"
+msgstr "_Zvuk"
+
+#: ../client/me-tv-client.cc:220
+msgid "_Help"
+msgstr "_Nápověda"
+
+#: ../client/me-tv-client.cc:222
+msgid "Subtitles"
+msgstr "Titulky"
+
+#: ../client/me-tv-client.cc:223
+msgid "_Streams"
+msgstr "_Proudy"
+
+#: ../client/me-tv-client.cc:224
+msgid "_Channels"
+msgstr "_Kanály"
+
+#: ../client/me-tv-client.cc:227
+msgid "_Both"
+msgstr "_Oba"
+
+#: ../client/me-tv-client.cc:228
+msgid "_Left"
+msgstr "_Levý"
+
+#: ../client/me-tv-client.cc:229
+msgid "_Right"
+msgstr "_Pravý"
+
+#: ../client/me-tv-client.cc:240
+msgid "Failed to get DBus session"
+msgstr "Selhalo záskání relace DBus"
+
+#: ../client/me-tv-client.cc:293
+msgid "An unhandled error occurred"
+msgstr "Nastala neošetřená chyba"
+
+#: ../client/me-tv-ui.cc:90 ../client/me-tv-ui.cc:105
+msgid "Failed to get active text value"
+msgstr "Chyba při odebírání hodnoty aktivního textu."
+
+#: ../client/me-tv-ui.cc:186
+msgid "Failed to get active integer value"
+msgstr "Chyba při odebírání celočíselné hodnoty"
+
+#: ../client/scan_dialog.cc:30
+msgid "Me TV - Error"
+msgstr "Me TV - chyba"
+
+#: ../client/scan_dialog.cc:67
+msgid "Service Name"
+msgstr "Název služby"
+
+#: ../client/scan_dialog.cc:215
+msgid "Importing channels"
+msgstr "Importují se kanály"
+
+#: ../client/scan_dialog.cc:234
+msgid ""
+"Failed to read data from file.  Please ensure that the channels file is UTF-"
+"8 encoded."
+msgstr ""
+"Nepodařilo se přečíst data ze souboru. Ujistěte se, že soubor s kanály je v "
+"kódování UTF-8."
+
+#: ../client/scheduled_recordings_dialog.cc:44
+msgid "Description"
+msgstr "Popis"
+
+#: ../client/scheduled_recordings_dialog.cc:48
+msgid "Record"
+msgstr "Nahrávání"
+
+#: ../client/scheduled_recordings_dialog.cc:49
+msgid "After"
+msgstr "Po"
+
+#: ../client/scheduled_recordings_dialog.cc:50
+msgid "Device"
+msgstr "Zařízení"
+
+#: ../client/scheduled_recordings_dialog.cc:60
+msgid "No scheduled recording selected"
+msgstr "Není vybráno žádné naplánované nahrávání"
+
+#: ../client/vlc_engine.cc:140
+msgid "MRL not specified"
+msgstr "MRL nespecifikováno"
+
+#: ../server/channel_manager.cc:112 ../server/channel_manager.cc:185
+msgid "Unknown frontend type"
+msgstr "Neznámý typ rozhraní"
+
+#: ../server/channel_manager.cc:255
+msgid "Invalid channel index"
+msgstr "Neplatný index kanálu"
+
+#: ../server/channel_manager.cc:280
+msgid "Channel '%1' not found"
+msgstr "Kanál '%1' nebyl nalezen"
+
+#: ../server/channel_manager.cc:309
+msgid "Failed to add channel: You cannot have more than 1 channel"
+msgid_plural "Failed to add channel: You cannot have more than %1 channels"
+msgstr[0] "Nemohu přidat kanál: Nelze mít více než jeden kanál"
+msgstr[1] "Nemohu přidat kanál: Nelze mít více než %1 kanálů"
+msgstr[2] "Nemohu přidat kanál: Nelze mít více než %1 kanálů"
+
+#: ../server/data.cc:50 ../server/data.cc:55
+msgid "Failed to prepare statement: %1"
+msgstr "Selhala příprava příkazu: %1"
+
+#: ../server/data.cc:62
+msgid "Prepared statement had remaining data: %1"
+msgstr "Připravený příkaz obsahuje přebývající data: %1"
+
+#: ../server/data.cc:67
+msgid "Failed to create statement"
+msgstr "Selhalo vytvoření příkazu"
+
+#: ../server/data.cc:75
+msgid "Failed to finalise statement"
+msgstr "Selhalo dokončení příkazu"
+
+#: ../server/data.cc:105
+msgid "Failed to execute statement: %1"
+msgstr "Nepodařilo se spustit příkaz: %1"
+
+#: ../server/data.cc:176
+msgid "Failed to connect to Me TV database '%1'"
+msgstr "Selhalo připojení k Me TV databázi '%1'"
+
+#: ../server/data.cc:246
+msgid "Only integers can be primary keys"
+msgstr "Primární klíče musí být pouze celočíselné"
+
+#: ../server/data.cc:315
+msgid "Failed to create TableAdapter: Table has no columns"
+msgstr "Nepodařilo se vytvořit tabulku Adapter: tabulka nemá sloupce"
+
+#: ../server/device_manager.cc:135
+msgid "There are no DVB devices available"
+msgstr "Žádná DVB zařízení nejsou k dispozici"
+
+#: ../server/dvb_demuxer.cc:38
+msgid "Failed to open demux device"
+msgstr "Selhalo otevření demultiplexoru"
+
+#: ../server/dvb_demuxer.cc:69
+msgid "Failed to set PES filter"
+msgstr "Selhalo nastavení filtru PES"
+
+#: ../server/dvb_demuxer.cc:91
+msgid "Failed to set section filter for demuxer"
+msgstr "Selhalo nastavení sekčního filtru demultiplexoru"
+
+#: ../server/dvb_demuxer.cc:102
+msgid "Failed to set demuxer buffer size"
+msgstr "Selhalo nastavení velikosti vyrovnávací paměti demultiplexoru"
+
+#: ../server/dvb_demuxer.cc:110
+msgid "Read timeout"
+msgstr "Vypršel čas pro čtení"
+
+#: ../server/dvb_demuxer.cc:116
+msgid "Failed to read data from demuxer"
+msgstr "Selhalo čtení dat z demultiplexoru"
+
+#: ../server/dvb_demuxer.cc:129
+msgid "Failed to read header"
+msgstr "Selhalo čtení záhlaví"
+
+#: ../server/dvb_demuxer.cc:140
+msgid "Failed to read section"
+msgstr "Selhalo čtení sekce"
+
+#: ../server/dvb_demuxer.cc:145
+msgid "CRC32 check failed"
+msgstr "Kontrola CRC32 selhala"
+
+#: ../server/dvb_demuxer.cc:153
+msgid "Failed to stop demuxer"
+msgstr "Selhalo zastavení demultiplexoru"
+
+#: ../server/dvb_demuxer.cc:168
+msgid "Failed to poll"
+msgstr "Selhalo dotazování"
+
+#: ../server/dvb_frontend.cc:50
+msgid "Failed to open tuner"
+msgstr "Selhalo otevření tuneru"
+
+#: ../server/dvb_frontend.cc:55
+msgid "Failed to get tuner info"
+msgstr "Selhalo zjištění informací tuneru"
+
+#: ../server/dvb_frontend.cc:74
+#, c-format
+msgid "Frontend::tune_to(%d)"
+msgstr "Frontend::tune_to(%d)"
+
+#: ../server/dvb_frontend.cc:112
+msgid "Failed to tune device"
+msgstr "Selhalo ladění zařízení"
+
+#: ../server/dvb_frontend.cc:115
+msgid "Waiting for signal lock ..."
+msgstr "Čekám na zámek signálu ..."
+
+#: ../server/dvb_frontend.cc:117
+msgid "Got signal lock"
+msgstr "Obdržen zámek signálu"
+
+#: ../server/dvb_frontend.cc:133
+msgid "Failed to set tone off"
+msgstr "Selhalo vypnutí tónu"
+
+#: ../server/dvb_frontend.cc:138
+msgid "Failed to set voltage"
+msgstr "Selhalo nastavení napětí"
+
+#: ../server/dvb_frontend.cc:144
+msgid "Failed to send master command"
+msgstr "Selhalo odeslání řídícího příkazu"
+
+#: ../server/dvb_frontend.cc:150
+msgid "Failed to send burst"
+msgstr "Chyba při odesílání dávky"
+
+#: ../server/dvb_frontend.cc:156
+msgid "Failed to set tone"
+msgstr "Selhalo nastavení tónu"
+
+#: ../server/dvb_frontend.cc:187
+msgid "Failed to lock to channel"
+msgstr "Selhalo uzamčení kanálu"
+
+#: ../server/dvb_frontend.cc:196
+msgid "Failed to get signal strength"
+msgstr "Selhalo zjištění síly signálu"
+
+#: ../server/dvb_frontend.cc:206
+msgid "Failed to get signal to noise ratio"
+msgstr "Selhalo zjištění poměru signálu k šumu"
+
+#: ../server/dvb_si.cc:412
+msgid "Failed to convert channel name"
+msgstr "Nepodařilo se převést název kanálu"
+
+#: ../server/dvb_si.cc:569
+msgid "ASSERT: offset > end_descriptor_offset"
+msgstr "ASSERT: offset > end_descriptor_offset"
+
+#: ../server/dvb_si.cc:580
+msgid "ASSERT: offset > end_section_offset"
+msgstr "ASSERT: offset > end_section_offset"
+
+#: ../server/dvb_si.cc:795
+msgid "No message"
+msgstr "Žádná zpráva"
+
+#: ../server/dvb_si.cc:802
+msgid "Failed to convert to UTF-8: %1"
+msgstr "Selhal převod do UTF-8: %1"
+
+#: ../server/epg_event.cc:79
+msgid "Unknown title"
+msgstr "Neznámý název"
+
+#: ../server/epg_event.cc:80
+msgid "Unknown subtitle"
+msgstr "Neznámý podtitul"
+
+#: ../server/epg_event.cc:81
+msgid "Unknown description"
+msgstr "Neznámý popis"
+
+#: ../server/epg_event.cc:100 ../server/scheduled_recording.cc:47
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "1 hodina"
+msgstr[1] "%1 hodiny"
+msgstr[2] "%1 hodin"
+
+#: ../server/epg_event.cc:108 ../server/scheduled_recording.cc:55
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "1 minuta"
+msgstr[1] "%1 minuty"
+msgstr[2] "%1 minut"
+
+#: ../server/me-tv-server.cc:96
+msgid "Failed to find a value for '%1'"
+msgstr "Selhalo nalezení hodnoty pro '%1'"
+
+#: ../server/me-tv-server.cc:121
+msgid "Failed to find a text value for '%1'"
+msgstr "Selhalo nalezení textové hodnoty pro '%1'"
+
+#: ../server/me-tv-server.cc:280
+msgid "The Me TV database version does not match the Me TV server version."
+msgstr "Verze Me TV databáze neodpovídá verzi Me TV serveru."
+
+#: ../server/me-tv-server.cc:439
+msgid "The SQLite version is not thread-safe"
+msgstr "Verze SQLite není \"thread-safe\""
+
+#: ../server/me-tv-server.cc:463
+msgid ""
+"The network broadcast address to send video streams for clients to display "
+"(default 127.0.0.1)."
+msgstr "Adresa, na které se vysílá pro klienty (výchozí 127.0.0.1)."
+
+#: ../server/me-tv-server.cc:467
+msgid "The network port for clients to connect to (default 1999)."
+msgstr "Port, na který se připojují klienti (výchozí 1999)."
+
+#: ../server/me-tv-server.cc:469
+msgid "Show Me TV Client help options"
+msgstr "Zobrazit nápovědu pro Me TV klienta"
+
+#: ../server/me-tv-server.cc:494
+msgid "Failed to initialise database"
+msgstr "Nepodařilo se inicializovat databázi"
+
+#: ../server/mpeg_stream.cc:318
+msgid "Failed to find Program Map PID for service"
+msgstr "Nepodařilo se najít PID"
+
+#: ../server/request_handler.cc:374 ../server/request_handler.cc:395
+#: ../server/request_handler.cc:411 ../server/request_handler.cc:428
+msgid "Invalid parameter count"
+msgstr "Nesprávný počet parametrů"
+
+#: ../server/request_handler.cc:440
+msgid ""
+"Failed to import: importing a channels.conf is only supported with DVB-T, "
+"DVB-C, DVB-S and ATSC"
+msgstr ""
+"Chyba při importování: importování channels.conf je podporováno jen s DVB-T, "
+"DVB-C, DVB-S a ATSC"
+
+#: ../server/scheduled_recording_manager.cc:258
+msgid ""
+"Failed to set scheduled recording for '%1' at %2: There are no devices "
+"available at that time"
+msgstr ""
+"Nepodařilo se uložit plánované nahrávání pro '%1' v %2: žádné zařízení v ten "
+"čas není k dispozici"
+
+#: ../server/scheduled_recording_manager.cc:280
+msgid ""
+"Failed to save scheduled recording because it conflicts with another "
+"scheduled recording called '%1'."
+msgstr ""
+"Nepodařilo se naplánovat nahrávání, protože koliduje s jiným, které bylo "
+"nazváno '%1'."
+
+#: ../server/scheduled_recording_manager.cc:301
+msgid ""
+"Failed to save scheduled recording because you have already have a scheduled "
+"recording called '%1' which is scheduled for the same time on the same "
+"channel."
+msgstr ""
+"Nepodařilo se naplánovat nahrávání, protože už je jiné s názvem '%1' a je ve "
+"stejném čase na stejném kanále."
+
+#: ../server/scheduled_recording_manager.cc:497
+msgid "Scheduled recording '%1' not found"
+msgstr "Naplánované nahrávání '%1' není dostupné"
+
+#: ../server/stream_manager.cc:84
+msgid "Failed to find frontend '%1' for scheduled recording"
+msgstr "Nepodařilo se najít frontend %1 pro naplánované nahrávání"
+
+#: ../server/stream_manager.cc:145
+msgid "Failed to get available frontend"
+msgstr "Nepodařilo se najít volný frontend"
+
+#: ../server/stream_manager.cc:168
+msgid "No such device"
+msgstr "Takové zařízení neexistuje"
+
+#: ../server/thread.cc:49
+msgid " thread has already been started"
+msgstr " vlákno již bylo spuštěno"

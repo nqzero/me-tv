@@ -1,0 +1,866 @@
+# Brazilian Portuguese translation for me-tv
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the me-tv package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: me-tv\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-04-04 17:54-0400\n"
+"PO-Revision-Date: 2011-04-09 18:49+0000\n"
+"Last-Translator: Rodger M. L. Rocha <Unknown>\n"
+"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Launchpad-Export-Date: 2011-04-10 05:09+0000\n"
+"X-Generator: Launchpad (build 12735)\n"
+
+#: ../client/me-tv.ui.h:1
+msgid " hours"
+msgstr " horas"
+
+#: ../client/me-tv.ui.h:2
+msgid "00:00"
+msgstr "00:00"
+
+#: ../client/me-tv.ui.h:3
+msgid "<b>Device:</b>"
+msgstr "<b>Dispositivo:</b>"
+
+#: ../client/me-tv.ui.h:4
+msgid ""
+"A channels.conf file is a common file format for storing channels and can be "
+"read by many applications.  You may have one of these from another DVB "
+"application. The <i>scan</i> command line application is the most common way "
+"to generate a channels.conf file."
+msgstr ""
+"Um arquivo channels.conf é um formato de arquivo comum para os canais de "
+"armazenamento e pode ser lido por muitas aplicações. Você pode ter um desses "
+"de outra aplicação DVB. O <i> scan </ i> aplicativo de linha de comando é a "
+"forma mais comum para gerar um arquivo channels.conf."
+
+#: ../client/me-tv.ui.h:5
+msgid ""
+"An initial scan file is used to seed the tuner with some initial parameters "
+"to help it find DVB services.  Many popular initial scan files are available "
+"from the LinuxTV dvb-apps package which is included in most Linux "
+"distributions.  Look for <i>dvb-apps</i> in your package management system."
+msgstr ""
+"Um arquivo de verificação inicial é usado como semente para o sintonizador "
+"com alguns parâmetros iniciais para ajudá-lo a encontrar serviços de DVB. "
+"Muitos populares arquivos de verificação inicial estão disponíveis a partir "
+"do pacote dvb-apps LinuxTV que está incluído na maioria das distribuições "
+"Linux. Procure por <i> dvb-apps </ i> no seu sistema de gerenciamento de "
+"pacotes."
+
+#: ../client/me-tv.ui.h:6
+msgid "Auto scan"
+msgstr "Auto busca"
+
+#: ../client/me-tv.ui.h:7
+msgid "Copyright © Michael Lamothe"
+msgstr ""
+
+#: ../client/me-tv.ui.h:8
+msgid "Device Text"
+msgstr "Texto do dispositivo"
+
+#: ../client/me-tv.ui.h:9
+msgid "Drag and drop the channels to reorder them."
+msgstr "Arraste e solte os canais para reorganizá-los."
+
+#: ../client/me-tv.ui.h:10
+msgid "EPG Event Search"
+msgstr ""
+
+#: ../client/me-tv.ui.h:11
+msgid "EPG event information"
+msgstr "Informação do evento EPG"
+
+#: ../client/me-tv.ui.h:12
+msgid ""
+"EPG event titles that contain the following entries will be automatically "
+"recorded.  The order is important, programs that are higher in the list get "
+"priority over the lower ones."
+msgstr ""
+"Títulos de evento EPG que contém as seguintes entradas deverão ser "
+"automáticamente gravadas. A ordem é importante, programas que são acima na "
+"lista possuem prioridade sobre o que estão abaixo na mesma."
+
+#: ../client/me-tv.ui.h:13
+msgid "EPG page size: "
+msgstr "Tamanho da página EPG: "
+
+#: ../client/me-tv.ui.h:14
+msgid "EPG span: "
+msgstr "Espaço EPG: "
+
+#: ../client/me-tv.ui.h:15
+msgid "Fullscreen"
+msgstr "Tela Cheia"
+
+#. TRANSLATORS: See the directions on translating the license http://www.gnu.org/licenses/translations.html
+#: ../client/me-tv.ui.h:17
+msgid ""
+"GNU General Public License:\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under\n"
+"the terms of the GNU General Public License as published by the Free "
+"Software\n"
+"Foundation; either version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY\n"
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A\n"
+"PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n"
+"\n"
+"On Debian systems, the complete text of the GNU General Public License can "
+"be\n"
+"found in /usr/share/common-licenses/GPL file."
+msgstr ""
+"Licença Pública Geral - GNU (General Public License):\n"
+"\n"
+"Este programa é um software livre; você pode redistribuí-lo e/ou modificá-lo "
+"sob\n"
+"os termos da Licença Pública Geral como publicado pela Fundação do Software "
+"Livre;\n"
+"Estar de acordo com a versão 2 da licença, ou (se você quiser) qualquer "
+"versão superior.\n"
+"\n"
+"Este programa é distribuído com a esperança de que seja útil, mas SEM "
+"QUALQUER\n"
+"GARANTIA; sem até mesmo a garantia de COMERCIALIZAÇÃO ou ADEQUAÇÃO PARA UM\n"
+"PROPÓSITO PARTICULAR. Veja a Licença Pública Geral GNU, para mais detalhes.\n"
+"\n"
+"Em sistemas Debian, o texto completo da Licença Pública Geral pode ser\n"
+"encontrado no arquivo GPL em /usr/share/common-licenses/GPL"
+
+#: ../client/me-tv.ui.h:30
+msgid "Import a channels.conf"
+msgstr "Importar um channels.conf"
+
+#: ../client/me-tv.ui.h:31
+msgid "Me TV - About"
+msgstr "Sobre - Me TV"
+
+#: ../client/me-tv.ui.h:32
+msgid "Me TV - Auto Record"
+msgstr "Me TV - Auto Gravação"
+
+#: ../client/me-tv.ui.h:33
+msgid "Me TV - Channels Editor"
+msgstr "Editor de canais - Me TV"
+
+#: ../client/me-tv.ui.h:34
+msgid "Me TV - EPG Event Search"
+msgstr "Me TB - Procurar evento EPG"
+
+#: ../client/me-tv.ui.h:35
+msgid "Me TV - It's TV for me computer"
+msgstr "Me TV - É TV para o meu computador"
+
+#: ../client/me-tv.ui.h:36
+msgid "Me TV - Main Window"
+msgstr "Janela principal - Me TV"
+
+#: ../client/me-tv.ui.h:37
+msgid "Me TV - Preferences Window"
+msgstr "Janela de preferências - Me TV"
+
+#: ../client/me-tv.ui.h:38
+msgid "Me TV - Program Details"
+msgstr "Detalhes do Programa - Me TV"
+
+#: ../client/me-tv.ui.h:39
+msgid "Me TV - Scan Wizard"
+msgstr "Assistente de Busca - Me TV"
+
+#: ../client/me-tv.ui.h:40
+msgid "Me TV - Scheduled Recordings"
+msgstr "Gravações Agendadas - Me TV"
+
+#: ../client/me-tv.ui.h:41
+msgid "Me TV is a Digital Television (DVB) viewer for GNOME"
+msgstr "Me TV é um visualizador de TV Digital (DVB) para o GNOME"
+
+#: ../client/me-tv.ui.h:42
+msgid "Me TV project website"
+msgstr "Website do projeto Me TV"
+
+#: ../client/me-tv.ui.h:43
+msgid "Next"
+msgstr "Próximo"
+
+#: ../client/me-tv.ui.h:44
+msgid "Next Day"
+msgstr ""
+
+#: ../client/me-tv.ui.h:45
+msgid "Now"
+msgstr "Agora"
+
+#: ../client/me-tv.ui.h:46
+msgid "Page:"
+msgstr "Página:"
+
+#: ../client/me-tv.ui.h:47
+msgid "Previous"
+msgstr "Anterior"
+
+#: ../client/me-tv.ui.h:48
+msgid "Previous Day"
+msgstr "Dia Anterior"
+
+#: ../client/me-tv.ui.h:49
+msgid "Recording directory: "
+msgstr "Diretório de gravação: "
+
+#: ../client/me-tv.ui.h:50
+msgid "Remove colon from recording filenames"
+msgstr "Remover dois pontos dos nomes de arquivo de gravação"
+
+#: ../client/me-tv.ui.h:51
+msgid "Scan Progress"
+msgstr "Progresso da Busca"
+
+#: ../client/me-tv.ui.h:52
+msgid "Scan using an initial scan file"
+msgstr "Buscar usando um arquivo de busca inicial"
+
+#: ../client/me-tv.ui.h:53
+msgid "Scanning/Importing"
+msgstr "Escaneando/Importando"
+
+#: ../client/me-tv.ui.h:54
+msgid "Scheduled Recordings"
+msgstr "Gravações Agendadas"
+
+#: ../client/me-tv.ui.h:55
+msgid "Search description"
+msgstr "Descrição da busca"
+
+#: ../client/me-tv.ui.h:56
+msgid "Search:"
+msgstr "Procurar:"
+
+#: ../client/me-tv.ui.h:57
+msgid "See https://launchpad.net/me-tv"
+msgstr "Veja https://launchpad.net/me-tv"
+
+#: ../client/me-tv.ui.h:58
+msgid "Select A Recording Directory"
+msgstr "Selecione um Diretório de Gravação"
+
+#: ../client/me-tv.ui.h:59
+msgid "Select Scan File"
+msgstr "Selecione o arquivo de procura"
+
+#: ../client/me-tv.ui.h:60
+msgid "Select a channels.conf file"
+msgstr "Selecione um arquivo channels.conf"
+
+#: ../client/me-tv.ui.h:61
+msgid "Select a file"
+msgstr "Selecionar um arquivo"
+
+#: ../client/me-tv.ui.h:62
+msgid "Set \"Always on Top\" at startup"
+msgstr "Ajustar para \"sempre no topo\" na inicialização"
+
+#: ../client/me-tv.ui.h:63
+msgid "Show EPG header"
+msgstr "Exibir cabeçalhos EPG"
+
+#: ../client/me-tv.ui.h:64
+msgid "Show channel number"
+msgstr "Mostrar o número do canal"
+
+#: ../client/me-tv.ui.h:65
+msgid "Show time on EPG event buttons"
+msgstr "Exibir o tempo de exibição em botões de eventos EPG"
+
+#: ../client/me-tv.ui.h:66
+msgid "Show tooltips for EPG event buttons"
+msgstr "Exibir dicas para botões de eventos EPG"
+
+#: ../client/me-tv.ui.h:67
+msgid "Text encoding:"
+msgstr "Codificação do texto:"
+
+#: ../client/me-tv.ui.h:68
+msgid ""
+"This option will only work if your DVB setup supports auto scanning.  "
+"Currently, this feature is only supported on DVB-T and ATSC devices."
+msgstr ""
+"Esta opção só vai funcionar se a sua configuração DVB suporta verificação "
+"automática. Atualmente, esse recurso só é suportado na tecnologia dos "
+"dispositivos DVB-T e ATSC."
+
+#: ../client/me-tv.ui.h:69
+msgid "This program is scheduled for recording."
+msgstr "Este prgrama está agendado para gravação."
+
+#: ../client/me-tv.ui.h:70
+msgid "View Schedule"
+msgstr "Visualisar Programação"
+
+#: ../client/me-tv.ui.h:71
+msgid "Watch Now"
+msgstr "Assista Agora."
+
+#: ../client/me-tv.ui.h:72
+msgid "What's on now"
+msgstr "O que está passando agora"
+
+#: ../client/me-tv.ui.h:73
+msgid "channels"
+msgstr "canais"
+
+#: ../client/auto_record_dialog.cc:41 ../client/epg_event_search_dialog.cc:62
+msgid "Title"
+msgstr "Título"
+
+#: ../client/auto_record_dialog.cc:94
+msgid "No row selected"
+msgstr "Nenhuma linha selecionada"
+
+#: ../client/channels_dialog.cc:54
+msgid "Channel Name"
+msgstr "Nome do Canal"
+
+#: ../client/channels_dialog.cc:57
+msgid "Record Before"
+msgstr ""
+
+#: ../client/channels_dialog.cc:60
+msgid "Record After"
+msgstr ""
+
+#: ../client/epg_event_search_dialog.cc:61
+msgid " "
+msgstr " "
+
+#: ../client/epg_event_search_dialog.cc:63
+#: ../client/scheduled_recordings_dialog.cc:45
+msgid "Channel"
+msgstr "Canal"
+
+#: ../client/epg_event_search_dialog.cc:64
+#: ../client/scheduled_recordings_dialog.cc:46
+msgid "Start Time"
+msgstr "Horário de início"
+
+#: ../client/epg_event_search_dialog.cc:65
+#: ../client/scheduled_recordings_dialog.cc:47
+msgid "Duration"
+msgstr "Duração"
+
+#: ../client/epg_event_search_dialog.cc:81
+msgid "No search text specified"
+msgstr "Busca não especificada"
+
+#: ../client/epg_event_search_dialog.cc:134
+msgid "No results"
+msgstr "Sem resultados"
+
+#: ../client/epg_event_search_dialog.cc:146
+msgid "No EPG event selected"
+msgstr "Nenhum evento EPG selecionado"
+
+#: ../client/epg_thread.cc:71 ../server/epg_thread.cc:70
+msgid "No demuxers"
+msgstr "Nenhum demuxers"
+
+#: ../client/epg_thread.cc:210 ../server/epg_thread.cc:209
+#, c-format
+msgid "Unknown source_id %u"
+msgstr "Origem_id %u desconhecida"
+
+#: ../client/main_window.cc:539
+msgid "Failed to start engine: Engine has already been started"
+msgstr "Falha ao iniciar mecanismo: O mecanismo já foi inicializado"
+
+#: ../client/main_window.cc:1033 ../client/main_window.cc:1105
+msgid "-"
+msgstr "-"
+
+#: ../client/main_window.cc:1033 ../client/main_window.cc:1105
+msgid "Unknown program"
+msgstr "Programa desconhecido"
+
+#: ../client/me-tv-client.cc:34 ../server/me-tv-server.cc:40
+msgid "Me TV is a digital television viewer for GTK"
+msgstr "Me TV é um visualizador de televisão digital para o GTK"
+
+#: ../client/me-tv-client.cc:35 ../server/me-tv-server.cc:41
+msgid ""
+"Me TV was developed for the modern digital lounge room with a PC for a media "
+"centre that is capable of normal PC tasks (web surfing, word processing and "
+"watching TV).\n"
+msgstr ""
+"Me TV foi desenvolvido para a sala de estar digital moderna, com um PC para "
+"um centro de mídia que é capaz de tarefas normais do PC (navegar na web, "
+"processamento de texto e assistindo TV).\n"
+
+#: ../client/me-tv-client.cc:96 ../server/me-tv-server.cc:447
+msgid "Enable verbose messages"
+msgstr "Ativar mensagens de voz"
+
+#: ../client/me-tv-client.cc:101
+msgid "Start in safe mode"
+msgstr "Inicializar em modo de segurança"
+
+#: ../client/me-tv-client.cc:106
+msgid "Start minimised in notification area"
+msgstr "Inicializar minimizado na área de notificação"
+
+#: ../client/me-tv-client.cc:110 ../server/me-tv-server.cc:451
+msgid "Disable the EPG thread.  Me TV will stop collecting EPG events."
+msgstr "Desativar o segmento EPG. Me TV vai parar de coletar eventos EPG."
+
+#: ../client/me-tv-client.cc:114
+msgid "Stops the rendering of the EPG event buttons on the UI."
+msgstr "Para o  processamento do evento EPG botões da interface do usuário."
+
+#: ../client/me-tv-client.cc:119
+msgid "Specify engine type xine, gstreamer or vlc (default: vlc)."
+msgstr ""
+
+#: ../client/me-tv-client.cc:123
+msgid ""
+"Tells Me TV not to call the screensaver Inhibit/UnInhibit methods for GNOME "
+"Screensaver."
+msgstr ""
+"Diga para Me TV não chamar a proteção de tela Ativar/Desativar métodos para "
+"Proteção de Tela do GNOME."
+
+#: ../client/me-tv-client.cc:127 ../server/me-tv-server.cc:455
+msgid ""
+"Only use the specified frontend devices (e.g. --"
+"devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"
+msgstr ""
+"Utilize apenas os dispositivos de interface especificados (e.g. --"
+"devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"
+
+#: ../client/me-tv-client.cc:131
+msgid "Me TV server host (default: localhost)"
+msgstr ""
+
+#: ../client/me-tv-client.cc:135
+msgid "Me TV server port (default: 1999)"
+msgstr ""
+
+#: ../client/me-tv-client.cc:139 ../server/me-tv-server.cc:459
+msgid ""
+"How long to wait (in seconds) before timing out while waiting for data from "
+"demuxer (default 5)."
+msgstr ""
+"Quanto tempo de espera (em segundos) antes de expirar o tempo enquanto "
+"espera por dados de demuxer (padrão 5)."
+
+#: ../client/me-tv-client.cc:141
+msgid "Show Me TV help options"
+msgstr "Mostrar opções de ajuda do Me TV"
+
+#: ../client/me-tv-client.cc:216
+msgid "_File"
+msgstr "_Arquivo"
+
+#: ../client/me-tv-client.cc:217
+msgid "_View"
+msgstr "_Ver"
+
+#: ../client/me-tv-client.cc:218
+msgid "_Video"
+msgstr "Ví_deo"
+
+#: ../client/me-tv-client.cc:219
+msgid "_Audio"
+msgstr "_Áudio"
+
+#: ../client/me-tv-client.cc:220
+msgid "_Help"
+msgstr "_Ajuda"
+
+#: ../client/me-tv-client.cc:222
+msgid "Subtitles"
+msgstr "Legendas"
+
+#: ../client/me-tv-client.cc:223
+msgid "_Streams"
+msgstr "_Transmissões"
+
+#: ../client/me-tv-client.cc:224
+msgid "_Channels"
+msgstr "_Canais"
+
+#: ../client/me-tv-client.cc:227
+msgid "_Both"
+msgstr "_Ambos"
+
+#: ../client/me-tv-client.cc:228
+msgid "_Left"
+msgstr "_Esquerda"
+
+#: ../client/me-tv-client.cc:229
+msgid "_Right"
+msgstr "_Direita"
+
+#: ../client/me-tv-client.cc:240
+msgid "Failed to get DBus session"
+msgstr "Falha ao obter sessão DBus"
+
+#: ../client/me-tv-client.cc:293
+msgid "An unhandled error occurred"
+msgstr "Um erro desconhecido ocorreu"
+
+#: ../client/me-tv-ui.cc:90 ../client/me-tv-ui.cc:105
+msgid "Failed to get active text value"
+msgstr "Erro ao capturar valor de texto ativo"
+
+#: ../client/me-tv-ui.cc:186
+msgid "Failed to get active integer value"
+msgstr "Erro ao capturar valor numérico ativo"
+
+#: ../client/scan_dialog.cc:30
+msgid "Me TV - Error"
+msgstr "Erro - Me TV"
+
+#: ../client/scan_dialog.cc:67
+msgid "Service Name"
+msgstr "Nome do serviço"
+
+#: ../client/scan_dialog.cc:215
+msgid "Importing channels"
+msgstr "Importando canais"
+
+#: ../client/scan_dialog.cc:234
+msgid ""
+"Failed to read data from file.  Please ensure that the channels file is UTF-"
+"8 encoded."
+msgstr ""
+
+#: ../client/scheduled_recordings_dialog.cc:44
+msgid "Description"
+msgstr "Descrição"
+
+#: ../client/scheduled_recordings_dialog.cc:48
+msgid "Record"
+msgstr "Gravar"
+
+#: ../client/scheduled_recordings_dialog.cc:49
+msgid "After"
+msgstr "Depois"
+
+#: ../client/scheduled_recordings_dialog.cc:50
+msgid "Device"
+msgstr "Dispositivo"
+
+#: ../client/scheduled_recordings_dialog.cc:60
+msgid "No scheduled recording selected"
+msgstr "Não foi selecionada nenhuma gravação agendada"
+
+#: ../client/vlc_engine.cc:140
+msgid "MRL not specified"
+msgstr ""
+
+#: ../server/channel_manager.cc:112 ../server/channel_manager.cc:185
+msgid "Unknown frontend type"
+msgstr "Tipo de frontend desconhecido"
+
+#: ../server/channel_manager.cc:255
+msgid "Invalid channel index"
+msgstr "Índice de canal inválido"
+
+#: ../server/channel_manager.cc:280
+msgid "Channel '%1' not found"
+msgstr "O canal '%1' não foi encontrado."
+
+#: ../server/channel_manager.cc:309
+msgid "Failed to add channel: You cannot have more than 1 channel"
+msgid_plural "Failed to add channel: You cannot have more than %1 channels"
+msgstr[0] ""
+"Falha ao adicionar um canal: Você pode não ter mais de 1 canal\r\n"
+"Falha ao adicionar um canal: Você pode não ter mais de %1 canais"
+msgstr[1] "Traduzido e revisado por https://launchpad.net/~josehumberto-melo"
+
+#: ../server/data.cc:50 ../server/data.cc:55
+msgid "Failed to prepare statement: %1"
+msgstr "Falha ao preparar frase: %1"
+
+#: ../server/data.cc:62
+msgid "Prepared statement had remaining data: %1"
+msgstr "Confirmação preparada continha dados restantes: %1"
+
+#: ../server/data.cc:67
+msgid "Failed to create statement"
+msgstr "Falha ao criar confirmação"
+
+#: ../server/data.cc:75
+msgid "Failed to finalise statement"
+msgstr "Falha ao finalizar confirmação"
+
+#: ../server/data.cc:105
+msgid "Failed to execute statement: %1"
+msgstr "Falha ao executar confirmação: %1"
+
+#: ../server/data.cc:176
+msgid "Failed to connect to Me TV database '%1'"
+msgstr "Falha ao conectar ao banco de dados '%1' do Me TV."
+
+#: ../server/data.cc:246
+msgid "Only integers can be primary keys"
+msgstr "Apenas números inteiros podem ser chaves primárias"
+
+#: ../server/data.cc:315
+msgid "Failed to create TableAdapter: Table has no columns"
+msgstr "Falha ao criar AdptadorTabela: Tabela não tem colunas"
+
+#: ../server/device_manager.cc:135
+msgid "There are no DVB devices available"
+msgstr "Não existem dispositivos DVB disponíveis"
+
+#: ../server/dvb_demuxer.cc:38
+msgid "Failed to open demux device"
+msgstr "Falha ao abrir o dispositivo demux"
+
+#: ../server/dvb_demuxer.cc:69
+msgid "Failed to set PES filter"
+msgstr "Falha ao ajustar o filtro PES"
+
+#: ../server/dvb_demuxer.cc:91
+msgid "Failed to set section filter for demuxer"
+msgstr "Falha ao ajustar o filtro de seção para o demuxer"
+
+#: ../server/dvb_demuxer.cc:102
+msgid "Failed to set demuxer buffer size"
+msgstr "Falha ao ajustar o tamanho do buffer para o demuxer"
+
+#: ../server/dvb_demuxer.cc:110
+msgid "Read timeout"
+msgstr "Leia o tempo limite"
+
+#: ../server/dvb_demuxer.cc:116
+msgid "Failed to read data from demuxer"
+msgstr "Falha na leitura dos dados do demuxer"
+
+#: ../server/dvb_demuxer.cc:129
+msgid "Failed to read header"
+msgstr "Falha na leitura do cabeçalho"
+
+#: ../server/dvb_demuxer.cc:140
+msgid "Failed to read section"
+msgstr "Falha na leitura da seção"
+
+#: ../server/dvb_demuxer.cc:145
+msgid "CRC32 check failed"
+msgstr "A verificação CRC32 falhou"
+
+#: ../server/dvb_demuxer.cc:153
+msgid "Failed to stop demuxer"
+msgstr "Falha ao parar o demuxer"
+
+#: ../server/dvb_demuxer.cc:168
+msgid "Failed to poll"
+msgstr "Falha na pesquisa"
+
+#: ../server/dvb_frontend.cc:50
+msgid "Failed to open tuner"
+msgstr "Falha ao abrir o tuner"
+
+#: ../server/dvb_frontend.cc:55
+msgid "Failed to get tuner info"
+msgstr "Falha ao acesar as informações do afinador"
+
+#: ../server/dvb_frontend.cc:74
+#, c-format
+msgid "Frontend::tune_to(%d)"
+msgstr "Interface::para_sintonia(%d)"
+
+#: ../server/dvb_frontend.cc:112
+msgid "Failed to tune device"
+msgstr "Falha ao sintonizar o dispositivo"
+
+#: ../server/dvb_frontend.cc:115
+msgid "Waiting for signal lock ..."
+msgstr "Esperando por um fechamento de sinal ..."
+
+#: ../server/dvb_frontend.cc:117
+msgid "Got signal lock"
+msgstr "Fechamento de sinal obtido"
+
+#: ../server/dvb_frontend.cc:133
+msgid "Failed to set tone off"
+msgstr "Falha ao ajustar o desligamento de tom"
+
+#: ../server/dvb_frontend.cc:138
+msgid "Failed to set voltage"
+msgstr "Falha ao ajustar a tensão"
+
+#: ../server/dvb_frontend.cc:144
+msgid "Failed to send master command"
+msgstr "Falha ao enviar um comando principal"
+
+#: ../server/dvb_frontend.cc:150
+msgid "Failed to send burst"
+msgstr "Falha ao enviar explosão"
+
+#: ../server/dvb_frontend.cc:156
+msgid "Failed to set tone"
+msgstr "Falha ao ajustar o tom"
+
+#: ../server/dvb_frontend.cc:187
+msgid "Failed to lock to channel"
+msgstr "Falha no fechamento de canal"
+
+#: ../server/dvb_frontend.cc:196
+msgid "Failed to get signal strength"
+msgstr "Falha ao pegar tamanho do sinal"
+
+#: ../server/dvb_frontend.cc:206
+msgid "Failed to get signal to noise ratio"
+msgstr "Falha ao obter a relação sinal ruído"
+
+#: ../server/dvb_si.cc:412
+msgid "Failed to convert channel name"
+msgstr "Falha ao converter o nome do canal"
+
+#: ../server/dvb_si.cc:569
+msgid "ASSERT: offset > end_descriptor_offset"
+msgstr "ASSERT: offset > end_descriptor_offset"
+
+#: ../server/dvb_si.cc:580
+msgid "ASSERT: offset > end_section_offset"
+msgstr "ASSERT: offset > end_section_offset"
+
+#: ../server/dvb_si.cc:795
+msgid "No message"
+msgstr "Sem mensagem"
+
+#: ../server/dvb_si.cc:802
+msgid "Failed to convert to UTF-8: %1"
+msgstr "Falha ao converter para UTF-8: %1"
+
+#: ../server/epg_event.cc:79
+msgid "Unknown title"
+msgstr "Título desconhecido"
+
+#: ../server/epg_event.cc:80
+msgid "Unknown subtitle"
+msgstr "Legenda desconhecida"
+
+#: ../server/epg_event.cc:81
+msgid "Unknown description"
+msgstr "Descrição desconhecida"
+
+#: ../server/epg_event.cc:100 ../server/scheduled_recording.cc:47
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "1 hora"
+msgstr[1] "%1 horas"
+
+#: ../server/epg_event.cc:108 ../server/scheduled_recording.cc:55
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "1 minuto"
+msgstr[1] "%1 minutos"
+
+#: ../server/me-tv-server.cc:96
+msgid "Failed to find a value for '%1'"
+msgstr "Falha ao pesquisar um valor para '%1'"
+
+#: ../server/me-tv-server.cc:121
+msgid "Failed to find a text value for '%1'"
+msgstr "Falha ao pesquisar um valor de texto para '%1'"
+
+#: ../server/me-tv-server.cc:280
+msgid "The Me TV database version does not match the Me TV server version."
+msgstr ""
+
+#: ../server/me-tv-server.cc:439
+msgid "The SQLite version is not thread-safe"
+msgstr "A versão do SQLite não é segura"
+
+#: ../server/me-tv-server.cc:463
+msgid ""
+"The network broadcast address to send video streams for clients to display "
+"(default 127.0.0.1)."
+msgstr ""
+
+#: ../server/me-tv-server.cc:467
+msgid "The network port for clients to connect to (default 1999)."
+msgstr ""
+
+#: ../server/me-tv-server.cc:469
+msgid "Show Me TV Client help options"
+msgstr ""
+
+#: ../server/me-tv-server.cc:494
+msgid "Failed to initialise database"
+msgstr "Falha ao inicial banco de dados"
+
+#: ../server/mpeg_stream.cc:318
+msgid "Failed to find Program Map PID for service"
+msgstr "Falha para encontrar Program Map PID para serviço"
+
+#: ../server/request_handler.cc:374 ../server/request_handler.cc:395
+#: ../server/request_handler.cc:411 ../server/request_handler.cc:428
+msgid "Invalid parameter count"
+msgstr ""
+
+#: ../server/request_handler.cc:440
+msgid ""
+"Failed to import: importing a channels.conf is only supported with DVB-T, "
+"DVB-C, DVB-S and ATSC"
+msgstr ""
+"Houve falha ao importar: importar um channels.conf é apenas suportado com "
+"DVB-T, DVB-C, DVB-S e ATSC"
+
+#: ../server/scheduled_recording_manager.cc:258
+msgid ""
+"Failed to set scheduled recording for '%1' at %2: There are no devices "
+"available at that time"
+msgstr ""
+
+#: ../server/scheduled_recording_manager.cc:280
+msgid ""
+"Failed to save scheduled recording because it conflicts with another "
+"scheduled recording called '%1'."
+msgstr ""
+"Falhou ao salvar gravação agendada por que está conflitando com outra "
+"gravação agendada chamada '%1'."
+
+#: ../server/scheduled_recording_manager.cc:301
+msgid ""
+"Failed to save scheduled recording because you have already have a scheduled "
+"recording called '%1' which is scheduled for the same time on the same "
+"channel."
+msgstr ""
+"Falhou ao salvar a gravação agendada por que você já tem uma gravação "
+"agendada chamada '%1', que está agendado para o mesmo horário no mesmo canal."
+
+#: ../server/scheduled_recording_manager.cc:497
+msgid "Scheduled recording '%1' not found"
+msgstr "Não foi encontrada a gravação agendada '%1'."
+
+#: ../server/stream_manager.cc:84
+msgid "Failed to find frontend '%1' for scheduled recording"
+msgstr "Falha ao localizar '% 1' interface para a gravação programada"
+
+#: ../server/stream_manager.cc:145
+msgid "Failed to get available frontend"
+msgstr "Falha ao obter a interface disponível"
+
+#: ../server/stream_manager.cc:168
+msgid "No such device"
+msgstr ""
+
+#: ../server/thread.cc:49
+msgid " thread has already been started"
+msgstr " thread já foi iniciada"
