@@ -1,0 +1,293 @@
+<gconfschemafile>
+	<schemalist>
+
+		<schema>
+			<key>/schemas/apps/me-tv/width</key>
+			<applyto>/apps/me-tv/width</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>0</default>
+			<locale name="C">
+				<short>The width of the window before Me TV was last closed</short>
+				<long>
+					The width of the window before Me TV was last closed.
+					Me TV uses this value to try to restore the main window to its previous geometry.
+				</long>
+			</locale>
+		</schema>
+      
+		<schema>
+			<key>/schemas/apps/me-tv/height</key>
+			<applyto>/apps/me-tv/height</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>0</default>
+			<locale name="C">
+				<short>The height of the window before Me TV was last closed</short>
+				<long>
+					The height of the window before Me TV was last closed.
+					Me TV uses this value to try to restore the main window to its previous geometry.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/x</key>
+			<applyto>/apps/me-tv/x</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>0</default>
+			<locale name="C">
+				<short>The x position of the window before Me TV was last closed</short>
+				<long>
+					The x position of the window before Me TV was last closed.
+					Me TV uses this value to try to restore the main window to its previous geometry.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/y</key>
+			<applyto>/apps/me-tv/y</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>0</default>
+			<locale name="C">
+				<short>The y position of the window before Me TV was last closed</short>
+				<long>
+					The y position of the window before Me TV was last closed.
+					Me TV uses this value to try to restore the main window to its previous geometry.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/show_epg_header</key>
+			<applyto>/apps/me-tv/show_epg_header</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Displays the date/time header in the EPG</short>
+				<long>					
+					By default, the EPG header is visible but disabling it can
+					minimise screen real estate by reducing the vertical EPG size.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/record_extra_before</key>
+			<applyto>/apps/me-tv/record_extra_before</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>5</default>
+			<locale name="C">
+				<short>Extra default time (in minutes) to append to the start of a scheduled recording</short>
+				<long>
+					Extra default time (in minutes) to append to the start of a scheduled recording.
+					This default value can be overriden when setting up a scheduled recording.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/record_extra_after</key>
+			<applyto>/apps/me-tv/record_extra_after</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>10</default>
+			<locale name="C">
+				<short>Extra default time (in minutes) to append to the end of a scheduled recording</short>
+				<long>
+					Extra default time (in minutes) to append to the end of a scheduled recording.
+					This default value can be overriden when setting up a scheduled recording.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/keep_above</key>
+			<applyto>/apps/me-tv/keep_above</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Sets the "Always On Top" attribute on the main window.</short>
+				<long>					
+					Sets the "Always On Top" attribute on the main window.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/video_driver</key>
+			<applyto>/apps/me-tv/video_driver</applyto>
+			<owner>me-tv</owner>
+			<type>string</type>
+			<default>xshm</default>
+			<locale name="C">
+				<short>Sets the video driver for the player to use.</short>
+				<long>
+					Me TV uses libvlc to render video, this setting tells libvlc which mechanism to use when drawing.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/audio_driver</key>
+			<applyto>/apps/me-tv/audio_driver</applyto>
+			<owner>me-tv</owner>
+			<type>string</type>
+			<default>alsa</default>
+			<locale name="C">
+				<short>Sets the audio driver for libvlc to use.</short>
+				<long>					
+					Me TV uses libvlc to play sound, this setting tells libvlc which mechanism to use when playing sound.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/last_channel</key>
+			<applyto>/apps/me-tv/last_channel</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>0</default>
+			<locale name="C">
+				<short>The last channel tuned to.</short>
+				<long>
+					This is used to store what channel the user was last watching so it can be returned when restarting.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/show_channel_number</key>
+			<applyto>/apps/me-tv/show_channel_number</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>false</default>
+			<locale name="C">
+				<short>Display a channel number next to the channel name in the EPG.</short>
+				<long>
+					Display a channel number next to the channel name in the EPG.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/epg_span_hours</key>
+			<applyto>/apps/me-tv/epg_span_hours</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>3</default>
+			<locale name="C">
+				<short>The number of hours for the EPG to span on one page.</short>
+				<long>
+					The number of hours for the EPG to span on one page.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/deinterlace_type</key>
+			<applyto>/apps/me-tv/deinterlace_type</applyto>
+			<owner>me-tv</owner>
+			<type>string</type>
+			<default>standard</default>
+			<locale name="C">
+				<short>Whether the video should be deinterlaced.</short>
+				<long>
+					Most digital video is transmitted in an interlaced format which should be corrected before viewing.  Options are "none", "standard", "tvtime"
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/text_encoding</key>
+			<applyto>/apps/me-tv/text_encoding</applyto>
+			<owner>me-tv</owner>
+			<type>string</type>
+			<default>auto</default>
+			<locale name="C">
+				<short>The text encoding that the DVB information is in.</short>
+				<long>
+					Most of the time the text encoding can be automatically determined but sometimes it needs a hint such as iso6937.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/show_epg_time</key>
+			<applyto>/apps/me-tv/show_epg_time</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>false</default>
+			<locale name="C">
+				<short>Display the time span in the EPG buttons.</short>
+				<long>
+					If you want to reduce the vertical size of your EPG then use this setting in combination with show_epg_tooltips.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/epg_page_size</key>
+			<applyto>/apps/me-tv/epg_page_size</applyto>
+			<owner>me-tv</owner>
+			<type>int</type>
+			<default>30</default>
+			<locale name="C">
+				<short>The number of channels to show before paging.</short>
+				<long>
+					The number of channels to show before paging, this is deliberately set low to reduce preformance issues.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/show_epg_tooltips</key>
+			<applyto>/apps/me-tv/show_epg_tooltips</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Show a tool tip when hovering over an EPG event.</short>
+				<long>
+					This will show the timespan of an EPG event in a tooltip.
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/recent_searches</key>
+			<applyto>/apps/me-tv/recent_searches</applyto>
+			<owner>me-tv</owner>
+			<type>list</type>
+			<list_type>string</list_type>
+			<default>[]</default>
+			<locale name="C">
+				<short>Recent EPG event searches</short>
+				<long>
+					Recent EPG event searches
+				</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/me-tv/multicast</key>
+			<applyto>/apps/me-tv/multicast</applyto>
+			<owner>me-tv</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Join multicast group</short>
+				<long>
+					Tells Me TV channel broadcasts to join a multicast group.
+				</long>
+			</locale>
+		</schema>
+	</schemalist>
+
+</gconfschemafile>
