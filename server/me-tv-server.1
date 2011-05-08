@@ -1,0 +1,43 @@
+.pc
+.TH "ME TV" 1 "2011-03-31" "2.0.0" "Me TV Server Manual"
+
+.SH NAME
+me-tv-server \- a digital television (DVB) viewer for GNOME
+
+.SH SYNOPSIS
+.B me-tv-server
+.I [-?|--help]
+.I [-v|--verbose]
+.I [--disable-epg-thread]
+.I [--devices]
+.I [--read-timeout]
+
+.SH DESCRIPTION
+Me TV is a GTK desktop application for watching digital television services 
+that use the DVB standard.  Me TV works with DVB-T/C/S and ATSC cards that have 
+kernel driver support.
+
+This is the server component to Me TV.
+
+.SH OPTIONS
+.TP
+.B -?|--help
+Show help options.
+.TP
+.B -v|--verbose
+Show verbose output.
+.TP
+.B --disable-epg-thread
+Disable the EPG thread.  Me TV will stop collecting EPG events.
+.TP
+.B --devices
+Only use the specified frontend devices.  You can specify more than one device by using a comma or colon separator. (e.g. \-\-devices=/dev/dvb/adapter0/frontend1)
+.TP
+.B --read-timeout
+How long to wait (in seconds) before timing out while waiting for data from demuxer (default 5)
+
+.SH AUTHOR
+Michael Lamothe (2007-2011) <michael.lamothe@gmail.com>.
+
+.SH COPYRIGHT
+Copyright (C) 2011 Michael Lamothe <michael.lamothe@gmail.com>.

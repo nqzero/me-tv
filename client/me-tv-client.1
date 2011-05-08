@@ -1,0 +1,49 @@
+.pc
+.TH "ME TV" 1 "2011-03-31" "2.0.0" "Me TV Client Manual"
+
+.SH NAME
+me-tv-client \- a digital television (DVB) viewer for GNOME
+
+.SH SYNOPSIS
+.B me-tv
+.I [-?|--help]
+.I [-v|--verbose]
+.I [-s|--safe-mode]
+.I [-m|--minimised]
+.I [--disable-epg]
+.I [--no-screensaver-inhibit]
+.I [--display=DISPLAY]
+
+.SH DESCRIPTION
+Me TV is a GTK desktop application for watching digital television services 
+that use the DVB standard.  Me TV works with DVB-T/C/S and ATSC cards that have 
+kernel driver support.
+
+.SH OPTIONS
+.TP
+.B -?|--help
+Show help options.
+.TP
+.B -v|--verbose
+Show verbose output.
+.TP
+.B -s|--safe-mode
+Show the preferences dialog an don't show video upon start.
+.TP
+.B -m|--minimised-mode
+Show minimised in notification area at startup.
+.TP
+.B --disable-epg
+Stops the rendering of the EPG event buttons on the UI.
+.TP
+.B --no-screensaver-inhibit
+Tells Me TV not to call the screensaver Inhibit/UnInhibit methods for GNOME Screensaver.
+.TP
+.B --display=DISPLAY
+X display to use
+
+.SH AUTHOR
+Michael Lamothe (2007-2011) <michael.lamothe@gmail.com>.
+
+.SH COPYRIGHT
+Copyright (C) 2011 Michael Lamothe <michael.lamothe@gmail.com>.

@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+_Name=Me TV
+GenericName=Digital Television Viewer
+_Comment=A digital television (DVB) viewer for GNOME
+Exec=me-tv-client
+X-MultipleArgs=false
+Icon=me-tv
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=AudioVideo;GTK;TV;
+MimeType=video/mpeg;audio/x-mpeg;video/x-mpeg;
+X-AppInstall-Package=me-tv
+X-AppInstall-Section=universe
