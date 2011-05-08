@@ -1,0 +1,3 @@
+Me TV is a GTK desktop application for watching digital television services that use the DVB standard.
+
+Me TV works with DVB-T, DVB-S, DVB-C and ATSC devices that are supported by Linux kernel drivers. If you would like to add a new feature yourself then feel free to create your own branch in the Me TV project.
