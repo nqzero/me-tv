@@ -1,0 +1,15 @@
+Makefile
+*.in
+aclocal.m4
+autom4te.cache
+.deps
+Makefile
+/config.*
+/configure
+/depcomp
+/install-sh
+/intltool-*
+/missing
+/mkinstalldirs
+/po/POTFILES
+/stamp-h1
