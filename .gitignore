@@ -12,4 +12,7 @@ Makefile
 /missing
 /mkinstalldirs
 /po/POTFILES
-/stamp-h1
+stamp-h1
+*.o
+*~
+stamp-it
