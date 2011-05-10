@@ -45,7 +45,7 @@ NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Se
 	serv_addr.sin_port = htons(server_port);
 	if (bind(socket_server, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) 
 	{
-		throw SystemException("Failed to on bind");
+		throw SystemException("Failed to bind");
 	}
 
 	listen(socket_server, 5);

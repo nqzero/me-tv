@@ -37,17 +37,19 @@ void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 	builder->add_field_value("duration", epg_event.duration);
 
 	Glib::RefPtr<const Set> parameters = Set::create(); 
-	Glib::RefPtr<const Set> epg_event_id = Set::create(); 
-	data_connection->statement_execute_non_select(builder->get_statement(), parameters, epg_event_id);
+	Glib::RefPtr<const Set> set_epg_event_id = Set::create(); 
+	data_connection->statement_execute_non_select(builder->get_statement(), parameters, set_epg_event_id);
 	
-	for (EpgEventTextList::const_iterator k = epg_event.texts.begin(); k != epg_event.texts.end(); k++)
-	{
-		const EpgEventText epg_event_text = *k;
-		Glib::RefPtr<SqlBuilder> builder_text = SqlBuilder::create(SQL_STATEMENT_INSERT);
+	int epg_event_id = set_epg_event_id->get_holder_value("+0").get_int();
 
-		g_debug("Adding text (%d,%s)", epg_event_id->get_holder_value("+0").get_int(), epg_event_text.language.c_str());
+	for (EpgEventTextList::const_iterator i = epg_event.texts.begin(); i != epg_event.texts.end(); i++)
+	{
+		const EpgEventText epg_event_text = *i;
+		Glib::RefPtr<SqlBuilder> builder_text = SqlBuilder::create(SQL_STATEMENT_INSERT);
+		
+		g_debug("Adding text (%d,%s)", epg_event_id, epg_event_text.language.c_str());
 		builder_text->set_table("epg_event_text");
-		builder_text->add_field_value("epg_event_id", epg_event_id->get_holder_value("+0").get_int());
+		builder_text->add_field_value("epg_event_id", epg_event_id);
 		builder_text->add_field_value("language", epg_event_text.language);
 		builder_text->add_field_value("title", epg_event_text.title);
 		builder_text->add_field_value("subtitle", epg_event_text.subtitle);
@@ -108,11 +110,11 @@ EpgEventList EpgEvents::get_all(time_t start_time, time_t end_time)
 
 	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
 		String::compose("select * from epg_event ee, epg_event_text eet "
-		                "where ee.id = eet.epg_event_id and "
-		                "((start_time <= %1 and (start_time+duration) >= %2) or "			// Envelops
-		                "(start_time >= %1 and start_time <= %2) or "						// Start time is in
-		                "((start_time+duration) >= %1 and (start_time+duration) <= %2))"	// End time is in
-		                "order by start_time",
+		                "where ee.id = eet.epg_event_id and ("
+				            "(start_time <= %1 and (start_time+duration) >= %2) or "
+				            "(start_time >= %1 and start_time <= %2) or "
+				            "((start_time+duration) >= %1 and (start_time+duration) <= %2)"
+		                ") order by start_time",
 		                start_time, end_time));
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
 	

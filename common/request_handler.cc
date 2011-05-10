@@ -462,26 +462,20 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			Glib::ustring text = get_attribute_value(root_node, "parameter[@name=\"text\"]/@value");
 			gboolean include_description = get_bool_attribute_value(root_node, "parameter[@name=\"include_description\"]/@value");
 
-			ChannelList channels = channel_manager.get_all();
-			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
+			EpgEventList epg_events = EpgEvents::search(text, include_description);
+			for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
 			{
-				Channel& channel = *i;
-
-				EpgEventList epg_events = EpgEvents::search(text, include_description);
-				for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
-				{
-					EpgEvent& epg_event = *i;
-					body += Glib::ustring::compose(
-						"<event id=\"%1\" channel_id=\"%2\" start_time=\"%3\" duration=\"%4\" title=\"%5\" subtitle=\"%6\" description=\"%7\" scheduled_recording_id=\"%8\" />",
-						epg_event.id,
-						epg_event.channel_id,
-						epg_event.start_time,
-						epg_event.duration,
-						encode_xml(epg_event.get_title()),
-						encode_xml(epg_event.get_subtitle()),
-						encode_xml(epg_event.get_description()),
-						scheduled_recording_manager.is_recording(epg_event));
-				}
+				EpgEvent& epg_event = *i;
+				body += Glib::ustring::compose(
+					"<event id=\"%1\" channel_id=\"%2\" start_time=\"%3\" duration=\"%4\" title=\"%5\" subtitle=\"%6\" description=\"%7\" scheduled_recording_id=\"%8\" />",
+					epg_event.id,
+					epg_event.channel_id,
+					epg_event.start_time,
+					epg_event.duration,
+					encode_xml(epg_event.get_title()),
+					encode_xml(epg_event.get_subtitle()),
+					encode_xml(epg_event.get_description()),
+					scheduled_recording_manager.is_recording(epg_event));
 			}
 		}
 		else if (command == "get_auto_record_list")
