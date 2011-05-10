@@ -170,14 +170,23 @@ private:
 		gboolean saved;
 	};
 
+	gboolean is_dirty;
+
 	std::list<EpgEntry> events;
 public:
+	EpgCache() : is_dirty(false) {}
+
 	void add(EpgEvent& epg_event, gboolean saved)
 	{
 		EpgEntry epg_entry;
 		epg_entry.epg_event = epg_event;
 		epg_entry.saved = saved;
 		events.push_back(epg_entry);
+
+		if (!saved)
+		{
+			is_dirty = true;
+		}
 	}
 	
 	guint get(guint event_id, guint channel_id)
@@ -196,19 +205,23 @@ public:
 
 	void save()
 	{
-		g_debug("Saving EPG events");
-		data_connection->begin_transaction("EPG", TRANSACTION_ISOLATION_READ_COMMITTED);
-		for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
+		if (is_dirty)
 		{
-			EpgEntry epg_entry = *i;
-			if (!epg_entry.saved)
+			g_debug("Saving EPG events");
+			for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
 			{
-				EpgEvents::add_epg_event(epg_entry.epg_event);
-				epg_entry.saved = true;
+				EpgEntry& epg_entry = *i;
+				if (!epg_entry.saved)
+				{
+					EpgEvents::add_epg_event(epg_entry.epg_event);
+					epg_entry.saved = true;
+				}
 			}
+			data_connection->commit_transaction(0);
+			g_debug("EPG events saved");
+
+			is_dirty = false;
 		}
-		data_connection->commit_transaction("EPG");
-		g_debug("EPG events saved");
 	}
 };
 
@@ -383,17 +396,17 @@ void EpgThread::run()
 			}
 			catch(const Glib::Exception& ex)
 			{
-				g_debug("Exception in EPG thread loop: %s", ex.what().c_str());
+				g_message("Exception in EPG thread loop: %s", ex.what().c_str());
 			}
 		}
 	}
 	catch(const Glib::Exception& ex)
 	{
-		g_debug("Unrecoverable exception in EPG thread loop: %s", ex.what().c_str());
+		g_message("Unrecoverable exception in EPG thread loop: %s", ex.what().c_str());
 	}
 	catch(...)
 	{
-		g_debug("Unrecoverable exception in EPG thread loop");
+		g_message("Unrecoverable exception in EPG thread loop");
 	}
 	
 	g_debug("Exiting EPG thread");
