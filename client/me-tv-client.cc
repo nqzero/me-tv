@@ -317,7 +317,8 @@ int main (int argc, char *argv[])
 			}
 
 			Gtk::Main::run();
-			client.unregister_client();
+                        if (network_server_thread != NULL) client.terminate();
+                        else client.unregister_client();
 			if (network_server_thread != NULL)
 			{
 				network_server_thread->join(true);

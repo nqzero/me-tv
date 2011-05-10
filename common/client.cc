@@ -18,9 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "../common/client.h"
-#include "../common/exception.h"
-#include "../common/common.h"
+#include "client.h"
+#include "exception.h"
+#include "common.h"
 #include <glibmm.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

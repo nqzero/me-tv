@@ -494,6 +494,8 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "terminate")
 		{
+                        // what should happen if there are other active clients ???
+			clients.remove(client_id);
 			result = true;
 		}
 		else
