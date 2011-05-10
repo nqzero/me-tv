@@ -213,8 +213,8 @@ public:
 				EpgEntry& epg_entry = *i;
 				if (!epg_entry.saved)
 				{
-					EpgEvents::add_epg_event(epg_entry.epg_event);
 					epg_entry.saved = true;
+					EpgEvents::add_epg_event(epg_entry.epg_event);
 				}
 			}
 			data_connection->commit_transaction(0);
@@ -389,8 +389,8 @@ void EpgThread::run()
 					time_t now = time(NULL);
 					if (now - last_save > 10)
 					{
-						epg_cache.save();
 						last_save = now;
+						epg_cache.save();
 					}
 				}
 			}

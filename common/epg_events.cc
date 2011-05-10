@@ -25,7 +25,6 @@
 
 void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 {
-	g_debug("Adding %d", epg_event.event_id);
 	Glib::RefPtr<SqlBuilder> builder = SqlBuilder::create(SQL_STATEMENT_INSERT);
 
 	builder->set_table("epg_event");
@@ -35,6 +34,8 @@ void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 	builder->add_field_value("event_id", epg_event.event_id);
 	builder->add_field_value("start_time", (guint)epg_event.start_time);
 	builder->add_field_value("duration", epg_event.duration);
+
+	g_debug("Adding EPG event (%d,%d)", epg_event.channel_id, epg_event.event_id);
 
 	Glib::RefPtr<const Set> parameters = Set::create(); 
 	Glib::RefPtr<const Set> set_epg_event_id = Set::create();
@@ -47,7 +48,7 @@ void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 		const EpgEventText epg_event_text = *i;
 		Glib::RefPtr<SqlBuilder> builder_text = SqlBuilder::create(SQL_STATEMENT_INSERT);
 		
-		g_debug("Adding text (%d,%s)", epg_event_id, epg_event_text.language.c_str());
+		g_debug("Adding text (%d,'%s')", epg_event_id, epg_event_text.title.c_str());
 		builder_text->set_table("epg_event_text");
 		builder_text->add_field_value("epg_event_id", epg_event_id);
 		builder_text->add_field_value("language", epg_event_text.language);
@@ -108,14 +109,18 @@ EpgEventList EpgEvents::get_all(time_t start_time, time_t end_time)
 {
 	EpgEventList result;
 
-	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
-		String::compose("select * from epg_event ee, epg_event_text eet "
-		                "where ee.id = eet.epg_event_id and ("
-				            "(start_time <= %1 and (start_time+duration) >= %2) or "
-				            "(start_time >= %1 and start_time <= %2) or "
-				            "((start_time+duration) >= %1 and (start_time+duration) <= %2)"
-		                ") order by start_time",
-		                start_time, end_time));
+	String statement = "select * from epg_event ee, epg_event_text eet where ee.id = eet.epg_event_id";
+	if (start_time != 0 || end_time != -1)
+	{
+		statement += String::compose(
+			" and ((start_time <= %1 and (start_time+duration) >= %2) or "
+			"(start_time >= %1 and start_time <= %2) or "
+			"((start_time+duration) >= %1 and (start_time+duration) <= %2))",
+			start_time, end_time);
+	}
+	statement += " order by start_time";
+	
+	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(statement);
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
 	
 	while (iter->move_next())
