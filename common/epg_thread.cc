@@ -166,19 +166,17 @@ private:
 	class EpgEntry
 	{
 	public:
-		guint version_number;
-		guint event_id;
-		guint channel_id;
+		EpgEvent epg_event;
+		gboolean saved;
 	};
 
 	std::list<EpgEntry> events;
 public:
-	void add(guint version_number, guint event_id, guint channel_id)
+	void add(EpgEvent& epg_event, gboolean saved)
 	{
 		EpgEntry epg_entry;
-		epg_entry.version_number = version_number;
-		epg_entry.event_id = event_id;
-		epg_entry.channel_id = channel_id;
+		epg_entry.epg_event = epg_event;
+		epg_entry.saved = saved;
 		events.push_back(epg_entry);
 	}
 	
@@ -187,13 +185,30 @@ public:
 		for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
 		{
 			EpgEntry epg_entry = *i;
-			if (epg_entry.event_id == event_id && epg_entry.channel_id == channel_id)
+			if (epg_entry.epg_event.event_id == event_id && epg_entry.epg_event.channel_id == channel_id)
 			{
-				return epg_entry.version_number;
+				return epg_entry.epg_event.version_number;
 			}
 		}
 		
 		return 0;
+	}
+
+	void save()
+	{
+		g_debug("Saving EPG events");
+		data_connection->begin_transaction("EPG", TRANSACTION_ISOLATION_READ_COMMITTED);
+		for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
+		{
+			EpgEntry epg_entry = *i;
+			if (!epg_entry.saved)
+			{
+				EpgEvents::add_epg_event(epg_entry.epg_event);
+				epg_entry.saved = true;
+			}
+		}
+		data_connection->commit_transaction("EPG");
+		g_debug("EPG events saved");
 	}
 };
 
@@ -253,9 +268,11 @@ void EpgThread::run()
 		for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
 		{
 			EpgEvent& epg_event = *i;
-			epg_cache.add(epg_event.version_number, epg_event.event_id, epg_event.channel_id);
+			epg_cache.add(epg_event, true);
 		}
-	
+
+		time_t last_save = time(NULL);
+		
 		guint frequency = frontend.get_frontend_parameters().frequency;
 		while (!is_terminated())
 		{
@@ -348,13 +365,19 @@ void EpgThread::run()
 						
 										epg_event.texts.push_back(epg_event_text);
 									}
-
-									EpgEvents::add_epg_event(epg_event);
 								}
 
-								epg_cache.add(event.version_number, event.event_id, channel_id);
+								g_debug("Adding event %d to EPG cache", epg_event.event_id);
+								epg_cache.add(epg_event, false);
 							}
 						}
+					}
+
+					time_t now = time(NULL);
+					if (now - last_save > 10)
+					{
+						epg_cache.save();
+						last_save = now;
 					}
 				}
 			}

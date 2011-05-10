@@ -29,13 +29,13 @@ typedef std::list<EpgEvent> EpgEventList;
 class EpgEvents
 {
 public:
-	static void		add_epg_event(const EpgEvent& epg_event);
-	static void		update_epg_event(const EpgEvent& epg_event);
+	static void			add_epg_event(const EpgEvent& epg_event);
+	static void			update_epg_event(const EpgEvent& epg_event);
 	static gboolean		get_current(guint channe_id, EpgEvent& epg_event);
 	static EpgEventList	get_all(time_t start_time = 0, time_t end_time = -1);
 	static EpgEvent		get(int epg_event_id);
 	static void			load(Glib::RefPtr<DataModelIter> iter, EpgEvent& epg_event);
-	static EpgEventList	search(const Glib::ustring& text, gboolean search_description);
+	static EpgEventList	search(const String& text, gboolean search_description);
 };
 
 #endif

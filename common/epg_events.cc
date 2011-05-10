@@ -12,7 +12,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Library General Public License for more details.
- * e
+ * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
@@ -37,7 +37,7 @@ void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 	builder->add_field_value("duration", epg_event.duration);
 
 	Glib::RefPtr<const Set> parameters = Set::create(); 
-	Glib::RefPtr<const Set> set_epg_event_id = Set::create(); 
+	Glib::RefPtr<const Set> set_epg_event_id = Set::create();
 	data_connection->statement_execute_non_select(builder->get_statement(), parameters, set_epg_event_id);
 	
 	int epg_event_id = set_epg_event_id->get_holder_value("+0").get_int();
