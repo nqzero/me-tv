@@ -259,6 +259,7 @@ int main (int argc, char *argv[])
 				stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
 				stream_manager.start();
 
+                                broadcast_address = "127.0.0.1";
 				network_server_thread = new NetworkServerThread (server_port);
 				network_server_thread->start();
 			}
