@@ -29,7 +29,7 @@ typedef std::list<EpgEvent> EpgEventList;
 class EpgEvents
 {
 public:
-	static void			add_epg_event(const EpgEvent& epg_event);
+	static void			add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_event);
 	static void			update_epg_event(const EpgEvent& epg_event);
 	static gboolean		get_current(guint channe_id, EpgEvent& epg_event);
 	static EpgEventList	get_all(time_t start_time = 0, time_t end_time = -1);

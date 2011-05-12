@@ -26,6 +26,7 @@
 #include "../common/exception.h"
 
 Glib::RefPtr<Gtk::UIManager> ui_manager;
+bool quit_on_close;
 
 ComboBoxText::ComboBoxText(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& xml)
 	: Gtk::ComboBox(cobject)

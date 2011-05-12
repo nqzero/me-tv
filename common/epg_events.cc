@@ -21,9 +21,10 @@
 #include "epg_events.h"
 #include "data.h"
 #include "global.h"
+#include "../common/common.h"
 #include "../common/exception.h"
 
-void EpgEvents::add_epg_event(const EpgEvent& epg_event)
+void EpgEvents::add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_event)
 {
 	Glib::RefPtr<SqlBuilder> builder = SqlBuilder::create(SQL_STATEMENT_INSERT);
 
@@ -37,26 +38,34 @@ void EpgEvents::add_epg_event(const EpgEvent& epg_event)
 
 	g_debug("Adding EPG event (%d,%d)", epg_event.channel_id, epg_event.event_id);
 
-	Glib::RefPtr<const Set> parameters = Set::create(); 
-	Glib::RefPtr<const Set> set_epg_event_id = Set::create();
-	data_connection->statement_execute_non_select(builder->get_statement(), parameters, set_epg_event_id);
-	
-	int epg_event_id = set_epg_event_id->get_holder_value("+0").get_int();
+	batch->add_statement(builder->get_statement());
 
+	Glib::RefPtr<SqlParser> parser = SqlParser::create();
+	
 	for (EpgEventTextList::const_iterator i = epg_event.texts.begin(); i != epg_event.texts.end(); i++)
 	{
 		const EpgEventText epg_event_text = *i;
-		Glib::RefPtr<SqlBuilder> builder_text = SqlBuilder::create(SQL_STATEMENT_INSERT);
-		
-		g_debug("Adding text (%d,'%s')", epg_event_id, epg_event_text.title.c_str());
-		builder_text->set_table("epg_event_text");
-		builder_text->add_field_value("epg_event_id", epg_event_id);
-		builder_text->add_field_value("language", epg_event_text.language);
-		builder_text->add_field_value("title", epg_event_text.title);
-		builder_text->add_field_value("subtitle", epg_event_text.subtitle);
-		builder_text->add_field_value("description", epg_event_text.description);
 
-		data_connection->statement_execute_non_select_builder(builder_text);
+		g_debug("Adding text (%d,'%s')", epg_event.event_id, epg_event_text.title.c_str());
+
+		String title = epg_event_text.title;
+		String subtitle = epg_event_text.subtitle;
+		String description = epg_event_text.description;
+
+	    replace_text(title, "'", "''");
+	    replace_text(subtitle, "'", "''");
+		replace_text(description, "'", "''");
+		
+		Glib::RefPtr<Statement> statement = parser->parse_string(
+			String::compose(
+				"insert into epg_event_text ("
+			    "epg_event_id, language, title, subtitle, description"
+				") values ("
+				"(select id from epg_event where channel_id = %1 and event_id = %2), '%3', '%4', '%5', '%6');",
+			    epg_event.channel_id, epg_event.event_id,
+			    epg_event_text.language, title, subtitle, description
+			));
+		batch->add_statement(statement);
 	}			
 }
 

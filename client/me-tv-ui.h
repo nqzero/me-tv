@@ -25,6 +25,7 @@
 #include "me-tv.h"
 
 extern Glib::RefPtr<Gtk::UIManager>	ui_manager;
+extern bool quit_on_close;
 
 // This class exists because I can't get Gtk::ComboBoxText to work properly
 // it seems to have 2 columns

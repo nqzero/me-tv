@@ -183,30 +183,34 @@ public:
 		epg_entry.saved = saved;
 		events.push_back(epg_entry);
 
+		g_debug("Adding %d/%d/%d to cache", epg_entry.epg_event.event_id, epg_entry.epg_event.channel_id, epg_entry.epg_event.version_number);
+
 		if (!saved)
 		{
 			is_dirty = true;
 		}
 	}
 	
-	guint get(guint event_id, guint channel_id)
+	gint get(guint event_id, guint channel_id)
 	{
 		for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
 		{
-			EpgEntry epg_entry = *i;
+			EpgEntry& epg_entry = *i;
 			if (epg_entry.epg_event.event_id == event_id && epg_entry.epg_event.channel_id == channel_id)
 			{
 				return epg_entry.epg_event.version_number;
 			}
 		}
 		
-		return 0;
+		return -1;
 	}
 
 	void save()
 	{
 		if (is_dirty)
 		{
+			Glib::RefPtr<Batch> batch = Batch::create();
+
 			g_debug("Saving EPG events");
 			for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
 			{
@@ -214,13 +218,43 @@ public:
 				if (!epg_entry.saved)
 				{
 					epg_entry.saved = true;
-					EpgEvents::add_epg_event(epg_entry.epg_event);
+					EpgEvents::add_epg_event(batch, epg_entry.epg_event);
 				}
 			}
-			data_connection->commit_transaction(0);
+
+			g_debug("Saving EPG batch");
+			const Glib::RefPtr<Set> parameters;
+			data_connection->statement_execute_non_select("BEGIN;");
+			try
+			{
+				data_connection->batch_execute(batch, parameters, STATEMENT_MODEL_CURSOR);
+			}
+			catch(const Glib::Exception& ex)
+			{
+				g_message("Exception while trying to execute batch: %s", ex.what().c_str());
+			}
+			catch(...)
+			{
+				g_debug("Exception while trying to execute batch");
+			}			
+			data_connection->statement_execute_non_select("END;");
+/*			data_connection->begin_transaction("0", TRANSACTION_ISOLATION_UNKNOWN);
+			try
+			{
+				data_connection->batch_execute(batch, parameters, STATEMENT_MODEL_CURSOR);
+				data_connection->commit_transaction("0");
+			}
+			catch(...)
+			{
+				data_connection->rollback_transaction("0");
+				throw;
+			}
+	*/		
 			g_debug("EPG events saved");
 
 			is_dirty = false;
+
+			//signal_update();
 		}
 	}
 };
@@ -280,8 +314,7 @@ void EpgThread::run()
 		EpgEventList epg_events = EpgEvents::get_all();
 		for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
 		{
-			EpgEvent& epg_event = *i;
-			epg_cache.add(epg_event, true);
+			epg_cache.add(*i, true);
 		}
 
 		time_t last_save = time(NULL);
@@ -341,7 +374,7 @@ void EpgThread::run()
 							Dvb::SI::Event& event	= section.events[k];
 
 							guint version_number = epg_cache.get(event.event_id, channel_id);
-							if (version_number == 0)
+							if (version_number == -1)
 							{
 								EpgEvent epg_event;
 
@@ -380,7 +413,7 @@ void EpgThread::run()
 									}
 								}
 
-								g_debug("Adding event %d to EPG cache", epg_event.event_id);
+								g_debug("Adding event %d/%d to EPG cache", epg_event.event_id, epg_event.channel_id);
 								epg_cache.add(epg_event, false);
 							}
 						}
@@ -390,13 +423,17 @@ void EpgThread::run()
 					if (now - last_save > 10)
 					{
 						last_save = now;
-						epg_cache.save();
+						epg_cache.save();						
 					}
 				}
 			}
 			catch(const Glib::Exception& ex)
 			{
 				g_message("Exception in EPG thread loop: %s", ex.what().c_str());
+			}
+			catch(...)
+			{
+				g_message("Unknown exception in EPG thread loop");
 			}
 		}
 	}

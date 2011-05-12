@@ -60,6 +60,13 @@ static UniqueResponse on_message_received (
 	return response;
 }
 
+void on_error_gtk(const String& message)
+{
+	Gtk::MessageDialog dialog(message);
+	dialog.set_title(PACKAGE_NAME);
+	dialog.run();
+}
+
 int main (int argc, char *argv[])
 {
 #ifdef ENABLE_NLS
@@ -87,9 +94,11 @@ int main (int argc, char *argv[])
 	Gtk::Main main(argc, argv);
 
 	Glib::add_exception_handler(&handle_error);
+	signal_error.connect(sigc::ptr_fun(&on_error_gtk));
 
 	gint server_port = 1999;
 	String server_host;
+	gboolean non_unique = false;
 
 	g_log_set_handler(G_LOG_DOMAIN,
 		(GLogLevelFlags)(G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION),
@@ -98,21 +107,30 @@ int main (int argc, char *argv[])
 	Glib::OptionEntry verbose_option_entry;
 	verbose_option_entry.set_long_name("verbose");
 	verbose_option_entry.set_short_name('v');
-	verbose_option_entry.set_description(_("Enable verbose messages"));
+	verbose_option_entry.set_description(_("Enable verbose messages."));
 
 	Glib::OptionEntry safe_mode_option_entry;
 	safe_mode_option_entry.set_long_name("safe-mode");
 	safe_mode_option_entry.set_short_name('s');
-	safe_mode_option_entry.set_description(_("Start in safe mode"));
+	safe_mode_option_entry.set_description(_("Start in safe mode."));
 
 	Glib::OptionEntry minimised_option_entry;
 	minimised_option_entry.set_long_name("minimised");
 	minimised_option_entry.set_short_name('m');
-	minimised_option_entry.set_description(_("Start minimised in notification area"));
+	minimised_option_entry.set_description(_("Start minimised in notification area."));
+
+	Glib::OptionEntry non_unique_option_entry;
+	non_unique_option_entry.set_long_name("non-unique");
+	non_unique_option_entry.set_description(_("Don't check for existing instances of Me TV."));
+
+	Glib::OptionEntry quit_on_close_option_entry;
+	quit_on_close_option_entry.set_long_name("quit-on-close");
+	quit_on_close_option_entry.set_short_name('q');
+	quit_on_close_option_entry.set_description(_("Quit Me TV when the main window is closed."));
 
 	Glib::OptionEntry disable_epg_thread_option_entry;
 	disable_epg_thread_option_entry.set_long_name("disable-epg-thread");
-	disable_epg_thread_option_entry.set_description(_("Disable the EPG thread.  Me TV will stop collecting EPG events."));
+	disable_epg_thread_option_entry.set_description(_("Disable the EPG thread."));
 
 	Glib::OptionEntry disable_epg_option_entry;
 	disable_epg_option_entry.set_long_name("disable-epg");
@@ -129,19 +147,19 @@ int main (int argc, char *argv[])
 
 	Glib::OptionEntry devices_option_entry;
 	devices_option_entry.set_long_name("devices");
-	devices_option_entry.set_description(_("Only use the specified frontend devices (e.g. --devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"));
+	devices_option_entry.set_description(_("Only use the specified frontend devices. (e.g. --devices=/dev/dvb/adapter0/frontend0,/dev/dvb/adapter0/frontend1)"));
 
 	Glib::OptionEntry host_option_entry;
 	host_option_entry.set_long_name("server-host");
-	host_option_entry.set_description(_("Me TV server host (default: localhost)"));
+	host_option_entry.set_description(_("Me TV server host. (default: localhost)"));
 
 	Glib::OptionEntry port_option_entry;
 	port_option_entry.set_long_name("server-port");
-	port_option_entry.set_description(_("Me TV server port (default: 1999)"));
+	port_option_entry.set_description(_("Me TV server port. (default: 1999)"));
 
 	Glib::OptionEntry read_timeout_option_entry;
 	read_timeout_option_entry.set_long_name("read-timeout");
-	read_timeout_option_entry.set_description(_("How long to wait (in seconds) before timing out while waiting for data from demuxer (default 5)."));
+	read_timeout_option_entry.set_description(_("How long to wait (in seconds) before timing out while waiting for data from demuxer. (default 5)"));
 	
 	Glib::OptionGroup option_group(PACKAGE_NAME, "", _("Show Me TV help options"));
 	option_group.add_entry(verbose_option_entry, verbose_logging);
@@ -155,6 +173,8 @@ int main (int argc, char *argv[])
 	option_group.add_entry(host_option_entry, server_host);
 	option_group.add_entry(port_option_entry, server_port);
 	option_group.add_entry(engine_option_entry, engine_type);
+	option_group.add_entry(non_unique_option_entry, non_unique);
+	option_group.add_entry(quit_on_close_option_entry, quit_on_close);
 
 	Glib::OptionContext option_context;
 	option_context.set_summary(ME_TV_SUMMARY);
@@ -170,7 +190,7 @@ int main (int argc, char *argv[])
 			"run", (UniqueCommand)1,
 			(char*)NULL);
 
-		if (unique_app_is_running(unique_application))
+		if (unique_app_is_running(unique_application) && !non_unique)
 		{
 			g_debug("Me TV is already running");
 
@@ -262,10 +282,10 @@ int main (int argc, char *argv[])
 				network_server_thread = new NetworkServerThread (server_port);
 				network_server_thread->start();
 			}
-			
-			gboolean registered = client.register_client(server_host, server_port);
 
-			if (!registered)
+			client.register_client(server_host, server_port);
+
+			if (!client.is_registered())
 			{
 				if (network_server_thread == NULL && (server_host == "localhost" || server_host == "127.0.0.1"))
 				{
@@ -278,7 +298,7 @@ int main (int argc, char *argv[])
 						start_server(server_host);
 
 						int wait_time = 0;
-						while (wait_time++ < 5 && !client.is_registered())
+						while (wait_time++ < 10 && !client.is_registered())
 						{
 							sleep(1);
 
@@ -293,16 +313,11 @@ int main (int argc, char *argv[])
 								handle_error();
 							}
 						}
-	
-						if (!client.is_registered())
-						{
-							signal_error("Failed to register with Me TV Server");
-						}
 					}
 				}
 			}
 
-			if (!registered)
+			if (!client.is_registered())
 			{
 				throw Exception("Failed to communicate with Me TV server");
 			}

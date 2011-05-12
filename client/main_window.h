@@ -154,13 +154,10 @@ public:
 		
 	static MainWindow* create(Glib::RefPtr<Gtk::Builder> builder);
 		
-	void on_exception();
-
 	void show_channels_dialog();
 	void show_preferences_dialog();
 	void show_scheduled_recordings_dialog();
 	void show_epg_event_search_dialog();
-	void show_error(const Glib::ustring& message);
 };
 
 #endif

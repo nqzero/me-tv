@@ -367,7 +367,7 @@ void MainWindow::on_timeout()
 	}
 	catch(...)
 	{
-		on_exception();
+		handle_error();
 	}
 }
 
@@ -439,6 +439,11 @@ void MainWindow::on_hide()
 	stop_broadcasting();
 	save_geometry();
 	Gtk::Window::on_hide();
+
+	if (quit_on_close)
+	{
+		signal_quit();
+	}
 }
 
 bool MainWindow::on_delete_event(GdkEventAny* event)
@@ -721,31 +726,6 @@ void MainWindow::on_fullscreen()
 	}
 }
 
-void MainWindow::show_error(const Glib::ustring& message)
-{
-	set_status_text(message);
-}
-
-void MainWindow::on_exception()
-{
-	try
-	{
-		throw;
-	}
-	catch (const Exception& exception)
-	{
-		show_error(exception.what());
-	}
-	catch (const Glib::Error& exception)
-	{
-		show_error(exception.what());
-	}
-	catch (...)
-	{
-		show_error("Unhandled exception");
-	}
-}
-
 void MainWindow::select_channel_to_play()
 {
 	if (get_epg().empty())
@@ -793,9 +773,9 @@ void MainWindow::on_stop_broadcasting()
 	}
 }
 
-void MainWindow::on_error(const Glib::ustring& message)
+void MainWindow::on_error(const String& message)
 {
-	show_error(message);
+	set_status_text(message);
 }
 
 void MainWindow::set_offset(gint value)

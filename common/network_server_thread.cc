@@ -48,27 +48,40 @@ NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Se
 		throw SystemException("Failed to bind");
 	}
 
+	signal_quit.connect(sigc::mem_fun(*this, &NetworkServerThread::on_quit));
+
 	listen(socket_server, 5);
+}
+
+void NetworkServerThread::on_quit()
+{
+	terminate();
+	::close(socket_server);
 }
 
 void NetworkServerThread::run()
 {
-	Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &NetworkServerThread::on_timeout), 1);
+	sigc::connection connection = Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &NetworkServerThread::on_timeout), 1);
 
 	while (!is_terminated())
 	{
 		struct sockaddr_in client_addr;
 		socklen_t client_length = sizeof(client_addr);
 		int socket_client = accept(socket_server, (struct sockaddr *)&client_addr, &client_length);
-		gboolean do_terminate = request_handler.handle_request(socket_client);
-		::close(socket_client);
-
-		if (do_terminate)
+		if (socket_client > 0)
 		{
-			signal_quit();
-			terminate();
+			gboolean do_terminate = request_handler.handle_request(socket_client);
+			::close(socket_client);
+
+			if (do_terminate)
+			{
+				signal_quit();
+				terminate();
+			}
 		}
 	}
+
+	connection.disconnect();
 }
 
 gboolean NetworkServerThread::on_timeout()
