@@ -19,7 +19,7 @@
  */
  
 #include "dvb_si.h"
-#include "../common/exception.h"
+#include "exception.h"
 #include "atsc_text.h"
 
 #define CRC_BYTE_SIZE		4

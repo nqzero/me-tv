@@ -23,7 +23,7 @@
 
 #include <list>
 #include <libgdamm.h>
-#include "../common/me-tv-types.h"
+#include "me-tv-types.h"
 
 using namespace Gnome::Gda;
 

@@ -19,8 +19,8 @@
  */
 
 #include "epg_event.h"
-#include "../common/i18n.h"
-#include "../common/common.h"
+#include "i18n.h"
+#include "common.h"
 
 EpgEventText::EpgEventText()
 {

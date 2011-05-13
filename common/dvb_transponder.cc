@@ -20,8 +20,8 @@
  
 #include "dvb_transponder.h"
 #include "dvb_service.h"
-#include "../common/exception.h"
-#include "../common/i18n.h"
+#include "exception.h"
+#include "i18n.h"
 
 using namespace Dvb;
 

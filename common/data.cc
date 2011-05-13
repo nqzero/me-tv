@@ -19,9 +19,9 @@
  */
 
 #include "data.h"
-#include "../common/exception.h"
-#include "../common/i18n.h"
-#include "../common/common.h"
+#include "exception.h"
+#include "i18n.h"
+#include "common.h"
 #include <giomm.h>
 
 #define CURRENT_DATABASE_VERSION	9

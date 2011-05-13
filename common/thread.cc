@@ -19,8 +19,8 @@
  */
 
 #include "thread.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
+#include "i18n.h"
+#include "exception.h"
 
 Thread::Thread(const Glib::ustring& thread_name, gboolean join_thread_on_destroy)
 	: join_on_destroy(join_thread_on_destroy)

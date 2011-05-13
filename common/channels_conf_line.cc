@@ -19,7 +19,7 @@
  */
 
 #include "channels_conf_line.h"
-#include "../common/exception.h"
+#include "exception.h"
 
 struct StringTable ChannelsConfLine::bandwidth_table[] =
 {

@@ -20,7 +20,7 @@
 
 #include <glibmm.h>
 #include "mpeg_stream.h"
-#include "../common/exception.h"
+#include "exception.h"
 #include "global.h"
 #include "crc32.h"
 

@@ -19,8 +19,8 @@
  */
 
 #include "request_handler.h"
-#include "../common/exception.h"
-#include "../common/common.h"
+#include "exception.h"
+#include "common.h"
 #include "epg_events.h"
 #include "global.h"
 #include "channels_conf_line.h"

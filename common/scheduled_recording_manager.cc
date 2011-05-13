@@ -19,9 +19,11 @@
  */
 
 #include "scheduled_recording_manager.h"
-#include "../common/exception.h"
-#include "../common/i18n.h"
+#include "exception.h"
+#include "i18n.h"
 #include "global.h"
+#include "epg_events.h"
+#include "common.h"
 
 gboolean ScheduledRecordingManager::is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording)
 {
@@ -371,57 +373,51 @@ gint ScheduledRecordingManager::is_recording(const EpgEvent& epg_event)
 void ScheduledRecordingManager::check_auto_recordings()
 {
 	g_debug("Checking auto recordings");
-/*
-	ChannelList channels = channel_manager.get_all();
-	StringList auto_record_list;
 
-	Data::Table table = schema.tables["auto_record"];
-	Data::TableAdapter adapter(connection, table);
-	Data::DataTable data_table = adapter.select_rows("", "priority");
+	Glib::RefPtr<DataModel> model_auto_record = data_connection->statement_execute_select(
+		"select title from auto_record order by priority");
+	Glib::RefPtr<DataModelIter> iter_auto_record = model_auto_record->create_iter();
 
-	for (Data::Rows::iterator i = data_table.rows.begin(); i != data_table.rows.end(); i++)
+	while (iter_auto_record->move_next())
 	{
-		Data::Row row = *i;
-		auto_record_list.push_back(row["title"].string_value);
-	}
+		String title = Data::get(iter_auto_record, "title");
 
-	g_debug("Searching for auto record EPG events");
-	for (StringList::iterator iterator = auto_record_list.begin(); iterator != auto_record_list.end(); iterator++)
-	{
-		Glib::ustring title = (*iterator).uppercase();
 		g_debug("Searching for '%s'", title.c_str());
+		
+		Glib::RefPtr<DataModel> model = data_connection->statement_execute_select (
+			String::compose(
+				"select * from epg_event ee, epg_event_text ett ee.id = eet.epg_event_id "
+				"and title like '%%%1%%' order by start_time", title));
 
-		for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
+		Glib::RefPtr<DataModelIter> iter = model->create_iter();
+
+		while (iter->move_next())
 		{
-			Channel& channel = *i;
+			EpgEvent epg_event;
+			EpgEvents::load(iter, epg_event);
 
-			EpgEventList list = channel.epg_events.search(title, false);
-			for (EpgEventList::iterator j = list.begin(); j != list.end(); j++)
+			String title = epg_event.get_title();
+			g_debug("Checking candidate: %s at %d", title.c_str(), (int)epg_event.start_time);
+			gint scheduled_recording_id = is_recording(epg_event);
+			if (scheduled_recording_id != -1)
 			{
-				EpgEvent& epg_event = *j;
-
-				g_debug("Checking candidate: %s at %d", epg_event.get_title().c_str(), (int)epg_event.start_time);
-				gint scheduled_recording_id = is_recording(epg_event);
-				if (scheduled_recording_id == -1)
+				g_debug("EPG event '%s' at %d is already being recorded",
+					title.c_str(), (int)epg_event.start_time);
+			}
+			else
+			{
+				try
 				{
-					try
-					{
-						g_debug("Trying to auto record '%s' (%d)", epg_event.get_title().c_str(), epg_event.event_id);
-						add_scheduled_recording(schema, connection, epg_event);
-					}
-					catch(...)
-					{
-						g_debug("If there's an error here then we need to know!");
-						handle_error();
-					}
+					g_debug("Trying to auto record '%s' (%d)", title.c_str(), epg_event.event_id);
+					add_scheduled_recording(epg_event);
 				}
-				else
+				catch(...)
 				{
-					g_debug("EPG event '%s' at %d is already being recorded", epg_event.get_title().c_str(), (int)epg_event.start_time);
+					handle_error();
 				}
 			}
 		}
 	}
-*/
+	g_debug("Finished checking for auto recordings");
 }
 

@@ -21,8 +21,8 @@
 #include "epg_events.h"
 #include "data.h"
 #include "global.h"
-#include "../common/common.h"
-#include "../common/exception.h"
+#include "common.h"
+#include "exception.h"
 
 void EpgEvents::add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_event)
 {
@@ -36,8 +36,6 @@ void EpgEvents::add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_ev
 	builder->add_field_value("start_time", (guint)epg_event.start_time);
 	builder->add_field_value("duration", epg_event.duration);
 
-	g_debug("Adding EPG event (%d,%d)", epg_event.channel_id, epg_event.event_id);
-
 	batch->add_statement(builder->get_statement());
 
 	Glib::RefPtr<SqlParser> parser = SqlParser::create();
@@ -46,7 +44,7 @@ void EpgEvents::add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_ev
 	{
 		const EpgEventText epg_event_text = *i;
 
-		g_debug("Adding text (%d,'%s')", epg_event.event_id, epg_event_text.title.c_str());
+		g_debug("Adding text (%d, %d,'%s')", epg_event.event_id, epg_event.channel_id, epg_event_text.title.c_str());
 
 		String title = epg_event_text.title;
 		String subtitle = epg_event_text.subtitle;

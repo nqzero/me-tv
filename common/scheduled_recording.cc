@@ -19,8 +19,8 @@
  */
 
 #include "scheduled_recording.h"
-#include "../common/i18n.h"
-#include "../common/common.h"
+#include "i18n.h"
+#include "common.h"
 
 ScheduledRecording::ScheduledRecording()
 {

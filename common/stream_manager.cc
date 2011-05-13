@@ -24,7 +24,7 @@
 #include "device_manager.h"
 #include "dvb_transponder.h"
 #include "dvb_si.h"
-#include "../common/exception.h"
+#include "exception.h"
 
 void StreamManager::initialise(const Glib::ustring& text_encoding, guint timeout, gboolean ignore_teletext)
 {

@@ -24,7 +24,7 @@
 #include <glibmm.h>
 #include <errno.h>
 #include <string.h>
-#include "../common/i18n.h"
+#include "i18n.h"
 
 class Exception : public Glib::Exception
 {

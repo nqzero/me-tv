@@ -24,8 +24,8 @@
 #include <libxml++/libxml++.h>
 #include <giomm/socketclient.h>
 #include <map>
-#include "../common/me-tv-types.h"
-#include "../common/i18n.h"
+#include "me-tv-types.h"
+#include "i18n.h"
 
 class Client
 {

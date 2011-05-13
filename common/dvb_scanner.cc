@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "../common/exception.h"
+#include "exception.h"
 #include "dvb_si.h"
 #include "dvb_scanner.h"
 #include "dvb_demuxer.h"

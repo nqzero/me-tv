@@ -20,8 +20,8 @@
 
 #include "channel_manager.h"
 #include "global.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
+#include "i18n.h"
+#include "exception.h"
 
 void ChannelManager::load(Glib::RefPtr<DataModelIter>& iter, Channel& channel)
 {

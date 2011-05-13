@@ -33,7 +33,7 @@
 #include <list>
 #include <vector>
 #include <glibmm.h>
-#include "../common/i18n.h"
+#include "i18n.h"
 #include "buffer.h"
 
 namespace Mpeg

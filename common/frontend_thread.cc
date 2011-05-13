@@ -20,8 +20,8 @@
 
 #include "frontend_thread.h"
 #include "dvb_si.h"
-#include "../common/exception.h"
-#include "../common/common.h"
+#include "exception.h"
+#include "common.h"
 
 FrontendThread::FrontendThread(Dvb::Frontend& f, const Glib::ustring& encoding, guint t, gboolean i)
 	: Thread("Frontend"), frontend(f), text_encoding(encoding), timeout(t), ignore_teletext(i)

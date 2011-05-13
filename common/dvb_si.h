@@ -27,7 +27,7 @@
 #include <fstream>
 #include <linux/dvb/frontend.h>
 #include "global.h"
-#include "../common/i18n.h"
+#include "i18n.h"
 
 #define DVB_SECTION_BUFFER_SIZE	16*1024
 #define TS_PACKET_SIZE			188

@@ -18,9 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "../common/i18n.h"
+#include "i18n.h"
 #include "device_manager.h"
-#include "../common/exception.h"
+#include "exception.h"
 
 Glib::ustring DeviceManager::get_adapter_path(guint adapter)
 {
