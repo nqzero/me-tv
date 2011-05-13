@@ -22,12 +22,12 @@
 #include "dvb_si.h"
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include "../common/exception.h"
+#include "exception.h"
 
 class Lock : public Glib::RecMutex::Lock
 {
 public:
-	Lock(Glib::StaticRecMutex& mutex, const Glib::ustring& name) :
+	Lock(Glib::StaticRecMutex& mutex, const String& name) :
 		Glib::RecMutex::Lock(mutex) {}
 	~Lock() {}
 };
@@ -39,7 +39,12 @@ ChannelStream::ChannelStream(ChannelStreamType t, Channel& c) : channel(c)
 	last_insert_time = 0;
 }
 
-BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const Glib::ustring& i, const Glib::ustring& a, int p) :
+String BroadcastingChannelStream::get_description()
+{
+	return channel.get_text();
+}
+
+BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const String& i, const String& a, int p) :
 	ChannelStream(CHANNEL_STREAM_TYPE_BROADCAST, c), client_id(id), interface(i), address(a), port(p)
 {
 	int broadcast = 1;
@@ -52,9 +57,9 @@ BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const G
 	}
 
 	if ((setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast)) == -1)
-        {
+	{
 		throw SystemException("Failed to set broadcasting option");
-        }
+	}
 
 	recvaddr.sin_family = AF_INET;
 	recvaddr.sin_port = htons(port);
@@ -64,13 +69,18 @@ BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const G
 	g_debug("Added new channel stream '%s' -> '%s:%d'", channel.name.c_str(), address.c_str(), port);
 }
 
-RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const Glib::ustring& m, const Glib::ustring& d) :
+RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
 	ChannelStream(scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING, c)
 {
 	mrl = m;
 	description = d;
 
 	g_debug("Added new channel stream '%s' -> '%s'", channel.name.c_str(), mrl.c_str());
+}
+
+String RecordingChannelStream::get_description()
+{
+	return description;
 }
 
 void ChannelStream::clear_demuxers()
@@ -87,7 +97,7 @@ void ChannelStream::clear_demuxers()
 	}
 }
 
-Dvb::Demuxer& ChannelStream::add_pes_demuxer(const Glib::ustring& demux_path,
+Dvb::Demuxer& ChannelStream::add_pes_demuxer(const String& demux_path,
 	guint pid, dmx_pes_type_t pid_type, const gchar* type_text)
 {	
 	Lock lock(mutex, "ChannelStream::add_pes_demuxer()");
@@ -98,7 +108,7 @@ Dvb::Demuxer& ChannelStream::add_pes_demuxer(const Glib::ustring& demux_path,
 	return *demuxer;
 }
 
-Dvb::Demuxer& ChannelStream::add_section_demuxer(const Glib::ustring& demux_path, guint pid, guint id)
+Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint pid, guint id)
 {	
 	Lock lock(mutex, "FrontendThread::add_section_demuxer()");
 	Dvb::Demuxer* demuxer = new Dvb::Demuxer(demux_path);

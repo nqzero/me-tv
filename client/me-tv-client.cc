@@ -332,20 +332,21 @@ int main (int argc, char *argv[])
 			}
 
 			Gtk::Main::run();
-			client.unregister_client();
+
+			g_debug("Main loop exited");
 			if (network_server_thread != NULL)
 			{
-				network_server_thread->join(true);
+				client.terminate();
+			}
+			else
+			{
+				client.unregister_client();
 			}
 		}
 	}
 	catch (const Glib::Exception& exception)
 	{
-		g_message("Exception: %s", exception.what().c_str());
-	}
-	catch (...)
-	{
-		g_message(_("An unhandled error occurred"));		
+		handle_error();
 	}
 	
 	return 0;

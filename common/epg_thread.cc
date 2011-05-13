@@ -146,7 +146,7 @@ public:
 		channels.push_back(channel_entry);
 	}
 	
-	guint get(guint frequency, guint service_id)
+	gint get(guint frequency, guint service_id)
 	{
 		for (std::list<ChannelEntry>::iterator i = channels.begin(); i != channels.end(); i++)
 		{
@@ -156,7 +156,7 @@ public:
 				return channel_entry.channel_id;
 			}
 		}
-		return 0;
+		return -1;
 	}
 };
 
@@ -183,7 +183,10 @@ public:
 		epg_entry.saved = saved;
 		events.push_back(epg_entry);
 
-		g_debug("Adding %d/%d/%d to cache", epg_entry.epg_event.event_id, epg_entry.epg_event.channel_id, epg_entry.epg_event.version_number);
+		g_debug("Adding %d/%d/%d to cache",
+			epg_entry.epg_event.event_id,
+			epg_entry.epg_event.channel_id,
+			epg_entry.epg_event.version_number);
 
 		if (!saved)
 		{
@@ -231,30 +234,16 @@ public:
 			}
 			catch(const Glib::Exception& ex)
 			{
-				g_message("Exception while trying to execute batch: %s", ex.what().c_str());
+				g_debug("Exception while trying to execute batch: %s", ex.what().c_str());
 			}
 			catch(...)
 			{
 				g_debug("Exception while trying to execute batch");
 			}			
 			data_connection->statement_execute_non_select("END;");
-/*			data_connection->begin_transaction("0", TRANSACTION_ISOLATION_UNKNOWN);
-			try
-			{
-				data_connection->batch_execute(batch, parameters, STATEMENT_MODEL_CURSOR);
-				data_connection->commit_transaction("0");
-			}
-			catch(...)
-			{
-				data_connection->rollback_transaction("0");
-				throw;
-			}
-	*/		
 			g_debug("EPG events saved");
 
 			is_dirty = false;
-
-			//signal_update();
 		}
 	}
 };
@@ -263,7 +252,7 @@ void EpgThread::run()
 {
 	try
 	{
-		Glib::ustring					demux_path				= frontend.get_adapter().get_demux_path();
+		Glib::ustring					demux_path = frontend.get_adapter().get_demux_path();
 		EITDemuxers						demuxers(demux_path);
 		Dvb::SI::SectionParser			parser(text_encoding, timeout);
 		Dvb::SI::MasterGuideTableArray	master_guide_tables;
@@ -356,18 +345,18 @@ void EpgThread::run()
 						}
 					}
 
-					guint channel_id = channel_cache.get(frequency, service_id);
-					if (channel_id == 0)
+					gint channel_id = channel_cache.get(frequency, service_id);
+					if (channel_id == -1)
 					{
 						Channel channel;
-						if (channel_manager.find(channel, frequency, service_id))
+						if (channel_manager.find(channel, frequency, service_id) != NULL)
 						{
 							channel_id = channel.id;
 							channel_cache.add(channel.id, frequency, service_id);
 						}
 					}
 					
-					if (channel_id != 0)
+					if (channel_id != -1)
 					{
 						for (unsigned int k = 0; section.events.size() > k; k++)
 						{

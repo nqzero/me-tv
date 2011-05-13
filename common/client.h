@@ -107,6 +107,7 @@ public:
 		public:
 			int channel_id;
 			int type;
+			String description;
 			DemuxerList demuxers;
 		};
 

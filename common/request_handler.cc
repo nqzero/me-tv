@@ -209,13 +209,13 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			{
 				FrontendThread* frontend_thread = *i;
 
-				body += "<frontend path=\"" + frontend_thread->frontend.get_path() + "\">";			
+				body += "<frontend path=\"" + frontend_thread->frontend.get_path() + "\">";
 				ChannelStreamList& streams = frontend_thread->get_streams();
 				for (ChannelStreamList::iterator j = streams.begin(); j != streams.end(); j++)
 				{
 					ChannelStream* stream = *j;
-					body += Glib::ustring::compose("<stream channel_id=\"%1\" type=\"%2\">",
-						stream->channel.id, stream->type);
+					body += Glib::ustring::compose("<stream channel_id=\"%1\" type=\"%2\" description=\"%3\">",
+						stream->channel.id, stream->type, stream->get_description());
 					Dvb::DemuxerList& demuxers = stream->demuxers;
 					for (Dvb::DemuxerList::iterator k = demuxers.begin(); k != demuxers.end(); k++)
 					{
@@ -282,7 +282,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 
 			ChannelList channels = channel_manager.get_all();
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
-			{				
+			{
 				Channel& channel = *i;
 				body += Glib::ustring::compose("<channel id=\"%1\" name=\"%2\">", channel.id, encode_xml(channel.name));
 
@@ -360,7 +360,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 
 			ChannelsConfLine channels_conf_line(line);
 			guint parameter_count = channels_conf_line.get_parameter_count();
-		
+			
 			g_debug("Line (%d parameters): '%s'", parameter_count, line.c_str());
 
 			device_manager.check_frontend();

@@ -31,7 +31,6 @@ private:
 	RequestHandler	request_handler;
 	
 	gboolean on_timeout();
-	void on_quit();
 	
 protected:
 	void run();

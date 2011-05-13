@@ -90,7 +90,7 @@ int main (int argc, char *argv[])
 					{
 						Client::Frontend::Stream& stream = *j;
 						Glib::ustring type = stream.type == 0 ? "Broadcast" : "Recording";
-						std::cout << " - Channel " << stream.channel_id << " - " << type << std::endl;
+						std::cout << " - Channel " << stream.channel_id << " - " << type << " - " << stream.description << std::endl;
 
 						Client::DemuxerList& demuxers = stream.demuxers;
 						for (Client::DemuxerList::iterator k = demuxers.begin(); k != demuxers.end(); k++)

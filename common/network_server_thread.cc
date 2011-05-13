@@ -48,15 +48,7 @@ NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Se
 		throw SystemException("Failed to bind");
 	}
 
-	signal_quit.connect(sigc::mem_fun(*this, &NetworkServerThread::on_quit));
-
 	listen(socket_server, 5);
-}
-
-void NetworkServerThread::on_quit()
-{
-	terminate();
-	::close(socket_server);
 }
 
 void NetworkServerThread::run()

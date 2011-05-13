@@ -24,6 +24,7 @@
 #include "mpeg_stream.h"
 #include "dvb_demuxer.h"
 #include "channel.h"
+#include "me-tv-types.h"
 #include <giomm.h>
 #include <netinet/in.h>
 
@@ -38,7 +39,7 @@ typedef enum
 class ChannelStream
 {
 private:
-	Glib::StaticRecMutex			mutex;
+	Glib::StaticRecMutex	mutex;
 	guint					last_insert_time;
 
 	virtual void write_data(guchar* buffer, gsize length) = 0;
@@ -56,29 +57,31 @@ public:
 	ChannelStreamType	type;
 	Channel				channel;
 
-	Dvb::Demuxer& add_pes_demuxer(const Glib::ustring& demux_path,
+	Dvb::Demuxer& add_pes_demuxer(const String& demux_path,
 		guint pid, dmx_pes_type_t pid_type, const gchar* type_text);
-	Dvb::Demuxer& add_section_demuxer(const Glib::ustring& demux_path, guint pid, guint id);
+	Dvb::Demuxer& add_section_demuxer(const String& demux_path, guint pid, guint id);
 
 	void clear_demuxers();
 	void write(guchar* buffer, gsize length);
-};
 
+	virtual String get_description() = 0;
+};
 
 class BroadcastingChannelStream : public ChannelStream
 {
 private:
-	int			sd;
-        struct sockaddr_in recvaddr;
-	Glib::ustring		address;
-	Glib::ustring		interface;
+	int					sd;
+	struct sockaddr_in	recvaddr;
+	String				address;
+	String				interface;
 	int					port;
 	int					client_id;
 
 	void write_data(guchar* buffer, gsize length);
-
+	String get_description();
+			
 public:
-	BroadcastingChannelStream(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port);
+	BroadcastingChannelStream(Channel& channel, int client_id, const String& interface, const String& address, int port);
 	~BroadcastingChannelStream();
 
 	int get_client_id() const { return client_id; }
@@ -87,11 +90,13 @@ public:
 class RecordingChannelStream : public ChannelStream
 {
 private:
-	Glib::ustring					mrl;
-	Glib::ustring					description;
+	String							mrl;
+	String							description;
 	Glib::RefPtr<Glib::IOChannel>	output_channel;
 
 	void write_data(guchar* buffer, gsize length);
+	String get_description();
+
 public:
 	RecordingChannelStream(Channel& channel, gboolean scheduled, const Glib::ustring& mrl, const Glib::ustring& description);
 	~RecordingChannelStream();

@@ -449,7 +449,10 @@ void MainWindow::on_hide()
 bool MainWindow::on_delete_event(GdkEventAny* event)
 {
 	hide();
-	Gtk::Main::quit();
+	if (quit_on_close)
+	{
+		Gtk::Main::quit();
+	}
 
 	return true;
 }
