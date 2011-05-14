@@ -237,7 +237,6 @@ void MainWindow::show_preferences_dialog()
 void MainWindow::on_change_view_mode()
 {
 	set_view_mode(view_mode == VIEW_MODE_VIDEO ? VIEW_MODE_CONTROLS : VIEW_MODE_VIDEO);
-	signal_update();
 }
 
 bool MainWindow::on_event_box_video_button_pressed(GdkEventButton* event_button)
