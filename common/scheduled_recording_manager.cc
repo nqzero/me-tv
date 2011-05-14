@@ -383,6 +383,8 @@ void ScheduledRecordingManager::check_auto_recordings()
 		String title = Data::get(iter_auto_record, "title");
 
 		g_debug("Searching for '%s'", title.c_str());
+
+		replace_text(title, "'", "''");
 		
 		Glib::RefPtr<DataModel> model = data_connection->statement_execute_select (
 			String::compose(

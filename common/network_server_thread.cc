@@ -49,12 +49,12 @@ NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Se
 	}
 
 	listen(socket_server, 5);
+
+	Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &NetworkServerThread::on_timeout), 1);
 }
 
 void NetworkServerThread::run()
 {
-	sigc::connection connection = Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &NetworkServerThread::on_timeout), 1);
-
 	while (!is_terminated())
 	{
 		struct sockaddr_in client_addr;
@@ -72,8 +72,6 @@ void NetworkServerThread::run()
 			}
 		}
 	}
-
-	connection.disconnect();
 }
 
 gboolean NetworkServerThread::on_timeout()
