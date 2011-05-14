@@ -53,7 +53,6 @@ void DeviceManager::initialise(const Glib::ustring& devices)
 				Dvb::Frontend* frontend = new Dvb::Frontend(*adapter, frontend_count);
 				try
 				{
-					frontend->open();
 					if (!is_frontend_supported(*frontend))
 					{
 						g_debug("Frontend not supported");

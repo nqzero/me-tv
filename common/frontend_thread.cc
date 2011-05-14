@@ -30,8 +30,13 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const Glib::ustring& encoding, 
 	
 	epg_thread = NULL;
 
-	Glib::ustring input_path = frontend.get_adapter().get_dvr_path();
+	input_path = frontend.get_adapter().get_dvr_path();
+}
 
+void FrontendThread::open() {
+    printf( "frontend::open\n" );
+
+        frontend.ref( 1 );
 	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
 	{
@@ -40,6 +45,7 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const Glib::ustring& encoding, 
 	
 	g_debug("FrontendThread created (%s)", frontend.get_path().c_str());
 }
+void FrontendThread::close() { ::close(dvr_fd); frontend.ref( 0 ); printf( "frontend::close\n" ); }
 
 FrontendThread::~FrontendThread()
 {
@@ -58,6 +64,7 @@ void FrontendThread::start()
 {
 	if (is_terminated())
 	{
+                if (!streams.empty()) open();
 		g_debug("Starting frontend thread (%s)", frontend.get_path().c_str());
 		Thread::start();
 	}
@@ -68,15 +75,13 @@ void FrontendThread::stop()
 	g_debug("Stopping frontend thread (%s)", frontend.get_path().c_str());
 	join(true);
 	g_debug("Frontend thread stopped and joined (%s)", frontend.get_path().c_str());
+        close();
 }
 
 void FrontendThread::run()
 {
 	g_debug("Frontend thread running (%s)", frontend.get_path().c_str());
 
-	struct pollfd pfds[1];
-	pfds[0].fd = dvr_fd;
-	pfds[0].events = POLLIN;
 	
 	guchar buffer[TS_PACKET_SIZE * PACKET_BUFFER_SIZE];
 
@@ -91,6 +96,9 @@ void FrontendThread::run()
 	
 		try
 		{
+                        struct pollfd pfds[1];
+                        pfds[0].fd = dvr_fd;
+                        pfds[0].events = POLLIN;
 			if (::poll(pfds, 1, 100) < 0)
 			{
 				throw SystemException("Frontend poll failed");
@@ -232,6 +240,7 @@ void FrontendThread::stop_epg_thread()
 
 void FrontendThread::start_broadcasting(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port)
 {
+        frontend.ref(1);
 	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
 	stop();
 	
@@ -242,6 +251,7 @@ void FrontendThread::start_broadcasting(Channel& channel, int client_id, const G
 	streams.push_back(channel_stream);
 
 	start();
+        frontend.ref(0);
 }
 
 void FrontendThread::stop_broadcasting(int client_id)

@@ -39,6 +39,15 @@ Frontend::~Frontend()
 	g_debug("Frontend destroyed");
 }
 
+void Frontend::ref(int add) {
+    g_debug( "Dvb::Frontend -- ref %5d, %5d\n", count, add );
+    if (add) { if (count++==0) open(); }
+    else     { if (--count==0) close(); }
+    if (count < 0) {
+        g_assert( false );
+    }
+}
+
 void Frontend::open()
 {
 	if (fd == -1)
