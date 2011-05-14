@@ -491,6 +491,19 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "set_auto_record_list")
 		{
+			int priority = 0;
+
+			NodeSet nodes = root_node->find("auto_record");
+			data_connection->statement_execute_non_select("delete from autorecord");
+			for (NodeSet::iterator i = nodes.begin(); i != nodes.end(); i++)
+			{
+				Node* node = *i;
+				String title = get_attribute_value(node, "@title");
+				replace_text(title, "'", "''");
+				data_connection->statement_execute_non_select(String::compose(
+					"insert into autorecord (title, priority) values ('%1',%2)",
+					title, priority));
+			}
 		}
 		else if (command == "terminate")
 		{
