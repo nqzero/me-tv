@@ -494,7 +494,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			int priority = 0;
 
 			NodeSet nodes = root_node->find("auto_record");
-			data_connection->statement_execute_non_select("delete from autorecord");
+			data_connection->statement_execute_non_select("delete from auto_record");
 			for (NodeSet::iterator i = nodes.begin(); i != nodes.end(); i++)
 			{
 				Node* node = *i;
@@ -528,7 +528,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				String value = get_attribute_value(node, "@value");
 				replace_text(value, "'", "''");
 				data_connection->statement_execute_non_select(String::compose(
-					"insert into configuration (name, value) values ('%1',%2)",
+					"insert into configuration (name, value) values ('%1','%2')",
 					name, value));
 			}
 		}
@@ -551,7 +551,7 @@ void RequestHandler::send_response(int sockfd,
 	const Glib::ustring& error_message, const Glib::ustring& body)
 {
 	Glib::ustring response = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-	response += "<response";			
+	response += "<response";
 	if (!error_message.empty())
 	{
 		response += " error=\"" + error_message + "\"";

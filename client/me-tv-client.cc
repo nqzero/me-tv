@@ -275,6 +275,9 @@ int main (int argc, char *argv[])
 				Gnome::Gda::init();
 				data_connection = Data::create_connection();
 
+				recording_directory = Data::get_scalar("configuration", "value", "name", "recording_directory");
+				preferred_language = Data::get_scalar("configuration", "value", "name", "preferred_language");
+
 				device_manager.initialise(devices);
 				stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
 				stream_manager.start();

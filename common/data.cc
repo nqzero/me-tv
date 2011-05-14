@@ -84,9 +84,15 @@ Glib::RefPtr<Connection> Data::create_connection()
 String Data::get_scalar(const String& table, const String& field, const String& where_field, const String& where_value)
 {
 	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
-		String::compose("select %1 from %2 where %3 = %4", field, table, where_field, where_value));
+		String::compose("select %1 from %2 where %3 = '%4'", field, table, where_field, where_value));
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
-	iter->move_next();
-	return get(iter, field);
+
+	String result;
+	if (iter->move_next())
+	{
+		result = get(iter, "value");
+	}
+	
+	return result;
 }
 

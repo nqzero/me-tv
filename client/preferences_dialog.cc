@@ -37,6 +37,7 @@ PreferencesDialog::PreferencesDialog(BaseObjectType* cobject, const Glib::RefPtr
 
 void PreferencesDialog::run()
 {
+	Gtk::FileChooserButton* file_chooser_button_recording_directory = NULL;
 	Gtk::SpinButton* spin_button_epg_span_hours = NULL;
 	Gtk::SpinButton* spin_button_epg_page_size = NULL;
 	Gtk::CheckButton* check_button_keep_above = NULL;
@@ -45,6 +46,7 @@ void PreferencesDialog::run()
 	Gtk::CheckButton* check_button_show_epg_tooltips = NULL;
 	Gtk::CheckButton* check_button_show_channel_number = NULL;
 
+	builder->get_widget("file_chooser_button_recording_directory", file_chooser_button_recording_directory);
 	builder->get_widget("spin_button_epg_span_hours", spin_button_epg_span_hours);
 	builder->get_widget("spin_button_epg_page_size", spin_button_epg_page_size);
 	builder->get_widget("check_button_keep_above", check_button_keep_above);
@@ -53,6 +55,8 @@ void PreferencesDialog::run()
 	builder->get_widget("check_button_show_epg_tooltips", check_button_show_epg_tooltips);
 	builder->get_widget("check_button_show_channel_number", check_button_show_channel_number);
 	
+	Client::ConfigurationMap configuration = client.get_configuration();
+	file_chooser_button_recording_directory->set_filename(configuration["recording_directory"]);
 	spin_button_epg_span_hours->set_value(configuration_manager.get_int_value("epg_span_hours"));
 	spin_button_epg_page_size->set_value(configuration_manager.get_int_value("epg_page_size"));
 	check_button_keep_above->set_active(configuration_manager.get_boolean_value("keep_above"));
@@ -70,6 +74,9 @@ void PreferencesDialog::run()
 		configuration_manager.set_boolean_value("show_epg_time", check_button_show_epg_time->get_active());
 		configuration_manager.set_boolean_value("show_epg_tooltips", check_button_show_epg_tooltips->get_active());
 		configuration_manager.set_boolean_value("show_channel_number", check_button_show_channel_number->get_active());
+
+		configuration["recording_directory"] = file_chooser_button_recording_directory->get_filename();
+		client.set_configuration(configuration);
 		
 		signal_update();
 	}
