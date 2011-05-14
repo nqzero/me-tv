@@ -40,8 +40,6 @@ extern gboolean						ignore_teletext;
 extern String						broadcast_address;
 extern String						text_encoding;
 
-extern ChannelManager				channel_manager;
-extern ScheduledRecordingManager	scheduled_recording_manager;
 extern DeviceManager				device_manager;
 extern StreamManager				stream_manager;
 extern Glib::RefPtr<Connection>		data_connection;

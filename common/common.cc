@@ -26,8 +26,6 @@
 #define BLOCK_SIZE	1024
 #define MAX_BUFFER_SIZE	1000 * BLOCK_SIZE
 
-ChannelManager				channel_manager;
-ScheduledRecordingManager	scheduled_recording_manager;
 DeviceManager				device_manager;
 StreamManager				stream_manager;
 Glib::RefPtr<Connection>	data_connection;

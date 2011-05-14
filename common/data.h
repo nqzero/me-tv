@@ -40,6 +40,9 @@ public:
 		return iter->get_value_for_field(column).get_int();
 	}
 
+	static String get_scalar(const String& table, const String& field, const String& where);
+	static String get_scalar(const String& table, const String& field, const String& where_field, const String& where_value);
+	
 	static Glib::RefPtr<Connection> create_connection();
 };
 

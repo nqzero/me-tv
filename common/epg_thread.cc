@@ -22,6 +22,7 @@
 #include "epg_events.h"
 #include "dvb_si.h"
 #include "exception.h"
+#include "channel_manager.h"
 
 class EITDemuxers
 {
@@ -349,7 +350,7 @@ void EpgThread::run()
 					if (channel_id == -1)
 					{
 						Channel channel;
-						if (channel_manager.find(channel, frequency, service_id))
+						if (ChannelManager::find(channel, frequency, service_id))
 						{
 							channel_id = channel.id;
 							channel_cache.add(channel.id, frequency, service_id);

@@ -57,7 +57,7 @@ void StreamManager::start_recording(const ScheduledRecording& scheduled_recordin
 {
 	gboolean frontend_found = false;
 
-	Channel channel = channel_manager.get(scheduled_recording.channel_id);
+	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
 	for (FrontendThreadList::iterator i = frontend_threads.begin(); i != frontend_threads.end() && !frontend_found; i++)
 	{

@@ -27,14 +27,14 @@
 
 gboolean ScheduledRecordingManager::is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording)
 {
-	Channel channel = channel_manager.get(scheduled_recording.channel_id);
+	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
 	ScheduledRecordingList scheduled_recordings = get_all();
 	for (ScheduledRecordingList::iterator i = scheduled_recordings.begin(); i != scheduled_recordings.end(); i++)
 	{
 		ScheduledRecording& current = *i;
 
-		Channel current_channel = channel_manager.get(current.channel_id);
+		Channel current_channel = ChannelManager::get(current.channel_id);
 
 		if (
 			current.id != scheduled_recording.id &&
@@ -57,7 +57,7 @@ void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_reco
 {
 	g_debug("Looking for an available device for scheduled recording");
 	
-	Channel channel = channel_manager.get(scheduled_recording.channel_id);
+	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
 	FrontendList& frontends = device_manager.get_frontends();
 	for (FrontendList::iterator j = frontends.begin(); j != frontends.end(); j++)
@@ -87,7 +87,7 @@ void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_reco
 void ScheduledRecordingManager::add_scheduled_recording(EpgEvent& epg_event)
 {
 	ScheduledRecording scheduled_recording;
-	Channel channel = channel_manager.get(epg_event.channel_id);
+	Channel channel = ChannelManager::get(epg_event.channel_id);
 	
 	int before = channel.record_extra_before;
 	int after = channel.record_extra_after;
@@ -112,7 +112,7 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 
 	g_debug("Setting scheduled recording");
 	
-	Channel channel = channel_manager.get(scheduled_recording.channel_id);
+	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
 	if (scheduled_recording.device.empty())
 	{
@@ -134,7 +134,7 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 	{
 		ScheduledRecording& current = *i;
 
-		Channel current_channel = channel_manager.get(current.channel_id);
+		Channel current_channel = ChannelManager::get(current.channel_id);
 
 		// Check for conflict
 		if (current.id != scheduled_recording.id &&

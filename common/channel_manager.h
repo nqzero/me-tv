@@ -27,19 +27,19 @@
 class ChannelManager
 {
 private:
-	void load(Glib::RefPtr<DataModelIter>& iter, Channel& channel);
+	static void load(Glib::RefPtr<DataModelIter>& iter, Channel& channel);
 
 public:
-	void remove_channel(guint channel_id);
-	void add_channel(const Channel& channel);
-	void set_channel(gint channel_id, const Glib::ustring& name,
+	static void remove_channel(guint channel_id);
+	static void add_channel(const Channel& channel);
+	static void set_channel(gint channel_id, const Glib::ustring& name,
 		guint sort_order, guint record_extra_before, guint record_extra_after);
 
-	Channel get(guint channel_id);
-	gboolean find(Channel& channel, guint channel_id);
-	gboolean find(Channel& channel, guint frequency, guint service_id);
+	static Channel get(guint channel_id);
+	static gboolean find(Channel& channel, guint channel_id);
+	static gboolean find(Channel& channel, guint frequency, guint service_id);
 
-	ChannelList get_all();
+	static ChannelList get_all();
 };
 
 #endif

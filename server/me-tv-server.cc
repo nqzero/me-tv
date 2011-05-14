@@ -87,14 +87,6 @@ int main(int argc, char** argv)
 		server_port_option_entry.set_long_name("server-port");
 		server_port_option_entry.set_description(_("The network port for clients to connect to (default 1999)."));
 
-		Glib::OptionEntry recording_directory_option_entry;
-		recording_directory_option_entry.set_long_name("recording-directory");
-		recording_directory_option_entry.set_description(_("The recording directory (defaults to the user's home directory)."));
-
-		Glib::OptionEntry preferred_language_option_entry;
-		preferred_language_option_entry.set_long_name("preferred-language");
-		preferred_language_option_entry.set_description(_("The preferred language used to send EPG text to the client."));
-
 		Glib::OptionGroup option_group(PACKAGE_NAME, "", _("Show Me TV Client help options"));
 		option_group.add_entry(verbose_option_entry, verbose_logging);
 		option_group.add_entry(disable_epg_thread_option_entry, disable_epg_thread);
@@ -102,8 +94,6 @@ int main(int argc, char** argv)
 		option_group.add_entry(read_timeout_option_entry, read_timeout);
 		option_group.add_entry(broadcast_address_option_entry, broadcast_address);
 		option_group.add_entry(server_port_option_entry, server_port);
-		option_group.add_entry(recording_directory_option_entry, recording_directory);
-		option_group.add_entry(preferred_language_option_entry, preferred_language);
 
 		Glib::OptionContext option_context;
 		option_context.set_summary(ME_TV_SUMMARY);
@@ -113,7 +103,10 @@ int main(int argc, char** argv)
 		option_context.parse(argc, argv);
 
 		data_connection = Data::create_connection();
-						
+
+		recording_directory = Data::get_scalar("configuration", "value", "name", "recording_directory");
+		preferred_language = Data::get_scalar("configuration", "value", "name", "preferred_language");
+		
 		device_manager.initialise(devices);
 		stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
 		stream_manager.start();

@@ -31,24 +31,23 @@ typedef std::list<ScheduledRecording> ScheduledRecordingList;
 class ScheduledRecordingManager
 {
 private:
-	gboolean is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording);
-	void select_device(ScheduledRecording& scheduled_recording);
-
-	void load(Glib::RefPtr<DataModelIter>& iter, ScheduledRecording& scheduled_recording);
+	static gboolean is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording);
+	static void select_device(ScheduledRecording& scheduled_recording);
+	static void load(Glib::RefPtr<DataModelIter>& iter, ScheduledRecording& scheduled_recording);
 
 public:
 
-	void check_auto_recordings();
-	void check_scheduled_recordings();
+	static void check_auto_recordings();
+	static void check_scheduled_recordings();
 
-	void add_scheduled_recording(EpgEvent& epg_event);
-	void add_scheduled_recording(ScheduledRecording& scheduled_recording);
-	void remove_scheduled_recording(guint scheduled_recording_id);
-	void remove_scheduled_recording(Channel& channel);
-	ScheduledRecording get(guint scheduled_recording_id);
-	ScheduledRecordingList get_all();
-	gint is_recording(const Channel& channel);
-	gint is_recording(const EpgEvent& epg_event);
+	static void add_scheduled_recording(EpgEvent& epg_event);
+	static void add_scheduled_recording(ScheduledRecording& scheduled_recording);
+	static void remove_scheduled_recording(guint scheduled_recording_id);
+	static void remove_scheduled_recording(Channel& channel);
+	static ScheduledRecording get(guint scheduled_recording_id);
+	static ScheduledRecordingList get_all();
+	static gint is_recording(const Channel& channel);
+	static gint is_recording(const EpgEvent& epg_event);
 };
 
 #endif

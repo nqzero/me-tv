@@ -238,7 +238,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "get_channels")
 		{
-			ChannelList channels = channel_manager.get_all();
+			ChannelList channels = ChannelManager::get_all();
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
@@ -256,7 +256,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 						encode_xml(epg_event.get_title()),
 						encode_xml(epg_event.get_subtitle()),
 						encode_xml(epg_event.get_description()),
-						scheduled_recording_manager.is_recording(epg_event));
+						ScheduledRecordingManager::is_recording(epg_event));
 				}
 				body += "</channel>";
 			}
@@ -273,14 +273,14 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				throw Exception("Invalid parameters");
 			}
 
-			channel_manager.set_channel(id, name, sort_order, record_extra_before, record_extra_after);
+			ChannelManager::set_channel(id, name, sort_order, record_extra_before, record_extra_after);
 		}
 		else if (command == "get_epg")
 		{
 			guint start_time = get_int_attribute_value(root_node, "parameter[@name=\"start_time\"]/@value");
 			guint end_time = get_int_attribute_value(root_node, "parameter[@name=\"end_time\"]/@value");
 
-			ChannelList channels = channel_manager.get_all();
+			ChannelList channels = ChannelManager::get_all();
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
@@ -302,7 +302,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 							encode_xml(epg_event.get_title()),
 							encode_xml(epg_event.get_subtitle()),
 							encode_xml(epg_event.get_description()),
-							scheduled_recording_manager.is_recording(epg_event));
+							ScheduledRecordingManager::is_recording(epg_event));
 					}
 				}
 
@@ -312,7 +312,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		else if (command == "start_broadcasting")
 		{
 			int channel_id = ::atoi(get_attribute_value(root_node, "parameter[@name=\"channel\"]/@value").c_str());
-			Channel channel = channel_manager.get(channel_id);
+			Channel channel = ChannelManager::get(channel_id);
 			Glib::ustring protocol = "udp";
 
 			RequestHandler::Client& client = clients.get(client_id);
@@ -328,18 +328,18 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		{
 			int epg_event_id = ::atoi(get_attribute_value(root_node, "parameter[@name=\"epg_event_id\"]/@value").c_str());
 			EpgEvent epg_event = EpgEvents::get(epg_event_id);
-			scheduled_recording_manager.add_scheduled_recording(epg_event);
-			scheduled_recording_manager.check_scheduled_recordings();
+			ScheduledRecordingManager::add_scheduled_recording(epg_event);
+			ScheduledRecordingManager::check_scheduled_recordings();
 		}
 		else if (command == "remove_scheduled_recording")
 		{
 			int scheduled_recording_id = ::atoi(get_attribute_value(root_node, "parameter[@name=\"scheduled_recording_id\"]/@value").c_str());
-			scheduled_recording_manager.remove_scheduled_recording(scheduled_recording_id);
-			scheduled_recording_manager.check_scheduled_recordings();
+			ScheduledRecordingManager::remove_scheduled_recording(scheduled_recording_id);
+			ScheduledRecordingManager::check_scheduled_recordings();
 		}
 		else if (command == "get_scheduled_recordings")
 		{
-			ScheduledRecordingList recordings = scheduled_recording_manager.get_all();
+			ScheduledRecordingList recordings = ScheduledRecordingManager::get_all();
 			for (ScheduledRecordingList::iterator i = recordings.begin(); i != recordings.end(); i++)
 			{
 				ScheduledRecording& recording = *i;
@@ -446,16 +446,16 @@ gboolean RequestHandler::handle_connection(int sockfd)
 					throw Exception(_("Failed to import: importing a channels.conf is only supported with DVB-T, DVB-C, DVB-S and ATSC"));
 			}
 
-			channel_manager.add_channel(channel);
+			ChannelManager::add_channel(channel);
 		
 			body += "<success />";
 		}
 		else if (command == "remove_channel")
 		{
 			int channel_id = get_int_attribute_value(root_node, "parameter[@name=\"channel_id\"]/@value");
-			Channel channel = channel_manager.get(channel_id);
-			scheduled_recording_manager.remove_scheduled_recording(channel);
-			channel_manager.remove_channel(channel_id);
+			Channel channel = ChannelManager::get(channel_id);
+			ScheduledRecordingManager::remove_scheduled_recording(channel);
+			ChannelManager::remove_channel(channel_id);
 		}
 		else if (command == "search_epg")
 		{
@@ -475,7 +475,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 					encode_xml(epg_event.get_title()),
 					encode_xml(epg_event.get_subtitle()),
 					encode_xml(epg_event.get_description()),
-					scheduled_recording_manager.is_recording(epg_event));
+					ScheduledRecordingManager::is_recording(epg_event));
 			}
 		}
 		else if (command == "get_auto_record_list")

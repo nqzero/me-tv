@@ -90,8 +90,8 @@ gboolean NetworkServerThread::on_timeout()
 		if (update)
 		{
 			request_handler.clients.check();
-			scheduled_recording_manager.check_auto_recordings();
-			scheduled_recording_manager.check_scheduled_recordings();
+			ScheduledRecordingManager::check_auto_recordings();
+			ScheduledRecordingManager::check_scheduled_recordings();
 
 			signal_update();
 		}
