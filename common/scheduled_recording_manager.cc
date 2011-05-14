@@ -386,7 +386,8 @@ void ScheduledRecordingManager::check_auto_recordings()
 		
 		Glib::RefPtr<DataModel> model = data_connection->statement_execute_select (
 			String::compose(
-				"select * from epg_event ee, epg_event_text ett ee.id = eet.epg_event_id "
+				"select * from epg_event ee, epg_event_text eet "
+				"where ee.id = eet.epg_event_id "
 				"and title like '%%%1%%' order by start_time", title));
 
 		Glib::RefPtr<DataModelIter> iter = model->create_iter();

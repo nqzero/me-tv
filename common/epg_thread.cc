@@ -387,12 +387,12 @@ void EpgThread::run()
 										EpgEventText epg_event_text;
 										const Dvb::SI::EventText& event_text = i->second;
 						
-										epg_event_text.id					= 0;
-										epg_event_text.epg_event_id			= 0;
-										epg_event_text.language				= event_text.language;
-										epg_event_text.title				= event_text.title;
-										epg_event_text.subtitle				= event_text.subtitle;
-										epg_event_text.description			= event_text.description;
+										epg_event_text.id			= 0;
+										epg_event_text.epg_event_id	= 0;
+										epg_event_text.language		= event_text.language;
+										epg_event_text.title		= event_text.title;
+										epg_event_text.subtitle		= event_text.subtitle;
+										epg_event_text.description	= event_text.description;
 
 										if (epg_event_text.subtitle == "-")
 										{
@@ -412,7 +412,7 @@ void EpgThread::run()
 					if (now - last_save > 10)
 					{
 						last_save = now;
-						epg_cache.save();						
+						epg_cache.save();
 					}
 				}
 			}
