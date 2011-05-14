@@ -501,8 +501,35 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				String title = get_attribute_value(node, "@title");
 				replace_text(title, "'", "''");
 				data_connection->statement_execute_non_select(String::compose(
-					"insert into autorecord (title, priority) values ('%1',%2)",
+					"insert into auto_record (title, priority) values ('%1',%2)",
 					title, priority));
+			}
+		}
+		else if (command == "get_configuration")
+		{
+			Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
+				"select * from configuration");
+			Glib::RefPtr<DataModelIter> iter = model->create_iter();
+				
+			while (iter->move_next())
+			{
+				body += Glib::ustring::compose("<configuration name=\"%1\" value=\"%2\" />",
+					encode_xml(Data::get(iter, "name")), encode_xml(Data::get(iter, "value")));
+			}
+		}
+		else if (command == "set_configuration")
+		{
+			NodeSet nodes = root_node->find("configuration");
+			data_connection->statement_execute_non_select("delete from configuration");
+			for (NodeSet::iterator i = nodes.begin(); i != nodes.end(); i++)
+			{
+				Node* node = *i;
+				String name = get_attribute_value(node, "@name");
+				String value = get_attribute_value(node, "@value");
+				replace_text(value, "'", "''");
+				data_connection->statement_execute_non_select(String::compose(
+					"insert into configuration (name, value) values ('%1',%2)",
+					name, value));
 			}
 		}
 		else if (command == "terminate")
