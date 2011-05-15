@@ -442,11 +442,6 @@ void MainWindow::on_hide()
 	save_geometry();
 	client.unregister_client();
 	Gtk::Window::on_hide();
-
-	if (quit_on_close)
-	{
-		signal_quit();
-	}
 }
 
 bool MainWindow::on_delete_event(GdkEventAny* event)

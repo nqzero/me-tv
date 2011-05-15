@@ -463,6 +463,10 @@ int main (int argc, char *argv[])
 				server = new Server(server_port);
 				server->start();
 			}
+			else
+			{
+				quit_on_close = true;
+			}
 
 			client.register_client();
 

@@ -113,10 +113,7 @@ Client::Client()
 
 Client::~Client()
 {
-	if (client_id != 0)
-	{
-		unregister_client();
-	}
+	unregister_client();
 }
 
 void Client::set_server(const String& h, int p)
@@ -449,9 +446,12 @@ gboolean Client::register_client()
 
 void Client::unregister_client()
 {
-	stop_broadcasting();
-	send_request("unregister");
-	client_id = 0;
+	if (client_id != 0)
+	{
+		stop_broadcasting();
+		send_request("unregister");
+		client_id = 0;
+	}
 }
 
 void Client::add_channel(const String& line)
