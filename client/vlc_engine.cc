@@ -116,6 +116,7 @@ void VlcEngine::play()
 {
 	if (has_media())
 	{
+		set_mute_state(true);
 		libvlc_media_player_play(media_player);
 	}
 }

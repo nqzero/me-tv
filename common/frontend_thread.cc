@@ -56,7 +56,7 @@ FrontendThread::~FrontendThread()
 
 void FrontendThread::start()
 {
-	if (is_terminated())
+	if (!streams.empty() && is_terminated())
 	{
 		g_debug("Starting frontend thread (%s)", frontend.get_path().c_str());
 		Thread::start();

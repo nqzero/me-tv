@@ -361,7 +361,7 @@ void EpgThread::run()
 						channel_cache.add(channel.id, frequency, service_id);
 					}
 					
-					if (channel_id <= 0)
+					if (channel_id > 0)
 					{
 						for (unsigned int k = 0; section.events.size() > k; k++)
 						{

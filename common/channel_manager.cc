@@ -109,7 +109,7 @@ Channel ChannelManager::get(guint channel_id)
 
 	if (!find(channel, channel_id))
 	{
-		throw Exception(String::compose(_("Channel '%1' not found"), channel_id));
+		throw Exception(String::compose(_("Channel %1 not found"), channel_id));
 	}
 
 	return channel;
