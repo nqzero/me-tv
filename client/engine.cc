@@ -17,8 +17,6 @@
  */
 
 #include "engine.h"
-#include "../common/exception.h"
-#include "me-tv.h"
 #include <iomanip>
 
 gboolean next;
@@ -46,14 +44,14 @@ void Engine::increment(gboolean forward, gboolean sh)
 	}
 }
 
-Glib::ustring Engine::format_2_digit(gint time)
+String Engine::format_2_digit(gint time)
 {
-	return Glib::ustring::format(std::setfill(L'0'), std::setw(2), time);
+	return String::format(std::setfill(L'0'), std::setw(2), time);
 }
 
-Glib::ustring Engine::format_time(gint time)
+String Engine::format_time(gint time)
 {
-	Glib::ustring result;
+	String result;
 
 	gint total_seconds = time / 1000;
 	gint hours = total_seconds / 60 / 60;
@@ -62,33 +60,33 @@ Glib::ustring Engine::format_time(gint time)
 
 	if (hours == 0)
 	{
-		result = Glib::ustring::compose("%1:%2", minutes, format_2_digit(seconds));
+		result = String::compose("%1:%2", minutes, format_2_digit(seconds));
 	}
 	else
 	{
-		result = Glib::ustring::compose("%1:%2:%3", hours, format_2_digit(minutes), format_2_digit(seconds));
+		result = String::compose("%1:%2:%3", hours, format_2_digit(minutes), format_2_digit(seconds));
 	}
 	
 	return result;
 }
 
-Glib::ustring Engine::get_text()
+String Engine::get_text()
 {
 	int length = get_length();
 	int time = get_time();
-	Glib::ustring result;
+	String result;
 	
 	if (time == 0 || length == 0)
 	{
 		float percentage = get_percentage() * 100;
 		if (percentage > 0.01)
 		{
-			result = Glib::ustring::compose("%1%%", (int)(percentage));
+			result = String::compose("%1%%", (int)(percentage));
 		}
 	}
 	else
 	{
-		result = Glib::ustring::compose("%1/%2", format_time(time), format_time(length));
+		result = String::compose("%1/%2", format_time(time), format_time(length));
 	}
 
 	return result;

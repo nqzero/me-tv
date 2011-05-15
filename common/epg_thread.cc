@@ -29,10 +29,10 @@ class EITDemuxers
 private:
 	GSList* eit_demuxers;
 	guint demuxer_count;
-	Glib::ustring demuxer_path;
+	String demuxer_path;
 
 public:
-	EITDemuxers(const Glib::ustring& path)
+	EITDemuxers(const String& path)
 	{
 		demuxer_path = path;
 		demuxer_count = 0;
@@ -44,7 +44,7 @@ public:
 		delete_all();
 	}
 		
-	gboolean get_next_eit(Dvb::SI::SectionParser& parser, Dvb::SI::EventInformationSection& section, gboolean is_atsc, const Glib::ustring& text_encoding);
+	gboolean get_next_eit(Dvb::SI::SectionParser& parser, Dvb::SI::EventInformationSection& section, gboolean is_atsc, const String& text_encoding);
 	
 	Dvb::Demuxer* add()
 	{
@@ -65,7 +65,7 @@ public:
 	}
 };
 
-gboolean EITDemuxers::get_next_eit(Dvb::SI::SectionParser& parser, Dvb::SI::EventInformationSection& section, gboolean is_atsc, const Glib::ustring& text_encoding)
+gboolean EITDemuxers::get_next_eit(Dvb::SI::SectionParser& parser, Dvb::SI::EventInformationSection& section, gboolean is_atsc, const String& text_encoding)
 {
 	if (eit_demuxers == NULL)
 	{
@@ -120,7 +120,7 @@ gboolean EITDemuxers::get_next_eit(Dvb::SI::SectionParser& parser, Dvb::SI::Even
 	return result >= 0;
 }
 
-EpgThread::EpgThread(Dvb::Frontend& f, const Glib::ustring& encoding, guint t)
+EpgThread::EpgThread(Dvb::Frontend& f, const String& encoding, guint t)
 	: Thread("EPG Thread"), frontend(f), text_encoding(encoding), timeout(t)
 {
 }
@@ -253,7 +253,7 @@ void EpgThread::run()
 {
 	try
 	{
-		Glib::ustring					demux_path = frontend.get_adapter().get_demux_path();
+		String					demux_path = frontend.get_adapter().get_demux_path();
 		EITDemuxers						demuxers(demux_path);
 		Dvb::SI::SectionParser			parser(text_encoding, timeout);
 		Dvb::SI::MasterGuideTableArray	master_guide_tables;
@@ -346,18 +346,22 @@ void EpgThread::run()
 						}
 					}
 
-					gint channel_id = channel_cache.get(frequency, service_id);
-					if (channel_id == -1)
+					gint channel_id = channel_cache.get(frequency, service_id);					
+					if (channel_id < 0)
 					{
 						Channel channel;
 						if (ChannelManager::find(channel, frequency, service_id))
 						{
 							channel_id = channel.id;
-							channel_cache.add(channel.id, frequency, service_id);
 						}
+						else
+						{
+							channel_id = 0;
+						}
+						channel_cache.add(channel.id, frequency, service_id);
 					}
 					
-					if (channel_id != -1)
+					if (channel_id <= 0)
 					{
 						for (unsigned int k = 0; section.events.size() > k; k++)
 						{

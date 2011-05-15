@@ -21,7 +21,7 @@
 #ifndef __THREAD_H__
 #define __THREAD_H__
 
-#include <glibmm.h>
+#include "me-tv-types.h"
 
 class Thread
 {
@@ -29,14 +29,14 @@ private:
 	gboolean				terminated;
 	Glib::Thread*			thread;
 	Glib::StaticRecMutex	mutex;
-	Glib::ustring			name;
+	String			name;
 	gboolean				join_on_destroy;
 	gboolean				started;
 
 	void on_run();
 
 public:
-	Thread(const Glib::ustring& name, gboolean join_on_destroy = true);
+	Thread(const String& name, gboolean join_on_destroy = true);
 	virtual ~Thread();
 
 	virtual void run() = 0;

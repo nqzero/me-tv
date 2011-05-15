@@ -43,20 +43,20 @@ private:
 	void stop_epg_thread();
 
 public:
-	FrontendThread(Dvb::Frontend& frontend, const Glib::ustring& encoding, guint timeout, gboolean ignore_teletext);
+	FrontendThread(Dvb::Frontend& frontend, const String& encoding, guint timeout, gboolean ignore_teletext);
 	~FrontendThread();
 
 	Dvb::Frontend& frontend;
-	Glib::ustring text_encoding;
+	String text_encoding;
 
 	gboolean is_available(const Channel& channel);
 
 	gboolean is_recording(const Channel& channel);
-	void start_recording(Channel& channel, const Glib::ustring& description, gboolean scheduled);
+	void start_recording(Channel& channel, const String& description, gboolean scheduled);
 	void stop_recording(const Channel& channel);
 
 	gboolean is_broadcasting();
-	void start_broadcasting(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port);
+	void start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port);
 	void stop_broadcasting(int client_id);
 
 	void start();

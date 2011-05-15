@@ -22,7 +22,7 @@
 #include "i18n.h"
 #include "exception.h"
 
-Thread::Thread(const Glib::ustring& thread_name, gboolean join_thread_on_destroy)
+Thread::Thread(const String& thread_name, gboolean join_thread_on_destroy)
 	: join_on_destroy(join_thread_on_destroy)
 {
 	g_static_rec_mutex_init(mutex.gobj());

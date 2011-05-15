@@ -37,13 +37,13 @@ public:
 		int channel_id;
 		int start_time;
 		int duration;
-		Glib::ustring title;
-		Glib::ustring subtitle;
-		Glib::ustring description;
+		String title;
+		String subtitle;
+		String description;
 		int scheduled_recording_id;
 
-		Glib::ustring get_start_time_text() const;
-		Glib::ustring get_duration_text() const;
+		String get_start_time_text() const;
+		String get_duration_text() const;
 	};
 
 	typedef std::list<EpgEvent> EpgEventList;
@@ -52,7 +52,7 @@ public:
 	{
 	public:
 		int id;
-		Glib::ustring name;
+		String name;
 		gboolean record_extra_before;
 		gboolean record_extra_after;
 		EpgEventList epg_events;
@@ -67,8 +67,8 @@ public:
 	class BroadcastingStream
 	{
 	public:
-		Glib::ustring protocol;
-		Glib::ustring address;
+		String protocol;
+		String address;
 		int port;
 	};
 
@@ -78,23 +78,23 @@ public:
 		int id;
 		int recurring_type;
 		int channel_id;
-		Glib::ustring description;
+		String description;
 		int start_time;
 		int duration;
-		Glib::ustring device;
+		String device;
 
-		Glib::ustring get_start_time_text() const;
-		Glib::ustring get_duration_text() const;
+		String get_start_time_text() const;
+		String get_duration_text() const;
 	};
 
 	typedef std::list<ScheduledRecording> ScheduledRecordingList;
-	typedef std::map<Glib::ustring, Glib::ustring> ConfigurationMap;
+	typedef std::map<String, String> ConfigurationMap;
 
 	class Demuxer
 	{
 	public:
 		int pid;
-		Glib::ustring filter_type;
+		String filter_type;
 	};
 
 	typedef std::list<Demuxer> DemuxerList;
@@ -113,7 +113,7 @@ public:
 
 		typedef std::list<Stream> StreamList;
 
-		Glib::ustring path;
+		String path;
 		StreamList streams;
 	};
 
@@ -123,40 +123,42 @@ private:
 	class Parameter
 	{
 	public:
-		Parameter(const Glib::ustring& n, const Glib::ustring& v) : name(n), value(v) {}
-		Parameter(const Glib::ustring& n, int v) : name(n), value(Glib::ustring::compose("%1", v)) {}
+		Parameter(const String& n, const String& v) : name(n), value(v) {}
+		Parameter(const String& n, int v) : name(n), value(String::compose("%1", v)) {}
 
-		Glib::ustring name;
-		Glib::ustring value;
+		String name;
+		String value;
 	};
 
 	class ParameterList : public std::list<Parameter>
 	{
 	public:
-		void add(const Glib::ustring& n, const Glib::ustring& v) { push_back(Parameter(n, v)); }
-		void add(const Glib::ustring& n, int v) { push_back(Parameter(n, v)); }
+		void add(const String& n, const String& v) { push_back(Parameter(n, v)); }
+		void add(const String& n, int v) { push_back(Parameter(n, v)); }
 	};
 
-	Glib::ustring host;
+	String host;
 	int port;
 	int client_id;
 	int broadcasting_channel_id;
 	xmlpp::DomParser parser;
-	xmlpp::Node* send_request(const Glib::ustring& command);
-	xmlpp::Node* send_request(const Glib::ustring& command, ParameterList& parameters);
-	xmlpp::Node* send_request(const Glib::ustring& command, const Glib::ustring& innerXml);
+	xmlpp::Node* send_request(const String& command);
+	xmlpp::Node* send_request(const String& command, ParameterList& parameters);
+	xmlpp::Node* send_request(const String& command, const String& innerXml);
 
 public:
 	Client();
 	~Client();
+
+	void set_server(const String& server_host, int server_port);
 
 	int get_client_id() const { return client_id; }
 	int get_broadcasting_channel_id() const { return broadcasting_channel_id; }
 
 	void terminate();
 
-	void add_channel(const Glib::ustring& line);
-	void set_channel(guint channel_id, const Glib::ustring& name,
+	void add_channel(const String& line);
+	void set_channel(guint channel_id, const String& name,
 		guint sort_order, gint record_extra_before, gint record_extra_after);
 	void remove_channel(int channel_id);
 	ChannelList get_channels();
@@ -169,10 +171,10 @@ public:
 	BroadcastingStream start_broadcasting(int channel_id, gboolean multicast);
 	void stop_broadcasting();
 
-	EpgEventList search_epg(const Glib::ustring& text, gboolean include_description);
+	EpgEventList search_epg(const String& text, gboolean include_description);
 	FrontendList get_status();
 	
-	gboolean register_client(const Glib::ustring& host, int port);
+	gboolean register_client();
 	void unregister_client();
 	gboolean is_registered() const { return client_id != 0; }
 

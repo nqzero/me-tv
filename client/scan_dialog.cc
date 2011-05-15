@@ -19,11 +19,9 @@
  */
 
 #include "scan_dialog.h"
-#include "me-tv-ui.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
+#include "me-tv-client.h"
 
-void show_error(const Glib::ustring& message)
+void show_error(const String& message)
 {
 	GdkLock gdk_lock;
 	Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
@@ -168,7 +166,7 @@ void ScanDialog::on_button_scan_wizard_next_clicked()
 
 	list_store->clear();
 
-	Glib::ustring initial_tuning_file;
+	String initial_tuning_file;
 	
 	Gtk::RadioButton* radio_button_auto_scan = NULL;
 	builder->get_widget("radio_button_auto_scan", radio_button_auto_scan);
@@ -187,7 +185,7 @@ void ScanDialog::on_button_scan_wizard_next_clicked()
 	{
 		Gtk::FileChooserButton* file_chooser_button = NULL;
 		builder->get_widget("file_chooser_button_import", file_chooser_button);
-		Glib::ustring channels_conf_path = file_chooser_button->get_filename();
+		String channels_conf_path = file_chooser_button->get_filename();
 		import_channels_conf(channels_conf_path);
 		hide();
 	}
@@ -205,10 +203,10 @@ void ScanDialog::on_combo_box_auto_scan_range_changed()
 //	radio_button_auto_scan->set_active();
 }
 
-void ScanDialog::import_channels_conf(const Glib::ustring& channels_conf_path)
+void ScanDialog::import_channels_conf(const String& channels_conf_path)
 {
 	Glib::RefPtr<Glib::IOChannel> file = Glib::IOChannel::create_from_file(channels_conf_path, "r");
-	Glib::ustring line;
+	String line;
 	guint line_count = 0;
 
 	progress_bar_scan->set_fraction(0);

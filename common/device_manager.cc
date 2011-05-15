@@ -22,23 +22,23 @@
 #include "device_manager.h"
 #include "exception.h"
 
-Glib::ustring DeviceManager::get_adapter_path(guint adapter)
+String DeviceManager::get_adapter_path(guint adapter)
 {
-	return Glib::ustring::compose("/dev/dvb/adapter%1", adapter);
+	return String::compose("/dev/dvb/adapter%1", adapter);
 }
 
-Glib::ustring DeviceManager::get_frontend_path(guint adapter, guint frontend_index)
+String DeviceManager::get_frontend_path(guint adapter, guint frontend_index)
 {
-	return Glib::ustring::compose("/dev/dvb/adapter%1/frontend%2", adapter, frontend_index);
+	return String::compose("/dev/dvb/adapter%1/frontend%2", adapter, frontend_index);
 }
 	
-void DeviceManager::initialise(const Glib::ustring& devices)
+void DeviceManager::initialise(const String& devices)
 {
-	Glib::ustring frontend_path;
+	String frontend_path;
 	
 	g_debug("Scanning DVB devices ...");
 	guint adapter_count = 0;
-	Glib::ustring adapter_path = get_adapter_path(adapter_count);
+	String adapter_path = get_adapter_path(adapter_count);
 	while (Gio::File::create_for_path(adapter_path)->query_exists())
 	{
 		// NB: This leaks but is low in memory and does not accumulate over time
@@ -48,7 +48,7 @@ void DeviceManager::initialise(const Glib::ustring& devices)
 		frontend_path = get_frontend_path(adapter_count, frontend_count);
 		while (Gio::File::create_for_path(frontend_path)->query_exists())
 		{
-			if (devices.empty() || devices.find(frontend_path) != Glib::ustring::npos)
+			if (devices.empty() || devices.find(frontend_path) != String::npos)
 			{
 				Dvb::Frontend* frontend = new Dvb::Frontend(*adapter, frontend_count);
 				try
@@ -62,7 +62,7 @@ void DeviceManager::initialise(const Glib::ustring& devices)
 					{					
 						frontends.push_back(frontend);
 
-						Glib::ustring frontend_type = "Unknown";
+						String frontend_type = "Unknown";
 
 						switch(frontend->get_frontend_type())
 						{
@@ -112,7 +112,7 @@ gboolean DeviceManager::is_frontend_supported(const Dvb::Frontend& test_frontend
 	return result;
 }
 
-Dvb::Frontend* DeviceManager::find_frontend_by_path(const Glib::ustring& path)
+Dvb::Frontend* DeviceManager::find_frontend_by_path(const String& path)
 {
 	Dvb::Frontend* result = NULL;
 

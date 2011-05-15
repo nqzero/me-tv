@@ -102,7 +102,7 @@ struct StringTable ChannelsConfLine::polarisation_table[] =
 	{ NULL, 0 }
 };
 
-guint convert_string_to_value(const StringTable* table, const Glib::ustring& text)
+guint convert_string_to_value(const StringTable* table, const String& text)
 {
 	gboolean found = false;
 	const StringTable*	current = table;
@@ -121,13 +121,13 @@ guint convert_string_to_value(const StringTable* table, const Glib::ustring& tex
 	
 	if (!found)
 	{
-		throw Exception(Glib::ustring::compose(_("Failed to find a value for '%1'"), text));
+		throw Exception(String::compose(_("Failed to find a value for '%1'"), text));
 	}
 	
 	return (guint)current->value;
 }
 
-Glib::ustring convert_value_to_string(const StringTable* table, guint value)
+String convert_value_to_string(const StringTable* table, guint value)
 {
 	gboolean found = false;
 	const StringTable*	current = table;
@@ -146,13 +146,13 @@ Glib::ustring convert_value_to_string(const StringTable* table, guint value)
 	
 	if (!found)
 	{
-		throw Exception(Glib::ustring::compose(_("Failed to find a text value for '%1'"), value));
+		throw Exception(String::compose(_("Failed to find a text value for '%1'"), value));
 	}
 	
 	return current->text;
 }
 
-void split_string(StringArray& parts, const Glib::ustring& text, const char* delimiter, gboolean remove_empty, gsize max_length)
+void split_string(StringArray& parts, const String& text, const char* delimiter, gboolean remove_empty, gsize max_length)
 {
 	gchar** temp_parts = g_strsplit_set(text.c_str(), delimiter, max_length);	
 	gchar** iterator = temp_parts;
@@ -169,12 +169,12 @@ void split_string(StringArray& parts, const Glib::ustring& text, const char* del
 	g_strfreev(temp_parts);
 }
 
-ChannelsConfLine::ChannelsConfLine(const Glib::ustring& line)
+ChannelsConfLine::ChannelsConfLine(const String& line)
 {
 	split_string(parts, line, ":", false, 20);
 }
 
-const Glib::ustring& ChannelsConfLine::get_name(guint index)
+const String& ChannelsConfLine::get_name(guint index)
 {
 	return parts[index];
 }

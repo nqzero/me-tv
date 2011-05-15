@@ -43,7 +43,7 @@ void Frontend::open()
 {
 	if (fd == -1)
 	{
-		Glib::ustring path = adapter.get_frontend_path(frontend);
+		String path = adapter.get_frontend_path(frontend);
 		g_debug("Opening frontend device: %s", path.c_str());
 		if ( (fd = ::open( path.c_str(), O_RDWR | O_NONBLOCK) ) < 0 )
 		{
@@ -61,7 +61,7 @@ void Frontend::close()
 {
 	if (fd != -1)
 	{
-		Glib::ustring path = adapter.get_frontend_path(frontend);
+		String path = adapter.get_frontend_path(frontend);
 		g_debug("Closing frontend device: %s", path.c_str());
 		
 		::close(fd);

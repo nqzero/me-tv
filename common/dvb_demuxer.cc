@@ -27,7 +27,7 @@
 
 using namespace Dvb;
 
-Demuxer::Demuxer(const Glib::ustring& device_path)
+Demuxer::Demuxer(const String& device_path)
 {
 	fd = -1;
 	filter_type = FILTER_TYPE_NONE;

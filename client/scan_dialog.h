@@ -21,8 +21,7 @@
 #ifndef __SCAN_DIALOG_H__
 #define __SCAN_DIALOG_H__
 
-#include <gtkmm.h>
-#include "me-tv-ui.h"
+#include "me-tv-client.h"
 
 #ifndef SCAN_DIRECTORIES
 #define SCAN_DIRECTORIES "/usr/share/dvb:/usr/share/doc/dvb-utils/examples/scan:/usr/share/dvb-apps"
@@ -37,7 +36,7 @@ private:
 	Gtk::TreeView*						tree_view_scanned_channels;
 	StringList							system_files;
 	guint								channel_count;
-	Glib::ustring						scan_directory_path;
+	String						scan_directory_path;
 
 	class ModelColumns : public Gtk::TreeModelColumnRecord
 	{
@@ -50,8 +49,8 @@ private:
 		}
 
 		Gtk::TreeModelColumn<guint>								column_id;
-		Gtk::TreeModelColumn<Glib::ustring>						column_name;
-		Gtk::TreeModelColumn<Glib::ustring>							column_signal_strength;
+		Gtk::TreeModelColumn<String>						column_name;
+		Gtk::TreeModelColumn<String>							column_signal_strength;
 	};
 
 	ModelColumns columns;
@@ -68,7 +67,7 @@ private:
 	void stop_scan();
 	void update_channel_count();
 
-	void import_channels_conf(const Glib::ustring& channels_conf_path);
+	void import_channels_conf(const String& channels_conf_path);
 
 	void on_show();
 

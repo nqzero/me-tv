@@ -513,7 +513,7 @@ gboolean Mpeg::Stream::find_descriptor(guchar tag, const unsigned char *buf, int
 	return false;
 }
 
-Glib::ustring Mpeg::Stream::get_lang_desc(const guchar* b)
+String Mpeg::Stream::get_lang_desc(const guchar* b)
 {
 	char c[4];
 	memset( mempcpy( c, b+2, 3 ), 0, 1 );

@@ -32,7 +32,6 @@ int main (int argc, char *argv[])
 
 	Glib::ustring server_host;
 	gint server_port = 1999;
-	Client client;
 
 	Glib::OptionEntry host_option_entry;
 	host_option_entry.set_long_name("server-host");
@@ -55,7 +54,9 @@ int main (int argc, char *argv[])
 	{
 		option_context.parse(argc, argv);
 
-		gboolean registered = client.register_client(server_host, server_port);
+		Client client;
+		client.set_server(server_host, server_port);
+		gboolean registered = client.register_client();
 
 		if (!registered)
 		{

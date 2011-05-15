@@ -19,10 +19,7 @@
  */
 
 #include "epg_event_dialog.h"
-#include "me-tv.h"
-#include "main_window.h"
-#include "../common/client.h"
-#include "../common/common.h"
+#include "me-tv-client.h"
 
 EpgEventDialog& EpgEventDialog::create(Glib::RefPtr<Gtk::Builder> builder)
 {
@@ -41,7 +38,7 @@ void EpgEventDialog::show_epg_event(Client::EpgEvent& epg_event)
 	time_t end_time = epg_event.start_time + epg_event.duration;
 	time_t now = time(NULL);
 	
-	Glib::ustring information = Glib::ustring::compose(
+	String information = String::compose(
 	    	"<b>%1</b>\n<b><i>%2</i></b>\n<i>%4 (%5)</i>\n\n%3",
 	    	encode_xml(epg_event.title),
 	    	epg_event.description.empty() ? "" : encode_xml(epg_event.subtitle),

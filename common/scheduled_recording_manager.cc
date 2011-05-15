@@ -25,7 +25,7 @@
 #include "epg_events.h"
 #include "common.h"
 
-gboolean ScheduledRecordingManager::is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording)
+gboolean ScheduledRecordingManager::is_device_available(const String& device, const ScheduledRecording& scheduled_recording)
 {
 	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
@@ -63,7 +63,7 @@ void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_reco
 	for (FrontendList::iterator j = frontends.begin(); j != frontends.end(); j++)
 	{
 		Dvb::Frontend* device = (*j);
-		const Glib::ustring& device_path = device->get_path();
+		const String& device_path = device->get_path();
 
 		if (device->get_frontend_type() != channel.transponder.frontend_type)
 		{
@@ -120,7 +120,7 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 
 		if (scheduled_recording.device.empty())
 		{
-			Glib::ustring message = Glib::ustring::compose(_(
+			String message = String::compose(_(
 				"Failed to set scheduled recording for '%1' at %2: There are no devices available at that time"),
 				scheduled_recording.description, scheduled_recording.get_start_time_text());
 			throw Exception(message);
@@ -143,7 +143,7 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 		    scheduled_recording.overlaps(current))
 		{
 			conflict = true;
-			Glib::ustring message =  Glib::ustring::compose(
+			String message =  String::compose(
 				_("Failed to save scheduled recording because it conflicts with another scheduled recording called '%1'."),
 				current.description);
 			throw Exception(message);
@@ -164,7 +164,7 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 		    current.start_time 		== scheduled_recording.start_time &&
 		    current.duration 		== scheduled_recording.duration)
 		{
-			Glib::ustring message =  Glib::ustring::compose(
+			String message =  String::compose(
 				_("Failed to save scheduled recording because you have already have a scheduled recording called '%1' which is scheduled for the same time on the same channel."),
 				current.description);
 			throw Exception(message);
@@ -326,7 +326,7 @@ ScheduledRecording ScheduledRecordingManager::get(guint scheduled_recording_id)
 	
 	if (!iter->move_next())
 	{
-		Glib::ustring message = Glib::ustring::compose(
+		String message = String::compose(
 			_("Scheduled recording '%1' not found"), scheduled_recording_id);
 		throw Exception(message);
 	}

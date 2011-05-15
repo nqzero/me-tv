@@ -32,19 +32,19 @@ ScheduledRecording::ScheduledRecording()
 	duration				= 0;
 }
 
-Glib::ustring ScheduledRecording::get_start_time_text() const
+String ScheduledRecording::get_start_time_text() const
 {
 	return get_local_time_text(start_time, "%c");
 }
 
-Glib::ustring ScheduledRecording::get_duration_text() const
+String ScheduledRecording::get_duration_text() const
 {
-	Glib::ustring result;
+	String result;
 	guint hours = duration / (60*60);
 	guint minutes = (duration % (60*60)) / 60;
 	if (hours > 0)
 	{
-		result = Glib::ustring::compose(ngettext("1 hour","%1 hours", hours), hours);
+		result = String::compose(ngettext("1 hour","%1 hours", hours), hours);
 	}
 	if (hours > 0 && minutes > 0)
 	{
@@ -52,7 +52,7 @@ Glib::ustring ScheduledRecording::get_duration_text() const
 	}
 	if (minutes > 0)
 	{
-		result += Glib::ustring::compose(ngettext("1 minute","%1 minutes", minutes), minutes);
+		result += String::compose(ngettext("1 minute","%1 minutes", minutes), minutes);
 	}
 	
 	return result;
@@ -63,7 +63,7 @@ time_t ScheduledRecording::get_end_time() const
 	return start_time + duration;
 }
 
-Glib::ustring ScheduledRecording::get_end_time_text() const
+String ScheduledRecording::get_end_time_text() const
 {
 	return get_local_time_text(get_end_time(), "%c");
 }

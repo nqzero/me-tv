@@ -26,7 +26,7 @@
 #include "dvb_si.h"
 #include "exception.h"
 
-void StreamManager::initialise(const Glib::ustring& text_encoding, guint timeout, gboolean ignore_teletext)
+void StreamManager::initialise(const String& text_encoding, guint timeout, gboolean ignore_teletext)
 {
 	g_debug("Creating stream manager");
 	FrontendList& frontends = device_manager.get_frontends();
@@ -80,7 +80,7 @@ void StreamManager::start_recording(const ScheduledRecording& scheduled_recordin
 
 	if (!frontend_found)
 	{
-		Glib::ustring message = Glib::ustring::compose(
+		String message = String::compose(
 		    _("Failed to find frontend '%1' for scheduled recording"),
 		    scheduled_recording.device);
 		throw Exception(message);
@@ -116,7 +116,7 @@ void StreamManager::stop()
 	}
 }
 
-void StreamManager::start_broadcasting(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port)
+void StreamManager::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
 {
 	gboolean found = false;
 
@@ -154,7 +154,7 @@ void StreamManager::stop_broadcasting(int client_id)
 	}
 }
 
-gboolean StreamManager::is_broadcasting(const Glib::ustring& device)
+gboolean StreamManager::is_broadcasting(const String& device)
 {
 	for (FrontendThreadList::iterator i = frontend_threads.begin(); i != frontend_threads.end(); i++)
 	{

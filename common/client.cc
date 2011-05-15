@@ -21,7 +21,7 @@
 #include "client.h"
 #include "exception.h"
 #include "common.h"
-#include <glibmm.h>
+#include "me-tv-types.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -44,29 +44,29 @@ Node* check_response(Node* requestNode)
 	return requestNode;
 }
 
-Glib::ustring get_start_time_text(int start_time)
+String get_start_time_text(int start_time)
 {
 	return get_local_time_text(start_time, "%A, %d %B %Y, %H:%M");
 }
 
-Glib::ustring Client::EpgEvent::get_start_time_text() const
+String Client::EpgEvent::get_start_time_text() const
 {
 	return ::get_start_time_text(start_time);
 }
 
-Glib::ustring Client::ScheduledRecording::get_start_time_text() const
+String Client::ScheduledRecording::get_start_time_text() const
 {
 	return ::get_start_time_text(start_time);
 }
 
-Glib::ustring get_duration_text(int duration)
+String get_duration_text(int duration)
 {
-	Glib::ustring result;
+	String result;
 	guint hours = duration / (60*60);
 	guint minutes = (duration % (60*60)) / 60;
 	if (hours > 0)
 	{
-		result = Glib::ustring::compose(ngettext("1 hour", "%1 hours", hours), hours);
+		result = String::compose(ngettext("1 hour", "%1 hours", hours), hours);
 	}
 	if (hours > 0 && minutes > 0)
 	{
@@ -74,18 +74,18 @@ Glib::ustring get_duration_text(int duration)
 	}
 	if (minutes > 0)
 	{
-		result += Glib::ustring::compose(ngettext("1 minute", "%1 minutes", minutes), minutes);
+		result += String::compose(ngettext("1 minute", "%1 minutes", minutes), minutes);
 	}
 
 	return result;
 }
 
-Glib::ustring Client::EpgEvent::get_duration_text() const
+String Client::EpgEvent::get_duration_text() const
 {
 	return ::get_duration_text(duration);
 }
 
-Glib::ustring Client::ScheduledRecording::get_duration_text() const
+String Client::ScheduledRecording::get_duration_text() const
 {
 	return ::get_duration_text(duration);
 }
@@ -101,12 +101,13 @@ Client::Channel& Client::ChannelList::get_by_id(int channel_id)
 		}
 	}
 
-	throw Exception("Channel not found");
+	throw Exception(String::compose("Channel %1 not found", channel_id));
 }
 
 Client::Client()
 {
 	client_id = 0;
+	port = 1999;
 	broadcasting_channel_id = -1;
 }
 
@@ -114,18 +115,25 @@ Client::~Client()
 {
 	if (client_id != 0)
 	{
+		stop_broadcasting();
 		unregister_client();
 	}
 }
 
-Node* Client::send_request(const Glib::ustring& command)
+void Client::set_server(const String& h, int p)
+{
+	host = h;
+	port = p;
+}
+
+Node* Client::send_request(const String& command)
 {
 	return send_request(command, "");
 }
 
-Node* Client::send_request(const Glib::ustring& command, ParameterList& parameters)
+Node* Client::send_request(const String& command, ParameterList& parameters)
 {
-	Glib::ustring innerXml;
+	String innerXml;
 
 	for (ParameterList::iterator i = parameters.begin(); i != parameters.end(); i++)
 	{
@@ -136,12 +144,12 @@ Node* Client::send_request(const Glib::ustring& command, ParameterList& paramete
 	return send_request(command, innerXml);
 }
 
-Node* Client::send_request(const Glib::ustring& command, const Glib::ustring& innerXml)
+Node* Client::send_request(const String& command, const String& innerXml)
 {
 	g_debug("Sending request");
 
-	Glib::ustring request = "<?xml version=\"1.0\" ?>";
-	request += Glib::ustring::compose("<request client_id=\"%1\" command=\"%2\">", client_id, command);
+	String request = "<?xml version=\"1.0\" ?>";
+	request += String::compose("<request client_id=\"%1\" command=\"%2\">", client_id, command);
 	request += innerXml;
 	request += "</request>";
 
@@ -176,7 +184,7 @@ Node* Client::send_request(const Glib::ustring& command, const Glib::ustring& in
 	write_string(sockfd, request);
 	::shutdown(sockfd, SHUT_WR);
 
-	Glib::ustring response = read_string(sockfd);
+	String response = read_string(sockfd);
 
 	::close(sockfd);
 
@@ -185,29 +193,29 @@ Node* Client::send_request(const Glib::ustring& command, const Glib::ustring& in
 	return check_response(parser.get_document()->get_root_node());
 }
 
-Glib::ustring get_attribute_value(Node* node)
+String get_attribute_value(Node* node)
 {
 	return dynamic_cast<xmlpp::Attribute*>(node)->get_value();
 }
 
-Glib::ustring get_attribute_value(Node* node, const Glib::ustring& xpath)
+String get_attribute_value(Node* node, const String& xpath)
 {
 	NodeSet nodeSet = node->find(xpath);
 
 	if (nodeSet.size() != 1)
 	{
-		throw Exception(Glib::ustring::compose("Failed to get single attribute for '%1'", xpath));
+		throw Exception(String::compose("Failed to get single attribute for '%1'", xpath));
 	}
 
 	return get_attribute_value(*(nodeSet.begin()));
 }
 
-int get_int_attribute_value(Node* node, const Glib::ustring& xpath)
+int get_int_attribute_value(Node* node, const String& xpath)
 {
 	return ::atoi(get_attribute_value(node, xpath).c_str());
 }
 
-gboolean get_bool_attribute_value(Node* node, const Glib::ustring& xpath)
+gboolean get_bool_attribute_value(Node* node, const String& xpath)
 {
 	return get_attribute_value(node, xpath) == "true";
 }
@@ -366,7 +374,7 @@ void Client::stop_broadcasting()
 	}
 }
 
-Client::EpgEventList Client::search_epg(const Glib::ustring& text, gboolean include_description)
+Client::EpgEventList Client::search_epg(const String& text, gboolean include_description)
 {
 	ParameterList parameters;
 	parameters.add("text", text);
@@ -425,12 +433,10 @@ Client::FrontendList Client::get_status()
 	return frontends;
 }
 
-gboolean Client::register_client(const Glib::ustring& h, int p)
+gboolean Client::register_client()
 {
 	try
 	{
-		host = h;
-		port = p;
 		Node* root_node = send_request("register");
 		client_id = get_int_attribute_value(root_node, "client/@id");
 	}
@@ -445,11 +451,11 @@ gboolean Client::register_client(const Glib::ustring& h, int p)
 void Client::unregister_client()
 {
 	send_request("unregister");
-	broadcasting_channel_id = -1;
+	stop_broadcasting();
 	client_id = 0;
 }
 
-void Client::add_channel(const Glib::ustring& line)
+void Client::add_channel(const String& line)
 {
 	ParameterList parameters;
 	parameters.add("line", line);
@@ -479,11 +485,11 @@ StringList Client::get_auto_record_list()
 
 void Client::set_auto_record_list(StringList& auto_record_list)
 {
-	Glib::ustring innerXml;
+	String innerXml;
 
 	for (StringList::iterator i = auto_record_list.begin(); i != auto_record_list.end(); i++)
 	{
-		innerXml += Glib::ustring::compose("<auto_record title=\"%1\" />", *i);
+		innerXml += String::compose("<auto_record title=\"%1\" />", *i);
 	}
 
 	send_request("set_auto_record_list", innerXml);
@@ -498,8 +504,8 @@ Client::ConfigurationMap Client::get_configuration()
 	{
 		Node* node = *i;
 
-		Glib::ustring name = get_attribute_value(node, "@name");
-		Glib::ustring value = get_attribute_value(node, "@value");
+		String name = get_attribute_value(node, "@name");
+		String value = get_attribute_value(node, "@value");
 
 		result[name] = value;
 	}
@@ -509,17 +515,17 @@ Client::ConfigurationMap Client::get_configuration()
 
 void Client::set_configuration(Client::ConfigurationMap& configuration)
 {
-	Glib::ustring innerXml;
+	String innerXml;
 
 	for (Client::ConfigurationMap::iterator i = configuration.begin(); i != configuration.end(); i++)
 	{
-		innerXml += Glib::ustring::compose("<configuration name=\"%1\" value=\"%2\" />", (*i).first, (*i).second);
+		innerXml += String::compose("<configuration name=\"%1\" value=\"%2\" />", (*i).first, (*i).second);
 	}
 
 	send_request("set_configuration", innerXml);
 }
 
-void Client::set_channel(guint channel_id, const Glib::ustring& name,
+void Client::set_channel(guint channel_id, const String& name,
 		guint sort_order, gint record_extra_before, gint record_extra_after)
 {
 	ParameterList parameters;

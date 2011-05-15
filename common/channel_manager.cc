@@ -91,7 +91,7 @@ gboolean ChannelManager::find(Channel& channel, guint frequency, guint service_i
 	gboolean result = false;
 
 	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
-		Glib::ustring::compose("select * from channel where frequency = %1 and service_id = %2", frequency, service_id));
+		String::compose("select * from channel where frequency = %1 and service_id = %2", frequency, service_id));
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
 	
 	if (iter->move_next())
@@ -109,7 +109,7 @@ Channel ChannelManager::get(guint channel_id)
 
 	if (!find(channel, channel_id))
 	{
-		throw Exception(Glib::ustring::compose(_("Channel '%1' not found"), channel_id));
+		throw Exception(String::compose(_("Channel '%1' not found"), channel_id));
 	}
 
 	return channel;
@@ -119,7 +119,7 @@ void ChannelManager::remove_channel(guint channel_id)
 {
 	g_debug("Deleting channel '%d'", channel_id);
 	data_connection->statement_execute_non_select(
-		Glib::ustring::compose("delete from channel where id = %1", channel_id));
+		String::compose("delete from channel where id = %1", channel_id));
 	g_debug("Channel '%d' deleted", channel_id);
 }
 
@@ -194,7 +194,7 @@ ChannelList ChannelManager::get_all()
 	return channels;
 }
 
-void ChannelManager::set_channel(int channel_id, const Glib::ustring& name,
+void ChannelManager::set_channel(int channel_id, const String& name,
 	guint sort_order, guint record_extra_before, guint record_extra_after)
 {
 	data_connection->statement_execute_non_select(

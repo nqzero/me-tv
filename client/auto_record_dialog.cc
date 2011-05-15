@@ -19,10 +19,7 @@
  */
 
 #include "auto_record_dialog.h"
-#include "me-tv.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
-#include "../common/client.h"
+#include "me-tv-client.h"
 
 AutoRecordDialog& AutoRecordDialog::create(Glib::RefPtr<Gtk::Builder> builder)
 {
@@ -66,7 +63,7 @@ void AutoRecordDialog::run()
 		Gtk::TreeModel::Children children = list_store->children();
 		for (Gtk::TreeIter iterator = children.begin(); iterator != children.end(); iterator++)
 		{			
-			Glib::ustring title = trim_string((*iterator)[columns.column_title]);
+			String title = trim_string((*iterator)[columns.column_title]);
 			if (!title.empty())
 			{
 				auto_record_list.push_back(title);

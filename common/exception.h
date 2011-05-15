@@ -21,7 +21,7 @@
 #ifndef __EXCEPTION_H__
 #define __EXCEPTION_H__
 
-#include <glibmm.h>
+#include "me-tv-types.h"
 #include <errno.h>
 #include <string.h>
 #include "i18n.h"
@@ -29,23 +29,23 @@
 class Exception : public Glib::Exception
 {
 protected:
-	Glib::ustring message;
+	String message;
 public:
-	Exception(const Glib::ustring& exception_message) : message(exception_message)
+	Exception(const String& exception_message) : message(exception_message)
 	{
 		g_debug("Exception: %s", message.c_str());
 	}
 
 	~Exception() throw() {}
-	Glib::ustring what() const { return message; }
+	String what() const { return message; }
 };
 
 class SystemException : public Exception
 {
 private:
-	Glib::ustring create_message(gint error_number, const Glib::ustring& message)
+	String create_message(gint error_number, const String& message)
 	{
-		Glib::ustring detail = _("Failed to get error message");
+		String detail = _("Failed to get error message");
 
 		char* system_error_message = strerror(error_number);
 		if (system_error_message != NULL)
@@ -53,16 +53,16 @@ private:
 			detail = system_error_message;
 		}
 
-		return Glib::ustring::compose("%1: %2", message, detail);
+		return String::compose("%1: %2", message, detail);
 	}
 public:
-	SystemException(const Glib::ustring& m) : Exception(create_message(errno, m)) {}
+	SystemException(const String& m) : Exception(create_message(errno, m)) {}
 };
 
 class TimeoutException : public Exception
 {
 public:
-	TimeoutException(const Glib::ustring& m) : Exception(m) {}
+	TimeoutException(const String& m) : Exception(m) {}
 };
 
 #endif

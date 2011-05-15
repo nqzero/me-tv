@@ -32,14 +32,14 @@ class DeviceManager
 private:
 	FrontendList frontends;	
 
-	static Glib::ustring get_adapter_path(guint adapter);
-	static Glib::ustring get_frontend_path(guint adapter, guint frontend);
+	static String get_adapter_path(guint adapter);
+	static String get_frontend_path(guint adapter, guint frontend);
 	static gboolean is_frontend_supported(const Dvb::Frontend& frontend);
 
 public:
-	void initialise(const Glib::ustring& devices);
+	void initialise(const String& devices);
 		
-	Dvb::Frontend* find_frontend_by_path(const Glib::ustring& path);
+	Dvb::Frontend* find_frontend_by_path(const String& path);
 	FrontendList& get_frontends() { return frontends; };
 
 	void check_frontend();

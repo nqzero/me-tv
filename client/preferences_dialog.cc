@@ -19,9 +19,8 @@
  */
 
 #include "preferences_dialog.h"
-#include "me-tv-ui.h"
+#include "me-tv-client.h"
 #include "configuration_manager.h"
-#include "../common/common.h"
 
 PreferencesDialog& PreferencesDialog::create(Glib::RefPtr<Gtk::Builder> builder)
 {

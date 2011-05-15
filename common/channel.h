@@ -30,9 +30,9 @@ public:
 	Channel();
 
 	guint				id;
-	Glib::ustring		name;
+	String		name;
 	guint				sort_order;
-	Glib::ustring		mrl;
+	String		mrl;
 	gint				record_extra_before;
 	gint				record_extra_after;
 	
@@ -40,7 +40,7 @@ public:
 	Dvb::Transponder	transponder;
 	
 	guint				get_transponder_frequency();
-	Glib::ustring		get_text();
+	String		get_text();
 
 	bool operator==(const Channel& channel) const;
 	bool operator!=(const Channel& channel) const;

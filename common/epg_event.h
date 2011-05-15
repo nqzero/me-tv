@@ -21,18 +21,17 @@
 #ifndef __EPG_EVENT_H__
 #define __EPG_EVENT_H__
 
-#include <glibmm.h>
-#include <list>
+#include "me-tv-types.h"
 
 class EpgEventText
 {
 public:
 	guint			id;
 	guint			epg_event_id;
-	Glib::ustring	language;
-	Glib::ustring	title;
-	Glib::ustring	subtitle;
-	Glib::ustring	description;
+	String	language;
+	String	title;
+	String	subtitle;
+	String	description;
 		
 	EpgEventText();
 };
@@ -54,12 +53,12 @@ public:
 	EpgEvent();
 		
 	time_t get_end_time() const { return start_time + duration; }
-	EpgEventText get_default_text(const Glib::ustring& preferred_language = "") const;
-	Glib::ustring get_title() const;
-	Glib::ustring get_subtitle() const;
-	Glib::ustring get_description() const;
-	Glib::ustring get_start_time_text() const;
-	Glib::ustring get_duration_text() const;
+	EpgEventText get_default_text(const String& preferred_language = "") const;
+	String get_title() const;
+	String get_subtitle() const;
+	String get_description() const;
+	String get_start_time_text() const;
+	String get_duration_text() const;
 };
 
 #endif

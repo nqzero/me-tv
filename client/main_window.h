@@ -21,7 +21,7 @@
 #ifndef __MAIN_WINDOW_H__
 #define __MAIN_WINDOW_H__
 
-#include "me-tv.h"
+#include "me-tv-client.h"
 #include "engine.h"
 #include <dbus/dbus.h>
 #include <gtkmm/volumebutton.h>
@@ -66,15 +66,15 @@ private:
 	void stop();
 	void set_view_mode(ViewMode display_mode);
 	void load_devices();
-	void set_state(const Glib::ustring& name, gboolean state);
+	void set_state(const String& name, gboolean state);
 	void add_channel_number(guint channel_number);
 	void toggle_mute();
 	void set_mute_state(gboolean state);
-	void set_status_text(const Glib::ustring& text);
+	void set_status_text(const String& text);
 	void select_channel_to_play();
 	void stop_broadcasting();
 
-	void play(const Glib::ustring& mrl);
+	void play(const String& mrl);
 
 	void toggle_visibility();
 	void save_geometry();
@@ -94,7 +94,7 @@ private:
 	void on_start_broadcasting(int channel_id);
 	void on_stop_broadcasting();
 	void on_update();
-	void on_error(const Glib::ustring& message);
+	void on_error(const String& message);
 
 	void on_show();
 	void on_hide();
@@ -135,9 +135,9 @@ private:
 	void update_table(Client::ChannelList& channels);
 	Client::ChannelList get_epg();
 	
-	Gtk::RadioButton& attach_radio_button(Gtk::RadioButtonGroup& group, const Glib::ustring& text, gboolean record, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
-	Gtk::Button& attach_button(const Glib::ustring& text, gboolean record, gboolean ellipsize, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
-	Gtk::Label& attach_label(const Glib::ustring& text, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
+	Gtk::RadioButton& attach_radio_button(Gtk::RadioButtonGroup& group, const String& text, gboolean record, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
+	Gtk::Button& attach_button(const String& text, gboolean record, gboolean ellipsize, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
+	Gtk::Label& attach_label(const String& text, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
 	void attach_widget(Gtk::Widget& widget, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
 	void create_channel_row(Gtk::RadioButtonGroup& group, Client::Channel& channel,
 		guint table_row, time_t start_time, guint channel_number,

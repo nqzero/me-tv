@@ -185,12 +185,12 @@ EpgEvent EpgEvents::get(int epg_event_id)
 	return epg_event;
 }
 
-EpgEventList EpgEvents::search(const Glib::ustring& text, gboolean search_description)
+EpgEventList EpgEvents::search(const String& text, gboolean search_description)
 {
 	EpgEventList result;
 
 	time_t now = time(NULL);
-	Glib::ustring upper_text = text.uppercase();
+	String upper_text = text.uppercase();
 
 	String statement = "select * from epg_event ee, epg_event_text eet where ee.id = eet.epg_event_id and ";
 	statement += String::compose("start_time > %1 and (upper(eet.title) like '%%%2%%'", now, text);

@@ -21,7 +21,7 @@
 #ifndef __EPG_EVENT_SEARCH_DIALOG_H__
 #define __EPG_EVENT_SEARCH_DIALOG_H__
 
-#include "me-tv-ui.h"
+#include "me-tv-client.h"
 
 class EpgEventSearchDialog : public Gtk::Dialog
 {
@@ -34,7 +34,7 @@ private:
 			add(column_text);
 		}
 
-		Gtk::TreeModelColumn<Glib::ustring> column_text;
+		Gtk::TreeModelColumn<String> column_text;
 	};
 	
 	typedef Glib::RefPtr<Gdk::Pixbuf> PixbufPtr;
@@ -56,12 +56,12 @@ private:
 		}
 
 		Gtk::TreeModelColumn<guint>			column_id;
-		Gtk::TreeModelColumn<Glib::ustring>	column_title;
+		Gtk::TreeModelColumn<String>	column_title;
 		Gtk::TreeModelColumn<guint>			column_channel;
-		Gtk::TreeModelColumn<Glib::ustring>	column_channel_name;
+		Gtk::TreeModelColumn<String>	column_channel_name;
 		Gtk::TreeModelColumn<guint>			column_start_time;
-		Gtk::TreeModelColumn<Glib::ustring>	column_start_time_text;
-		Gtk::TreeModelColumn<Glib::ustring>	column_duration;
+		Gtk::TreeModelColumn<String>	column_start_time_text;
+		Gtk::TreeModelColumn<String>	column_duration;
 		Gtk::TreeModelColumn<PixbufPtr>		column_image;
 		Gtk::TreeModelColumn<gint>		column_scheduled_recording_id;
 	};
@@ -79,7 +79,7 @@ private:
 	void on_show();
 	void on_row_activated(const Gtk::TreeModel::Path& tree_model_path, Gtk::TreeViewColumn* column);
 	void on_event_search_button_press_event(GdkEventButton* button);
-	void add_completion(const Glib::ustring& text);
+	void add_completion(const String& text);
 	void search();
 public:
 	EpgEventSearchDialog(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& builder);

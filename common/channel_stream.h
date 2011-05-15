@@ -98,7 +98,7 @@ private:
 	String get_description();
 
 public:
-	RecordingChannelStream(Channel& channel, gboolean scheduled, const Glib::ustring& mrl, const Glib::ustring& description);
+	RecordingChannelStream(Channel& channel, gboolean scheduled, const String& mrl, const String& description);
 	~RecordingChannelStream();
 };
 

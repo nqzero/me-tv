@@ -43,7 +43,7 @@ public:
 	XineEngine();
 	~XineEngine();
 
-	void set_mrl(const Glib::ustring& mrl);
+	void set_mrl(const String& mrl);
 	void set_window(int window);
 	void play();
 	void pause(gboolean state);

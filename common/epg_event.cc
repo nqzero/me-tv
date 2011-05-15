@@ -38,22 +38,22 @@ EpgEvent::EpgEvent()
 	save = true;
 }
 
-Glib::ustring EpgEvent::get_title() const
+String EpgEvent::get_title() const
 {
 	return get_default_text().title;
 }
 
-Glib::ustring EpgEvent::get_subtitle() const
+String EpgEvent::get_subtitle() const
 {
 	return get_default_text().subtitle;
 }
 
-Glib::ustring EpgEvent::get_description() const
+String EpgEvent::get_description() const
 {
 	return get_default_text().description;
 }
 
-EpgEventText EpgEvent::get_default_text(const Glib::ustring& preferred_language) const
+EpgEventText EpgEvent::get_default_text(const String& preferred_language) const
 {
 	EpgEventText result;
 	gboolean found = false;
@@ -85,19 +85,19 @@ EpgEventText EpgEvent::get_default_text(const Glib::ustring& preferred_language)
 	return result;
 }
 
-Glib::ustring EpgEvent::get_start_time_text() const
+String EpgEvent::get_start_time_text() const
 {
 	return get_local_time_text(start_time, "%A, %d %B %Y, %H:%M");
 }
 
-Glib::ustring EpgEvent::get_duration_text() const
+String EpgEvent::get_duration_text() const
 {
-	Glib::ustring result;
+	String result;
 	guint hours = duration / (60*60);
 	guint minutes = (duration % (60*60)) / 60;
 	if (hours > 0)
 	{
-		result = Glib::ustring::compose(ngettext("1 hour", "%1 hours", hours), hours);
+		result = String::compose(ngettext("1 hour", "%1 hours", hours), hours);
 	}
 	if (hours > 0 && minutes > 0)
 	{
@@ -105,7 +105,7 @@ Glib::ustring EpgEvent::get_duration_text() const
 	}
 	if (minutes > 0)
 	{
-		result += Glib::ustring::compose(ngettext("1 minute", "%1 minutes", minutes), minutes);
+		result += String::compose(ngettext("1 minute", "%1 minutes", minutes), minutes);
 	}
 	
 	return result;

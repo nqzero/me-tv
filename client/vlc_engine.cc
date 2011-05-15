@@ -17,9 +17,7 @@
  */
 
 #include "vlc_engine.h"
-#include "../common/exception.h"
-#include "me-tv.h"
-#include "../common/i18n.h"
+#include "me-tv-client.h"
 
 #define DEFAULT_VOLUME	130
 
@@ -133,7 +131,7 @@ void VlcEngine::stop()
 	}
 }
 
-void VlcEngine::set_mrl(const Glib::ustring& mrl)
+void VlcEngine::set_mrl(const String& mrl)
 {	
 	if (mrl.empty())
 	{

@@ -23,14 +23,14 @@
 #include "exception.h"
 #include "common.h"
 
-FrontendThread::FrontendThread(Dvb::Frontend& f, const Glib::ustring& encoding, guint t, gboolean i)
+FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t, gboolean i)
 	: Thread("Frontend"), frontend(f), text_encoding(encoding), timeout(t), ignore_teletext(i)
 {
 	g_debug("Creating FrontendThread (%s)", frontend.get_path().c_str());
 	
 	epg_thread = NULL;
 
-	Glib::ustring input_path = frontend.get_adapter().get_dvr_path();
+	String input_path = frontend.get_adapter().get_dvr_path();
 
 	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
@@ -105,7 +105,7 @@ void FrontendThread::run()
 					continue;
 				}
 
-				Glib::ustring message = Glib::ustring::compose("Frontend read failed (%1)", frontend.get_path());
+				String message = String::compose("Frontend read failed (%1)", frontend.get_path());
 				throw SystemException(message);
 			}
 
@@ -136,7 +136,7 @@ void FrontendThread::setup_dvb(ChannelStream& channel_stream)
 {
 	g_debug("Setting up DVB");
 
-	Glib::ustring demux_path = frontend.get_adapter().get_demux_path();
+	String demux_path = frontend.get_adapter().get_demux_path();
 
 	Buffer buffer;
 	const Channel& channel = channel_stream.channel;
@@ -230,7 +230,7 @@ void FrontendThread::stop_epg_thread()
 	}
 }
 
-void FrontendThread::start_broadcasting(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port)
+void FrontendThread::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
 {
 	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
 	stop();
@@ -271,15 +271,15 @@ void FrontendThread::stop_broadcasting(int client_id)
 	start();
 }
 
-Glib::ustring make_recording_filename(Channel& channel, const Glib::ustring& description)
+String make_recording_filename(Channel& channel, const String& description)
 {
-	Glib::ustring start_time = get_local_time_text("%c");
-	Glib::ustring filename;
-	Glib::ustring title = description;
+	String start_time = get_local_time_text("%c");
+	String filename;
+	String title = description;
 	
 	if (title.empty())
 	{
-		filename = Glib::ustring::compose
+		filename = String::compose
 		(
 			"%1 - %2.mpeg",
 			channel.name,
@@ -288,7 +288,7 @@ Glib::ustring make_recording_filename(Channel& channel, const Glib::ustring& des
 	}
 	else
 	{
-		filename = Glib::ustring::compose
+		filename = String::compose
 		(
 			"%1 - %2 - %3.mpeg",
 			title,
@@ -298,18 +298,18 @@ Glib::ustring make_recording_filename(Channel& channel, const Glib::ustring& des
 	}
 
 	// Clean filename
-	Glib::ustring::size_type position = Glib::ustring::npos;
-	while ((position = filename.find('/')) != Glib::ustring::npos)
+	String::size_type position = String::npos;
+	while ((position = filename.find('/')) != String::npos)
 	{
 		filename.replace(position, 1, "_");
 	}
 
-	while ((position = filename.find(':')) != Glib::ustring::npos )
+	while ((position = filename.find(':')) != String::npos )
 	{
 		filename.replace(position, 1, "_");
 	}
 
-	Glib::ustring fixed_filename = Glib::filename_from_utf8(filename);
+	String fixed_filename = Glib::filename_from_utf8(filename);
 	
 	return Glib::build_filename(recording_directory, fixed_filename);
 }
@@ -320,7 +320,7 @@ bool is_recording_stream(ChannelStream* channel_stream)
 }
 
 void FrontendThread::start_recording(Channel& channel,
-                                     const Glib::ustring& description,
+                                     const String& description,
                                      gboolean scheduled)
 {
 	stop();	

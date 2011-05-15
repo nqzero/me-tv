@@ -39,7 +39,7 @@ Dvb::SI::Event::Event()
 	version_number = 0;
 }
 
-SectionParser::SectionParser(const Glib::ustring& encoding, guint t)
+SectionParser::SectionParser(const String& encoding, guint t)
 {
 	text_encoding = encoding;
 	timeout = t;
@@ -347,7 +347,7 @@ void SectionParser::parse_nis (Demuxer& demuxer, NetworkInformationSection& sect
 	g_debug("transport_stream_length is %d, network_descriptor_length is %d and offset is %d", transport_stream_length, network_descriptor_length, offset);
 }
 
-gsize get_atsc_text(Glib::ustring& string, const guchar* buffer)
+gsize get_atsc_text(String& string, const guchar* buffer)
 {
 	size_t text_position = 0;
 	gsize offset = 0;
@@ -581,10 +581,10 @@ void SectionParser::parse_eis(Demuxer& demuxer, EventInformationSection& section
 	}
 }
 
-Glib::ustring get_lang_desc(const guchar* b)
+String get_lang_desc(const guchar* b)
 {
 	char c[4];
-	Glib::ustring s;
+	String s;
 	memset( mempcpy( c, b+2, 3 ), 0, 1 );
 	s = c;
 	return s;
@@ -604,7 +604,7 @@ gsize SectionParser::decode_event_descriptor (const guchar* event_buffer, Event&
 	{		
 	case EXTENDED_EVENT:
 		{
-			Glib::ustring language = get_lang_desc (event_buffer + 1);
+			String language = get_lang_desc (event_buffer + 1);
 			
 			if (!event.texts.contains(language))
 			{
@@ -627,7 +627,7 @@ gsize SectionParser::decode_event_descriptor (const guchar* event_buffer, Event&
 
 	case SHORT_EVENT:
 		{
-			Glib::ustring language = get_lang_desc (event_buffer);
+			String language = get_lang_desc (event_buffer);
 			
 			if (!event.texts.contains(language))
 			{
@@ -663,7 +663,7 @@ guint SectionParser::get_bits(const guchar* b, guint bitpos, gsize bitcount)
 	return val;
 }
 
-gsize SectionParser::get_text(Glib::ustring& s, const guchar* text_buffer)
+gsize SectionParser::get_text(String& s, const guchar* text_buffer)
 {
 	gsize length = text_buffer[0];
 	guint text_index = 0;
@@ -798,9 +798,9 @@ gsize SectionParser::get_text(Glib::ustring& s, const guchar* text_buffer)
 						error_message = error->message;
 					}
 					
-					Glib::ustring message = Glib::ustring::compose(
+					String message = String::compose(
 						_("Failed to convert to UTF-8: %1"),
-						Glib::ustring(error_message));
+						String(error_message));
 					g_debug("%s", message.c_str());
 					g_debug("Codeset: %s", codeset);
 					g_debug("Length: %zu", length);
@@ -828,9 +828,9 @@ gsize SectionParser::get_text(Glib::ustring& s, const guchar* text_buffer)
 	return length + 1;
 }
 
-Glib::ustring SectionParser::convert_iso6937(const guchar* text_buffer, gsize length)
+String SectionParser::convert_iso6937(const guchar* text_buffer, gsize length)
 {
-	Glib::ustring result;
+	String result;
 	gint val;
 	guint i;
 	
@@ -1105,7 +1105,7 @@ Glib::ustring SectionParser::convert_iso6937(const guchar* text_buffer, gsize le
 	return result;
 }
 
-gboolean EventTextMap::contains(const Glib::ustring& language)
+gboolean EventTextMap::contains(const String& language)
 {
 	for (const_iterator i = begin(); i != end(); i++)
 	{

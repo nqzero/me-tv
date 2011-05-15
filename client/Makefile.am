@@ -33,12 +33,9 @@ me_tv_client_SOURCES = \
 	gstreamer_engine.h \
 	gstreamer_engine.cc \
 	me-tv-client.cc \
+	me-tv-client.h \
 	main_window.cc \
 	main_window.h \
-	me-tv.cc \
-	me-tv.h \
-	me-tv-ui.h \
-	me-tv-ui.cc \
 	preferences_dialog.cc \
 	preferences_dialog.h \
 	engine.h \

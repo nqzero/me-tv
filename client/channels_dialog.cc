@@ -18,12 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "me-tv.h"
-#include <gtkmm.h>
-#include "scan_dialog.h"
 #include "channels_dialog.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
+#include "me-tv-client.h"
+#include "scan_dialog.h"
 
 ChannelsDialog& ChannelsDialog::create(Glib::RefPtr<Gtk::Builder> builder)
 {
@@ -127,7 +124,7 @@ void ChannelsDialog::save()
 	{
 		Gtk::TreeModel::Row row(*iterator);
 		guint id = row[columns.column_id];
-		Glib::ustring name = row[columns.column_name];
+		String name = row[columns.column_name];
 		gint record_extra_before = row[columns.column_record_extra_before];
 		gint record_extra_after = row[columns.column_record_extra_after];
 		client.set_channel(id, name, ++sort_order, record_extra_before, record_extra_after);

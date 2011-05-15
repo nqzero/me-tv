@@ -18,9 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "../common/exception.h"
-#include "../common/i18n.h"
-#include "me-tv.h"
+#include "me-tv-client.h"
 #include "scheduled_recordings_dialog.h"
 
 ScheduledRecordingsDialog& ScheduledRecordingsDialog::create(Glib::RefPtr<Gtk::Builder> builder)

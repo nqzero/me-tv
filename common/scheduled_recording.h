@@ -21,8 +21,7 @@
 #ifndef __SCHEDULED_RECORDING_H__
 #define __SCHEDULED_RECORDING_H__
 
-#include <glibmm.h>
-#include <list>
+#include "me-tv-types.h"
 
 #define SCHEDULED_RECORDING_ACTION_AFTER_NONE		0
 #define SCHEDULED_RECORDING_ACTION_AFTER_CLOSE		1
@@ -37,20 +36,20 @@ class ScheduledRecording
 {
 public:
 	guint			id;
-	Glib::ustring	description;
+	String	description;
 	guint			recurring_type;
 	guint			action_after;
 	guint			channel_id;
 	time_t			start_time;
 	guint			duration;
-	Glib::ustring	device;
+	String	device;
 		
 	ScheduledRecording();
 		
-	Glib::ustring get_start_time_text() const;
-	Glib::ustring get_duration_text() const;
+	String get_start_time_text() const;
+	String get_duration_text() const;
 	time_t get_end_time() const;
-	Glib::ustring get_end_time_text() const;
+	String get_end_time_text() const;
 
 	gboolean is_old() const { return is_old(time_t(NULL)); }
 	gboolean is_old(time_t now) const;

@@ -18,24 +18,53 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "me-tv.h"
-#include "../common/i18n.h"
-#include "main_window.h"
+#include <gdk/gdk.h>
 #include <gst/gst.h>
 #include <gconfmm.h>
 #include <glib/gprintf.h>
-#include <X11/Xlib.h>
 #include <unique/unique.h>
 #include <dbus/dbus-glib.h>
-#include "me-tv-ui.h"
+
+#include "main_window.h"
+#include "me-tv-client.h"
 #include "configuration_manager.h"
-#include "../common/exception.h"
-#include "../common/common.h"
 #include "../common/network_server_thread.h"
 
 #define ME_TV_SUMMARY _("Me TV is a digital television viewer for GTK")
 #define ME_TV_DESCRIPTION _("Me TV was developed for the modern digital lounge room with a PC for a media centre that is capable "\
 	"of normal PC tasks (web surfing, word processing and watching TV).\n")
+
+bool							disable_epg				= false;
+bool							safe_mode				= false;
+bool							minimised_mode			= false;
+bool							no_screensaver_inhibit	= false;
+bool							quit_on_close			= false;
+String							engine_type				= "vlc";
+Glib::RefPtr<Gtk::UIManager>	ui_manager;
+Client							client;
+
+Glib::RefPtr<Gtk::ToggleAction> toggle_action_fullscreen;
+Glib::RefPtr<Gtk::ToggleAction> toggle_action_mute;
+Glib::RefPtr<Gtk::ToggleAction> toggle_action_record_current;
+Glib::RefPtr<Gtk::ToggleAction> toggle_action_visibility;
+
+Glib::RefPtr<Gtk::Action> action_about;
+Glib::RefPtr<Gtk::Action> action_auto_record;
+Glib::RefPtr<Gtk::Action> action_channels;
+Glib::RefPtr<Gtk::Action> action_change_view_mode;
+Glib::RefPtr<Gtk::Action> action_decrease_volume;
+Glib::RefPtr<Gtk::Action> action_epg_event_search;
+Glib::RefPtr<Gtk::Action> action_increase_volume;
+Glib::RefPtr<Gtk::Action> action_preferences;
+Glib::RefPtr<Gtk::Action> action_present;
+Glib::RefPtr<Gtk::Action> action_quit;
+Glib::RefPtr<Gtk::Action> action_restart_server;
+Glib::RefPtr<Gtk::Action> action_scheduled_recordings;
+
+sigc::signal<void, int> signal_start_broadcasting;
+sigc::signal<void> signal_stop_broadcasting;
+sigc::signal<void, int> signal_add_scheduled_recording;
+sigc::signal<void, int> signal_remove_scheduled_recording;
 
 static UniqueResponse on_message_received (
 	UniqueApp*			app,
@@ -58,6 +87,165 @@ static UniqueResponse on_message_received (
 	}
 
 	return response;
+}
+
+ComboBoxText::ComboBoxText(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& xml)
+	: Gtk::ComboBox(cobject)
+{
+	list_store = Gtk::ListStore::create(columns);
+	clear();
+	set_model(list_store);
+	pack_start(columns.column_text);
+	set_active(0);
+}
+
+void ComboBoxText::append_text(const String& text, const String& value)
+{
+	Gtk::TreeModel::Row row = *list_store->append();
+	row[columns.column_text] = text;
+	row[columns.column_value] = value;
+}
+
+void ComboBoxText::set_active_text(const String& text)
+{
+	Gtk::TreeNodeChildren children = get_model()->children();
+	for (Gtk::TreeNodeChildren::iterator i = children.begin(); i != children.end(); i++)
+	{
+		Gtk::TreeModel::Row row = *i;
+		if (row[columns.column_text] == text)
+		{
+			set_active(i);
+		}
+	}
+}
+
+void ComboBoxText::set_active_value(const String& value)
+{
+	Gtk::TreeNodeChildren children = get_model()->children();
+	for (Gtk::TreeNodeChildren::iterator i = children.begin(); i != children.end(); i++)
+	{
+		Gtk::TreeModel::Row row = *i;
+		if (row[columns.column_value] == value)
+		{
+			set_active(i);
+		}
+	}
+}
+
+void ComboBoxText::clear_items()
+{
+	list_store->clear();
+}
+
+String ComboBoxText::get_active_text()
+{
+	Gtk::TreeModel::iterator i = get_active();
+	if (i)
+	{
+		Gtk::TreeModel::Row row = *i;
+		if (row)
+		{
+			return row[columns.column_text];
+		}
+	}
+	
+	throw Exception(_("Failed to get active text value"));
+}
+
+String ComboBoxText::get_active_value()
+{
+	Gtk::TreeModel::iterator i = get_active();
+	if (i)
+	{
+		Gtk::TreeModel::Row row = *i;
+		if (row)
+		{
+			return row[columns.column_value];
+		}
+	}
+	
+	throw Exception(_("Failed to get active text value"));
+}
+
+ComboBoxEntryText::ComboBoxEntryText(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& xml)
+	: Gtk::ComboBoxEntryText(cobject)
+{
+}
+
+GdkLock::GdkLock()
+{
+	gdk_threads_enter();
+}
+
+GdkLock::~GdkLock()
+{
+	gdk_threads_leave();
+}
+
+GdkUnlock::GdkUnlock()
+{
+	gdk_threads_leave();
+}
+
+GdkUnlock::~GdkUnlock()
+{
+	gdk_threads_enter();
+}
+
+IntComboBox::IntComboBox(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& xml)
+	: Gtk::ComboBox(cobject)
+{
+	list_store = Gtk::ListStore::create(columns);
+	clear();
+	set_model(list_store);
+	pack_start(columns.column_int);
+	set_size(0);
+	set_active(0);
+}
+
+void IntComboBox::set_size(guint size)
+{	
+	g_debug("Setting integer combo box size to %d", size);
+
+	list_store->clear();
+	for (guint i = 0; i < size; i++)
+	{
+		Gtk::TreeModel::Row row = *list_store->append();
+		row[columns.column_int] = (i+1);
+		
+		if (list_store->children().size() == 1)
+		{
+			set_active(0);
+		}
+	}
+	
+	if (size == 0)
+	{
+		Gtk::TreeModel::Row row = *list_store->append();
+		row[columns.column_int] = 1;
+	}
+	
+	set_sensitive(size > 1);
+}
+
+guint IntComboBox::get_size()
+{
+	return list_store->children().size();
+}
+
+guint IntComboBox::get_active_value()
+{
+	Gtk::TreeModel::iterator i = get_active();
+	if (i)
+	{
+		Gtk::TreeModel::Row row = *i;
+		if (row)
+		{
+			return row[columns.column_int];
+		}
+	}
+	
+	throw Exception(_("Failed to get active integer value"));
 }
 
 void on_error_gtk(const String& message)
@@ -286,39 +474,7 @@ int main (int argc, char *argv[])
 				network_server_thread->start();
 			}
 
-			client.register_client(server_host, server_port);
-
-			if (!client.is_registered())
-			{
-				if (network_server_thread == NULL && (server_host == "localhost" || server_host == "127.0.0.1"))
-				{
-					Gtk::MessageDialog dialog("Failed to communicate with Me TV server.  "
-						"Would you like the Me TV client to attempt to start it?",
-						false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
-					dialog.set_title(PACKAGE_NAME);
-					if (dialog.run() == Gtk::RESPONSE_YES)
-					{
-						start_server(server_host);
-
-						int wait_time = 0;
-						while (wait_time++ < 10 && !client.is_registered())
-						{
-							sleep(1);
-
-							g_debug("Attempting to register");
-							try
-							{
-								client.register_client(server_host, server_port);
-								g_debug("Registered with client ID %d", client.get_client_id());
-							}
-							catch (...)
-							{
-								handle_error();
-							}
-						}
-					}
-				}
-			}
+			client.register_client();
 
 			if (!client.is_registered())
 			{
@@ -326,7 +482,11 @@ int main (int argc, char *argv[])
 			}
 
 			MainWindow* main_window = MainWindow::create(builder);
-			main_window->show_all();
+
+			if (!minimised_mode)
+			{
+				main_window->show_all();
+			}
 
 			Client::ChannelList channels = client.get_channels();
 			if (channels.empty())

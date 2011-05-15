@@ -16,9 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "me-tv.h"
 #include "gstreamer_engine.h"
-#include "../common/exception.h"
 #include <gst/gst.h>
 #include <gst/gstbus.h>
 #include <gst/interfaces/xoverlay.h>
@@ -32,7 +30,7 @@ static gboolean on_bus_message (GstBus* bus, GstMessage *message, gpointer data)
 			gchar* debug = NULL;
 
 			gst_message_parse_error(message, &err, &debug);
-			Glib::ustring message = err->message;
+			String message = err->message;
 			g_error_free(err);
 			g_free(debug);
 
@@ -110,7 +108,7 @@ void GStreamerEngine::stop()
 	gst_element_set_state(GST_ELEMENT(playbin), GST_STATE_NULL);
 }
 
-void GStreamerEngine::set_mrl(const Glib::ustring& mrl)
+void GStreamerEngine::set_mrl(const String& mrl)
 {
 	g_object_set(G_OBJECT(playbin), "uri", mrl.c_str(), NULL);
 }

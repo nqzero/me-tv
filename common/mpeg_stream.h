@@ -30,9 +30,7 @@
 #define STREAM_TYPE_AUDIO_AC3	0x81
 
 #include <linux/dvb/frontend.h>
-#include <list>
-#include <vector>
-#include <glibmm.h>
+#include "me-tv-types.h"
 #include "i18n.h"
 #include "buffer.h"
 
@@ -68,7 +66,7 @@ namespace Mpeg
 			language = _("Unknown language");
 		}
 		
-		Glib::ustring	language;
+		String	language;
 	};
 
 	class TeletextLanguageDescriptor
@@ -83,7 +81,7 @@ namespace Mpeg
 		}
 
 		guint			type;
-		Glib::ustring	language;
+		String	language;
 		guint			magazine_number;
 		guint			page_number;
 	};
@@ -108,7 +106,7 @@ namespace Mpeg
 		guint subtitling_type;
 		guint ancillary_page_id;
 		guint composition_page_id;
-		Glib::ustring language;
+		String language;
 	};
 
 	class Stream
@@ -119,7 +117,7 @@ namespace Mpeg
 
 		gboolean is_pid_used(guint pid);
 		gboolean find_descriptor(guchar tag, const unsigned char *buf, int descriptors_loop_len, const unsigned char **desc, int *desc_len);
-		Glib::ustring get_lang_desc(const guchar* buffer);
+		String get_lang_desc(const guchar* buffer);
 		guint pat_counter;
 		guint pmt_counter;
 			

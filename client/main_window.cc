@@ -18,10 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "me-tv.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
 #include "main_window.h"
+#include "me-tv-client.h"
 #include "channels_dialog.h"
 #include "preferences_dialog.h"
 #include "scheduled_recordings_dialog.h"
@@ -32,19 +30,17 @@
 #include "xine_engine.h"
 #include "vlc_engine.h"
 #include "configuration_manager.h"
-#include <gtkmm.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include "../common/common.h"
 
 #define MINUTES_PER_COLUMN	1
 #define COLUMNS_PER_HOUR	(60 * MINUTES_PER_COLUMN)
 #define UPDATE_INTERVAL					60
 #define SECONDS_UNTIL_CHANNEL_CHANGE	3
 
-Glib::ustring ui_info =
+String ui_info =
 	"<ui>"
 	"	<menubar name='menu_bar'>"
 	"		<menu action='action_file'>"
@@ -430,6 +426,13 @@ void MainWindow::on_show()
 	builder->get_widget("event_box_video", event_box_video);
 	event_box_video->resize_children();
 
+	client.register_client();
+
+	if (!client.is_registered())
+	{
+		throw Exception("Failed to communicate with Me TV server");
+	}
+
 	select_channel_to_play();
 }
 
@@ -437,6 +440,7 @@ void MainWindow::on_hide()
 {
 	stop_broadcasting();
 	save_geometry();
+	client.unregister_client();
 	Gtk::Window::on_hide();
 
 	if (quit_on_close)
@@ -564,7 +568,7 @@ void MainWindow::create_engine()
 	}
 	else
 	{
-		throw Exception(Glib::ustring::compose("Unknown engine type '%1'", engine_type));
+		throw Exception(String::compose("Unknown engine type '%1'", engine_type));
 	}
 
 	engine->set_mute_state(mute_state);
@@ -577,7 +581,7 @@ void MainWindow::stop_broadcasting()
 	signal_stop_broadcasting();
 }
 
-void MainWindow::play(const Glib::ustring& mrl)
+void MainWindow::play(const String& mrl)
 {
 	if (engine == NULL)
 	{
@@ -597,8 +601,8 @@ void MainWindow::on_update()
 {
 	g_debug("Updating UI");
 
-	Glib::ustring description = "Me TV - It's TV for me computer";
-	Glib::ustring title = description;
+	String description = "Me TV - It's TV for me computer";
+	String title = description;
 
 	int broadcasting_channel = client.get_broadcasting_channel_id();
 	Client::ChannelList channels = get_epg();
@@ -611,7 +615,7 @@ void MainWindow::on_update()
 
 		if (!channel.epg_events.empty())
 		{
-			Glib::ustring event_title = (*(channel.epg_events.begin())).title;
+			String event_title = (*(channel.epg_events.begin())).title;
 
 			title += " - " + event_title;
 			description += " - " + event_title;
@@ -625,7 +629,7 @@ void MainWindow::on_update()
 	g_debug("UI updated");
 }
 
-void MainWindow::set_status_text(const Glib::ustring& text)
+void MainWindow::set_status_text(const String& text)
 {
 	Gtk::Label* label = NULL;
 	builder->get_widget("label_status_text", label);
@@ -746,14 +750,14 @@ void MainWindow::on_start_broadcasting(int channel_id)
 	gboolean multicast = configuration_manager.get_boolean_value("multicast");
 	Client::BroadcastingStream stream = client.start_broadcasting(channel_id, multicast);
 
-	Glib::ustring mrl;
+	String mrl;
 	if (engine_type == "vlc")
 	{
-		mrl = Glib::ustring::compose("%1://@0.0.0.0:%2/", stream.protocol, stream.port);
+		mrl = String::compose("%1://@0.0.0.0:%2/", stream.protocol, stream.port);
 	}
 	else
 	{
-		mrl = Glib::ustring::compose("%1://%2:%3/", stream.protocol, stream.address, stream.port);
+		mrl = String::compose("%1://%2:%3/", stream.protocol, stream.address, stream.port);
 	}
 
 	play(mrl);
@@ -900,7 +904,7 @@ void MainWindow::update_table(Client::ChannelList& channels)
 			for (guint hour = 0; hour < epg_span_hours; hour++)
 			{
 				guint hour_time = start_time + (hour * 60 * 60);
-				Glib::ustring hour_time_text = get_local_time_text(hour_time, "%c");
+				String hour_time_text = get_local_time_text(hour_time, "%c");
 
 				Gtk::Frame* frame = Gtk::manage(new Gtk::Frame());
 				Gtk::Label* label = Gtk::manage(new Gtk::Label(hour_time_text));
@@ -954,10 +958,10 @@ void MainWindow::create_channel_row(Gtk::RadioButtonGroup& group, Client::Channe
 	guint table_row, time_t start_time, guint channel_number,
 	gboolean show_channel_number, gboolean show_epg_time, gboolean show_epg_tooltips)
 {
-	Glib::ustring channel_text = Glib::ustring::compose("<b>%1</b>", encode_xml(channel.name));
+	String channel_text = String::compose("<b>%1</b>", encode_xml(channel.name));
 	if (show_channel_number)
 	{
-		channel_text = Glib::ustring::compose("<i>%1.</i> ", channel_number) + channel_text;
+		channel_text = String::compose("<i>%1.</i> ", channel_number) + channel_text;
 	}
 		
 	Gtk::RadioButton& channel_button = attach_radio_button(group, channel_text, false, 0, 1, table_row, table_row + 1);
@@ -1030,7 +1034,7 @@ void MainWindow::create_channel_row(Gtk::RadioButtonGroup& group, Client::Channe
 				{
 					guint converted_start_time = epg_event.start_time;
 
-					Glib::ustring text;
+					String text;
 					if (show_epg_time)
 					{
 						text = get_local_time_text(converted_start_time, "<b>%H:%M");
@@ -1060,11 +1064,11 @@ void MainWindow::create_channel_row(Gtk::RadioButtonGroup& group, Client::Channe
 
 					if (show_epg_tooltips)
 					{
-						Glib::ustring tooltip_text = epg_event.title;
+						String tooltip_text = epg_event.title;
 						tooltip_text += get_local_time_text(converted_start_time, "\n%A, %B %d (%H:%M");
 						tooltip_text += get_local_time_text(converted_start_time + epg_event.duration, " - %H:%M)");
-						Glib::ustring subtitle = trim_string(epg_event.subtitle);
-						Glib::ustring description = trim_string(epg_event.description);
+						String subtitle = trim_string(epg_event.subtitle);
+						String description = trim_string(epg_event.description);
 						if (!subtitle.empty())
 						{
 							tooltip_text += "\n" + subtitle;
@@ -1098,7 +1102,7 @@ void MainWindow::create_channel_row(Gtk::RadioButtonGroup& group, Client::Channe
 	}
 }
 
-Gtk::RadioButton& MainWindow::attach_radio_button(Gtk::RadioButtonGroup& group, const Glib::ustring& text, gboolean record, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
+Gtk::RadioButton& MainWindow::attach_radio_button(Gtk::RadioButtonGroup& group, const String& text, gboolean record, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
 {
 	Gtk::RadioButton* button = Gtk::manage(new Gtk::RadioButton(group));
 	button->property_draw_indicator() = false;
@@ -1128,7 +1132,7 @@ Gtk::RadioButton& MainWindow::attach_radio_button(Gtk::RadioButtonGroup& group, 
 	return *button;
 }
 
-Gtk::Button& MainWindow::attach_button(const Glib::ustring& text, gboolean record, gboolean ellipsize, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
+Gtk::Button& MainWindow::attach_button(const String& text, gboolean record, gboolean ellipsize, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
 {
 	Gtk::Button* button = new Gtk::Button();
 	button->set_alignment(0, 0.5);
@@ -1158,7 +1162,7 @@ Gtk::Button& MainWindow::attach_button(const Glib::ustring& text, gboolean recor
 	return *button;
 }
 
-Gtk::Label& MainWindow::attach_label(const Glib::ustring& text, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
+Gtk::Label& MainWindow::attach_label(const String& text, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options)
 {
 	Gtk::Label* label = new Gtk::Label(text.c_str());
 	label->set_justify(Gtk::JUSTIFY_LEFT);

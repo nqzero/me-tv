@@ -29,9 +29,9 @@ Channel::Channel()
 	service_id	= 0;
 }
 
-Glib::ustring Channel::get_text()
+String Channel::get_text()
 {
-	Glib::ustring result = name;
+	String result = name;
 	EpgEvent epg_event;
 /*	
 	if (epg_events.get_current(id, epg_event))

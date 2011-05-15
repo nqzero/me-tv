@@ -19,11 +19,8 @@
  */
 
 #include "epg_event_search_dialog.h"
-
 #include "epg_event_dialog.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
-#include "configuration_manager.h"
+#include "me-tv-client.h"
 
 EpgEventSearchDialog& EpgEventSearchDialog::get(Glib::RefPtr<Gtk::Builder> builder)
 {
@@ -73,8 +70,8 @@ void EpgEventSearchDialog::search()
 	builder->get_widget("check_button_search_description", check);
 
 	bool include_description = check->get_active();
-	Glib::ustring text = combo_box_entry_search->get_active_text();
-	Glib::ustring text_uppercase = text.uppercase();
+	String text = combo_box_entry_search->get_active_text();
+	String text_uppercase = text.uppercase();
 
 	if (text.empty())
 	{
@@ -90,7 +87,7 @@ void EpgEventSearchDialog::search()
 
     for (StringList::iterator i = recent_searches.begin(); i != recent_searches.end(); i++)
     {
-		Glib::ustring recent_search = *i;
+		String recent_search = *i;
         (*list_store_search->append())[search_columns.column_text] = recent_search;
 		if (recent_search.uppercase() == text_uppercase)
 		{

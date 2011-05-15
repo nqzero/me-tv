@@ -21,8 +21,7 @@
 #ifndef __DVB_SERVICE_H__
 #define __DVB_SERVICE_H__
 
-#include <glibmm.h>
-#include <list>
+#include "me-tv-types.h"
 
 namespace Dvb
 {
@@ -33,7 +32,7 @@ namespace Dvb
 	public:
 		Service(Transponder& transponder);
 			
-		Glib::ustring		name;
+		String			name;
 		guint				id;
 		Transponder&		transponder;
 		

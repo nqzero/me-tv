@@ -32,7 +32,7 @@ private:
 public:
 	static void remove_channel(guint channel_id);
 	static void add_channel(const Channel& channel);
-	static void set_channel(gint channel_id, const Glib::ustring& name,
+	static void set_channel(gint channel_id, const String& name,
 		guint sort_order, guint record_extra_before, guint record_extra_after);
 
 	static Channel get(guint channel_id);

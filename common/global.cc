@@ -25,14 +25,14 @@ StreamManager				stream_manager;
 RequestHandler				request_handler;
 Glib::RefPtr<Connection>	data_connection;
 
-Glib::ustring			preferred_language;
+String			preferred_language;
 Glib::StaticRecMutex	mutex;
 bool					verbose_logging			= false;
 bool					disable_epg_thread		= false;
-Glib::ustring			devices;
-Glib::ustring			text_encoding;
+String			devices;
+String			text_encoding;
 gboolean				ignore_teletext = true;
-Glib::ustring			recording_directory;
+String			recording_directory;
 int						read_timeout = 5000;
 int						server_port = 1999;
 

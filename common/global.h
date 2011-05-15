@@ -32,16 +32,16 @@
 extern bool									verbose_logging;
 extern bool									disable_epg_thread;
 extern bool									disable_epg;
-extern Glib::ustring						devices;
-extern Glib::ustring						preferred_language;
+extern String						devices;
+extern String						preferred_language;
 extern int									read_timeout;
-extern Glib::ustring						server_address;
+extern String						server_address;
 extern int									server_port;
-extern Glib::ustring						recording_directory;
+extern String						recording_directory;
 extern guint								record_extra_before;
 extern guint								record_extra_after;
 extern sigc::signal<void>					signal_update;
-extern sigc::signal<void, Glib::ustring>	signal_error;
+extern sigc::signal<void, String>	signal_error;
 
 extern ChannelManager				channel_manager;
 extern ScheduledRecordingManager	scheduled_recording_manager;

@@ -25,8 +25,8 @@
 #include <sys/poll.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <glibmm.h>
 #include <linux/dvb/dmx.h>
+#include "me-tv-types.h"
 
 extern int read_timeout;
 
@@ -41,7 +41,7 @@ namespace Dvb
 	public:
 		typedef enum { FILTER_TYPE_NONE, FILTER_TYPE_PES, FILTER_TYPE_SECTION } FilterType;
 
-		Demuxer(const Glib::ustring& device_path);
+		Demuxer(const String& device_path);
 		~Demuxer();
 
 		int pid;

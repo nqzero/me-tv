@@ -57,16 +57,16 @@ namespace Dvb
 		class EventText
 		{
 		public:
-			Glib::ustring language;
-			Glib::ustring title;
-			Glib::ustring subtitle;
-			Glib::ustring description;
+			String language;
+			String title;
+			String subtitle;
+			String description;
 		};
 		
-		class EventTextMap : public std::map<Glib::ustring, EventText>
+		class EventTextMap : public std::map<String, EventText>
 		{
 		public:
-			gboolean contains(const Glib::ustring& language);
+			gboolean contains(const String& language);
 		};
 		
 		class Event
@@ -108,8 +108,8 @@ namespace Dvb
 			guint id;
 			guint type;
 			gboolean eit_schedule_flag;
-			Glib::ustring provider_name;
-			Glib::ustring name;
+			String provider_name;
+			String name;
 		};
 
 		class ServiceDescriptionSection
@@ -146,7 +146,7 @@ namespace Dvb
 		class VirtualChannel
 		{
 		public:
-			Glib::ustring short_name;
+			String short_name;
 			guint major_channel_number;
 			guint minor_channel_number;
 			guint channel_TSID;
@@ -166,19 +166,19 @@ namespace Dvb
 		{
 		private:
 			guchar buffer[DVB_SECTION_BUFFER_SIZE];
-			Glib::ustring text_encoding;
+			String text_encoding;
 			guint timeout;
 				
 			guint get_bits(const guchar* buffer, guint bitpos, gsize bitcount);
-			Glib::ustring convert_iso6937(const guchar* buffer, gsize length);
+			String convert_iso6937(const guchar* buffer, gsize length);
 			gsize decode_event_descriptor (const guchar* buffer, Event& event);
 			gsize read_section(Demuxer& demuxer);
 		
 			fe_code_rate_t parse_fec_inner(guint bitmask);
 		public:
-			SectionParser(const Glib::ustring& encoding, guint read_timeout);
+			SectionParser(const String& encoding, guint read_timeout);
 			
-			gsize get_text(Glib::ustring& s, const guchar* buffer);
+			gsize get_text(String& s, const guchar* buffer);
 			const guchar* get_buffer() const { return buffer; };
 
 			void parse_eis (Demuxer& demuxer, EventInformationSection& section);

@@ -44,21 +44,21 @@ namespace Dvb
 	class Adapter
 	{
 	private:
-		Glib::ustring path;
+		String path;
 		guint index;
 	public:
 		Adapter(guint adapter_index) : index(adapter_index)
 		{
-			path = Glib::ustring::compose("/dev/dvb/adapter%1", index);
+			path = String::compose("/dev/dvb/adapter%1", index);
 		}
 
-		Glib::ustring get_frontend_path(guint frontend) const
+		String get_frontend_path(guint frontend) const
 		{
-			return Glib::ustring::compose(path + "/frontend%1", frontend);
+			return String::compose(path + "/frontend%1", frontend);
 		}
 			
-		Glib::ustring get_demux_path() const { return path + "/demux0"; }
-		Glib::ustring get_dvr_path() const { return path + "/dvr0"; }
+		String get_demux_path() const { return path + "/demux0"; }
+		String get_dvr_path() const { return path + "/dvr0"; }
 	};
 	
 	class Frontend
@@ -83,10 +83,10 @@ namespace Dvb
 		const struct dvb_frontend_parameters& get_frontend_parameters() const;
 		fe_type_t get_frontend_type() const { return frontend_info.type; }
 		const struct dvb_frontend_info& get_frontend_info() const;
-		Glib::ustring get_name() const { return get_frontend_info().name; }
+		String get_name() const { return get_frontend_info().name; }
 		int get_fd() const { return fd; }
 		const Adapter& get_adapter() const { return adapter; }
-		Glib::ustring get_path() const { return adapter.get_frontend_path(frontend); }
+		String get_path() const { return adapter.get_frontend_path(frontend); }
 
 		guint get_signal_strength();
 		guint get_snr();

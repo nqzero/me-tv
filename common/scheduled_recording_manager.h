@@ -31,7 +31,7 @@ typedef std::list<ScheduledRecording> ScheduledRecordingList;
 class ScheduledRecordingManager
 {
 private:
-	static gboolean is_device_available(const Glib::ustring& device, const ScheduledRecording& scheduled_recording);
+	static gboolean is_device_available(const String& device, const ScheduledRecording& scheduled_recording);
 	static void select_device(ScheduledRecording& scheduled_recording);
 	static void load(Glib::RefPtr<DataModelIter>& iter, ScheduledRecording& scheduled_recording);
 

@@ -45,13 +45,13 @@ private:
 
 		Gtk::TreeModelColumn<guint>							column_sort;
 		Gtk::TreeModelColumn<Client::ScheduledRecording>	column_scheduled_recording;
-		Gtk::TreeModelColumn<Glib::ustring>					column_description;
-		Gtk::TreeModelColumn<Glib::ustring>					column_channel;
-		Gtk::TreeModelColumn<Glib::ustring>					column_start_time;
-		Gtk::TreeModelColumn<Glib::ustring>					column_duration;
-		Gtk::TreeModelColumn<Glib::ustring>					column_recurring_type;
-		Gtk::TreeModelColumn<Glib::ustring>					column_action_after;
-		Gtk::TreeModelColumn<Glib::ustring>					column_device;
+		Gtk::TreeModelColumn<String>					column_description;
+		Gtk::TreeModelColumn<String>					column_channel;
+		Gtk::TreeModelColumn<String>					column_start_time;
+		Gtk::TreeModelColumn<String>					column_duration;
+		Gtk::TreeModelColumn<String>					column_recurring_type;
+		Gtk::TreeModelColumn<String>					column_action_after;
+		Gtk::TreeModelColumn<String>					column_device;
 	};
 	
 	ModelColumns						columns;

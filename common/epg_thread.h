@@ -28,11 +28,11 @@ class EpgThread : public Thread
 {
 private:
 	Dvb::Frontend& frontend;
-	Glib::ustring text_encoding;
+	String text_encoding;
 	guint timeout;
 	
 public:
-	EpgThread(Dvb::Frontend& frontend, const Glib::ustring& text_encoding, guint timeout);
+	EpgThread(Dvb::Frontend& frontend, const String& text_encoding, guint timeout);
 
 	void run();
 };

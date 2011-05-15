@@ -27,30 +27,30 @@
 
 using namespace xmlpp;
 
-Node* RequestHandler::get_attribute(const Node* node, const Glib::ustring& xpath)
+Node* RequestHandler::get_attribute(const Node* node, const String& xpath)
 {
 	NodeSet result = node->find(xpath);
 	return result.empty() ? NULL : result.at(0);
 }
 
-Glib::ustring RequestHandler::get_attribute_value(const Node* node, const Glib::ustring& xpath)
+String RequestHandler::get_attribute_value(const Node* node, const String& xpath)
 {
 	Node* resultNode = get_attribute(node, xpath);
 	if (resultNode == NULL)
 	{
-		throw Exception(Glib::ustring::compose(
+		throw Exception(String::compose(
 			"XPath expression '%1' returned no results",
 			xpath));
 	}
 	return dynamic_cast<Attribute*>(resultNode)->get_value();
 }
 
-int RequestHandler::get_int_attribute_value(const Node* node, const Glib::ustring& xpath)
+int RequestHandler::get_int_attribute_value(const Node* node, const String& xpath)
 {
 	return ::atoi(get_attribute_value(node, xpath).c_str());
 }
 
-gboolean RequestHandler::get_bool_attribute_value(const Node* node, const Glib::ustring& xpath)
+gboolean RequestHandler::get_bool_attribute_value(const Node* node, const String& xpath)
 {
 	return get_attribute_value(node, xpath) == "true";
 }
@@ -72,7 +72,7 @@ void RequestHandler::ClientList::remove(int client_id)
 		}
 	}
 
-	throw Exception("Client not found");
+	throw Exception(String::compose("Client %1 not found", client_id));
 }
 
 int RequestHandler::ClientList::add()
@@ -114,7 +114,7 @@ RequestHandler::Client& RequestHandler::ClientList::get(int client_id)
 		}
 	}
 
-	throw Exception("Client not found");
+	throw Exception(String::compose("Client %1 not found", client_id));
 }
 
 void RequestHandler::ClientList::update(int client_id)
@@ -163,10 +163,10 @@ int RequestHandler::ClientList::get_free_port()
 
 gboolean RequestHandler::handle_connection(int sockfd)
 {
-	Glib::ustring body;
+	String body;
 	gboolean result = false;
 
-	Glib::ustring request = read_string(sockfd);
+	String request = read_string(sockfd);
 
 	DomParser parser;
 	parser.parse_memory(request);
@@ -178,14 +178,14 @@ gboolean RequestHandler::handle_connection(int sockfd)
 	}
 
 	const Node* root_node = parser.get_document()->get_root_node();
-	const Glib::ustring& command = get_attribute_value(root_node, "@command");
+	const String& command = get_attribute_value(root_node, "@command");
 
-	Glib::ustring error_message;
+	String error_message;
 	
 	g_debug("Command: %s", command.c_str());
 	if (command == "register")
 	{
-		body += Glib::ustring::compose("<client id=\"%1\" />", clients.add());
+		body += String::compose("<client id=\"%1\" />", clients.add());
 	}
 	else
 	{
@@ -214,13 +214,13 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				for (ChannelStreamList::iterator j = streams.begin(); j != streams.end(); j++)
 				{
 					ChannelStream* stream = *j;
-					body += Glib::ustring::compose("<stream channel_id=\"%1\" type=\"%2\" description=\"%3\">",
+					body += String::compose("<stream channel_id=\"%1\" type=\"%2\" description=\"%3\">",
 						stream->channel.id, stream->type, stream->get_description());
 					Dvb::DemuxerList& demuxers = stream->demuxers;
 					for (Dvb::DemuxerList::iterator k = demuxers.begin(); k != demuxers.end(); k++)
 					{
 						Dvb::Demuxer* demuxer = *k;
-						Glib::ustring type = "None";
+						String type = "None";
 						if (demuxer->filter_type == Dvb::Demuxer::FILTER_TYPE_PES)
 						{
 							type = "PES";
@@ -229,7 +229,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 						{
 							type = "SECTION";
 						}
-						body += Glib::ustring::compose("<demuxer pid=\"%1\" filter_type=\"%2\" />", demuxer->pid, type);
+						body += String::compose("<demuxer pid=\"%1\" filter_type=\"%2\" />", demuxer->pid, type);
 					}
 					body += "</stream>";
 				}
@@ -242,12 +242,12 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
-				body += Glib::ustring::compose("<channel id=\"%1\" name=\"%2\" record_extra_before=\"%3\" record_extra_after=\"%4\">",
+				body += String::compose("<channel id=\"%1\" name=\"%2\" record_extra_before=\"%3\" record_extra_after=\"%4\">",
 					channel.id, encode_xml(channel.name), channel.record_extra_before, channel.record_extra_after);
 				EpgEvent epg_event;
 				if (EpgEvents::get_current(channel.id, epg_event))
 				{
-					body += Glib::ustring::compose(
+					body += String::compose(
 						"<event id=\"%1\" channel_id=\"%2\" start_time=\"%3\" duration=\"%4\" title=\"%5\" subtitle=\"%6\" description=\"%7\" scheduled_recording_id=\"%8\" />",
 						epg_event.id,
 						epg_event.channel_id,
@@ -264,7 +264,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		else if (command == "set_channel")
 		{
 			guint id = get_int_attribute_value(root_node, "parameter[@name=\"id\"]/@value");
-			Glib::ustring name = get_attribute_value(root_node, "parameter[@name=\"name\"]/@value");
+			String name = get_attribute_value(root_node, "parameter[@name=\"name\"]/@value");
 			guint sort_order = get_int_attribute_value(root_node, "parameter[@name=\"sort_order\"]/@value");
 			gint record_extra_before = get_int_attribute_value(root_node, "parameter[@name=\"record_extra_before\"]/@value");
 			gint record_extra_after = get_int_attribute_value(root_node, "parameter[@name=\"record_extra_after\"]/@value");
@@ -284,7 +284,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
-				body += Glib::ustring::compose("<channel id=\"%1\" name=\"%2\">", channel.id, encode_xml(channel.name));
+				body += String::compose("<channel id=\"%1\" name=\"%2\">", channel.id, encode_xml(channel.name));
 
 				EpgEventList epg_events = EpgEvents::get_all(start_time, end_time);
 				for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
@@ -293,7 +293,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 
 					if (epg_event.channel_id == channel.id)
 					{
-						body += Glib::ustring::compose(
+						body += String::compose(
 							"<event id=\"%1\" channel_id=\"%2\" start_time=\"%3\" duration=\"%4\" title=\"%5\" subtitle=\"%6\" description=\"%7\" scheduled_recording_id=\"%8\" />",
 							epg_event.id,
 							epg_event.channel_id,
@@ -313,11 +313,11 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		{
 			int channel_id = ::atoi(get_attribute_value(root_node, "parameter[@name=\"channel\"]/@value").c_str());
 			Channel channel = ChannelManager::get(channel_id);
-			Glib::ustring protocol = "udp";
+			String protocol = "udp";
 
 			RequestHandler::Client& client = clients.get(client_id);
 			stream_manager.start_broadcasting(channel, client_id, "", broadcast_address, client.broadcast_port);
-			body += Glib::ustring::compose("<stream protocol=\"%1\" address=\"%2\" port=\"%3\" />",
+			body += String::compose("<stream protocol=\"%1\" address=\"%2\" port=\"%3\" />",
 				protocol, broadcast_address, client.broadcast_port);
 		}
 		else if (command == "stop_broadcasting")
@@ -343,7 +343,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			for (ScheduledRecordingList::iterator i = recordings.begin(); i != recordings.end(); i++)
 			{
 				ScheduledRecording& recording = *i;
-				body += Glib::ustring::compose(
+				body += String::compose(
 					"<scheduled_recording id=\"%1\" channel_id=\"%2\" recurring_type=\"%3\" start_time=\"%4\" duration=\"%5\" description=\"%6\" device=\"%7\" />",
 					recording.id,
 					recording.channel_id,
@@ -356,7 +356,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "add_channel")
 		{
-			Glib::ustring line = get_attribute_value(root_node, "parameter[@name=\"line\"]/@value"); 
+			String line = get_attribute_value(root_node, "parameter[@name=\"line\"]/@value"); 
 
 			ChannelsConfLine channels_conf_line(line);
 			guint parameter_count = channels_conf_line.get_parameter_count();
@@ -459,14 +459,14 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "search_epg")
 		{
-			Glib::ustring text = get_attribute_value(root_node, "parameter[@name=\"text\"]/@value");
+			String text = get_attribute_value(root_node, "parameter[@name=\"text\"]/@value");
 			gboolean include_description = get_bool_attribute_value(root_node, "parameter[@name=\"include_description\"]/@value");
 
 			EpgEventList epg_events = EpgEvents::search(text, include_description);
 			for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
 			{
 				EpgEvent& epg_event = *i;
-				body += Glib::ustring::compose(
+				body += String::compose(
 					"<event id=\"%1\" channel_id=\"%2\" start_time=\"%3\" duration=\"%4\" title=\"%5\" subtitle=\"%6\" description=\"%7\" scheduled_recording_id=\"%8\" />",
 					epg_event.id,
 					epg_event.channel_id,
@@ -486,7 +486,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				
 			while (iter->move_next())
 			{
-				body += Glib::ustring::compose("<auto_record title=\"%1\" />", encode_xml(Data::get(iter, "title")));
+				body += String::compose("<auto_record title=\"%1\" />", encode_xml(Data::get(iter, "title")));
 			}
 		}
 		else if (command == "set_auto_record_list")
@@ -513,7 +513,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				
 			while (iter->move_next())
 			{
-				body += Glib::ustring::compose("<configuration name=\"%1\" value=\"%2\" />",
+				body += String::compose("<configuration name=\"%1\" value=\"%2\" />",
 					encode_xml(Data::get(iter, "name")), encode_xml(Data::get(iter, "value")));
 			}
 		}
@@ -548,9 +548,9 @@ gboolean RequestHandler::handle_connection(int sockfd)
 }
 
 void RequestHandler::send_response(int sockfd,
-	const Glib::ustring& error_message, const Glib::ustring& body)
+	const String& error_message, const String& body)
 {
-	Glib::ustring response = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+	String response = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	response += "<response";
 	if (!error_message.empty())
 	{
@@ -592,7 +592,7 @@ gboolean RequestHandler::handle_request(int sockfd)
 	return result;
 }
 
-void RequestHandler::set_broadcast_address(const Glib::ustring& address)
+void RequestHandler::set_broadcast_address(const String& address)
 {
 	broadcast_address = address;
 }

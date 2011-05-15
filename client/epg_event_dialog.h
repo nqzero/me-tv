@@ -21,8 +21,7 @@
 #ifndef __EPG_EVENT_DIALOG_H__
 #define __EPG_EVENT_DIALOG_H__
 
-#include "me-tv-ui.h"
-#include "../common/client.h"
+#include "me-tv-client.h"
 
 class EpgEventDialog : public Gtk::Dialog
 {

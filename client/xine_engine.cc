@@ -16,10 +16,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "me-tv.h"
 #include "xine_engine.h"
-#include "../common/exception.h"
-
 #include <xine/xineutils.h>
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
@@ -209,7 +206,7 @@ void XineEngine::stop()
 	xine_stop(stream);
 }
 
-void XineEngine::set_mrl(const Glib::ustring& mrl)
+void XineEngine::set_mrl(const String& mrl)
 {	
 	if (!xine_open(stream, mrl.c_str()))
 	{

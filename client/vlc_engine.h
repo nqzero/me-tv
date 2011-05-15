@@ -34,7 +34,7 @@ public:
 	VlcEngine(bool use_ffmpeg_demux = false);
 	~VlcEngine();
 
-	void set_mrl(const Glib::ustring& mrl);
+	void set_mrl(const String& mrl);
 	void set_window(int window);
 	void play();
 	void pause(gboolean state);
@@ -50,7 +50,7 @@ public:
 	void set_percentage(float percentage);
 	void set_mute_state(gboolean mute);
 
-	Glib::ustring get_time_text();
+	String get_time_text();
 };
 
 #endif

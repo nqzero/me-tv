@@ -30,7 +30,7 @@ Scanner::Scanner()
 	terminated = false;
 }
 
-void Scanner::tune_to(Frontend& frontend, const Transponder& transponder, const Glib::ustring& text_encoding, guint read_timeout)
+void Scanner::tune_to(Frontend& frontend, const Transponder& transponder, const String& text_encoding, guint read_timeout)
 {
 	if (terminated)
 	{
@@ -45,7 +45,7 @@ void Scanner::tune_to(Frontend& frontend, const Transponder& transponder, const 
 		SI::ServiceDescriptionSection sds;
 		SI::NetworkInformationSection nis;
 		
-		Glib::ustring demux_path = frontend.get_adapter().get_demux_path();
+		String demux_path = frontend.get_adapter().get_demux_path();
 		Demuxer demuxer_sds(demux_path);
 		Demuxer demuxer_nis(demux_path);
 		
@@ -61,10 +61,10 @@ void Scanner::tune_to(Frontend& frontend, const Transponder& transponder, const 
 		
 		for (guint i = 0; i < sds.services.size(); i++)
 		{
-			Glib::ustring service_name = sds.services[i].name;
+			String service_name = sds.services[i].name;
 			if (service_name.empty())
 			{
-				service_name = Glib::ustring::compose("Unknown Service %1-%2",
+				service_name = String::compose("Unknown Service %1-%2",
 				   	transponder.frontend_parameters.frequency/1000,
 				    sds.services[i].id);
 			}
@@ -98,7 +98,7 @@ void Scanner::tune_to(Frontend& frontend, const Transponder& transponder, const 
 	}
 }
 
-void Scanner::atsc_tune_to(Frontend& frontend, const Transponder& transponder, const Glib::ustring& text_encoding, guint read_timeout)
+void Scanner::atsc_tune_to(Frontend& frontend, const Transponder& transponder, const String& text_encoding, guint read_timeout)
 {
 	if (terminated)
 	{
@@ -112,7 +112,7 @@ void Scanner::atsc_tune_to(Frontend& frontend, const Transponder& transponder, c
 		SI::SectionParser parser(text_encoding, read_timeout);
 		SI::VirtualChannelTable virtual_channel_table;
 		
-		Glib::ustring demux_path = frontend.get_adapter().get_demux_path();
+		String demux_path = frontend.get_adapter().get_demux_path();
 		Demuxer demuxer_vct(demux_path);
 		
 		frontend.tune_to(transponder,  1500);
@@ -128,7 +128,7 @@ void Scanner::atsc_tune_to(Frontend& frontend, const Transponder& transponder, c
 				signal_service(
 					transponder.frontend_parameters,
 					vc->program_number,
-					Glib::ustring::compose("%1-%2 %3", vc->major_channel_number, vc->minor_channel_number, vc->short_name),
+					String::compose("%1-%2 %3", vc->major_channel_number, vc->minor_channel_number, vc->short_name),
 					transponder.polarisation,
 				    frontend.get_signal_strength());
 		}
@@ -139,7 +139,7 @@ void Scanner::atsc_tune_to(Frontend& frontend, const Transponder& transponder, c
 	}
 }
 
-void Scanner::start(Frontend& frontend, TransponderList& t, const Glib::ustring& text_encoding, guint timeout)
+void Scanner::start(Frontend& frontend, TransponderList& t, const String& text_encoding, guint timeout)
 {
 	transponders = t;
 	

@@ -54,14 +54,14 @@ private:
 		void remove(int client_id);
 	};
 
-	Glib::ustring broadcast_address;
+	String broadcast_address;
 
-	xmlpp::Node* get_attribute(const xmlpp::Node* node, const Glib::ustring& xpath);
-	Glib::ustring get_attribute_value(const xmlpp::Node* node, const Glib::ustring& xpath);
-	int get_int_attribute_value(const xmlpp::Node* node, const Glib::ustring& xpath);
-	gboolean get_bool_attribute_value(const xmlpp::Node* node, const Glib::ustring& xpath);
+	xmlpp::Node* get_attribute(const xmlpp::Node* node, const String& xpath);
+	String get_attribute_value(const xmlpp::Node* node, const String& xpath);
+	int get_int_attribute_value(const xmlpp::Node* node, const String& xpath);
+	gboolean get_bool_attribute_value(const xmlpp::Node* node, const String& xpath);
 	void send_response(int sockfd,
-		const Glib::ustring& error_message, const Glib::ustring& body);
+		const String& error_message, const String& body);
 	gboolean handle_connection(int sockfd);
 
 public:
@@ -70,7 +70,7 @@ public:
 	ClientList clients;
 
 	gboolean handle_request(int sockfd);
-	void set_broadcast_address(const Glib::ustring& broadcast_address);
+	void set_broadcast_address(const String& broadcast_address);
 };
 
 #endif

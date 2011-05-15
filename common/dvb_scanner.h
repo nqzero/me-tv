@@ -34,15 +34,15 @@ namespace Dvb
 		gboolean terminated;
 		TransponderList transponders;
 			
-		void tune_to(Frontend& frontend, const Transponder& transponder, const Glib::ustring& text_encoding, guint read_timeout);
-		void atsc_tune_to(Frontend& frontend, const Transponder& transponder, const Glib::ustring& text_encoding, guint read_timeout);
+		void tune_to(Frontend& frontend, const Transponder& transponder, const String& text_encoding, guint read_timeout);
+		void atsc_tune_to(Frontend& frontend, const Transponder& transponder, const String& text_encoding, guint read_timeout);
 	public:
 		Scanner();
 
-		void start(Frontend& frontend, TransponderList& transponders, const Glib::ustring& text_encoding, guint timeout);
+		void start(Frontend& frontend, TransponderList& transponders, const String& text_encoding, guint timeout);
 		void terminate();
 			
-		sigc::signal<void,const struct dvb_frontend_parameters&, guint, const Glib::ustring&, const guint, guint> signal_service;
+		sigc::signal<void,const struct dvb_frontend_parameters&, guint, const String&, const guint, guint> signal_service;
 		sigc::signal<void, guint, gsize> signal_progress;
 		sigc::signal<void> signal_complete;
 	};

@@ -21,6 +21,7 @@
 #ifndef __AUTO_RECORD_DIALOG_H__
 #define __AUTO_RECORD_DIALOG_H__
 
+#include "../common/me-tv-types.h"
 #include <gtkmm.h>
 
 class AutoRecordDialog : public Gtk::Dialog
@@ -34,7 +35,7 @@ private:
 			add(column_title);
 		}
 
-		Gtk::TreeModelColumn<Glib::ustring>	column_title;
+		Gtk::TreeModelColumn<String>	column_title;
 	};
 	
 	ModelColumns						columns;

@@ -42,13 +42,13 @@ private:
 	static struct StringTable modulation_table[];
 	static struct StringTable polarisation_table[];
 	
-	std::vector<Glib::ustring> parts;
+	std::vector<String> parts;
 public:
-	ChannelsConfLine(const Glib::ustring& line);
+	ChannelsConfLine(const String& line);
 	
 	guint get_parameter_count() const { return parts.size(); }
 		
-	const Glib::ustring&	get_name(guint index);
+	const String&	get_name(guint index);
 	fe_spectral_inversion_t	get_inversion(guint index);
 	fe_bandwidth_t			get_bandwidth(guint index);
 	fe_code_rate_t			get_fec(guint index);

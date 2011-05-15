@@ -19,20 +19,20 @@
 #ifndef __ENGINE_H__
 #define __ENGINE_H__
 
-#include <gtkmm.h>
+#include "me-tv-client.h"
 
 extern gboolean next;
 
 class Engine
 {
 protected:
-	Glib::ustring format_2_digit(gint time);
-	Glib::ustring format_time(gint time);
+	String format_2_digit(gint time);
+	String format_time(gint time);
 
 public:
 	virtual ~Engine();
 	
-	virtual void set_mrl(const Glib::ustring& mrl) = 0;
+	virtual void set_mrl(const String& mrl) = 0;
 	virtual void set_window(int window) = 0;
 	virtual void play() = 0;
 	virtual void pause(gboolean state) = 0;
@@ -48,7 +48,7 @@ public:
 	virtual void set_mute_state(gboolean mute) = 0;
 
 	void increment(gboolean forward, gboolean sh);
-	Glib::ustring get_text();
+	String get_text();
 };
 
 #endif

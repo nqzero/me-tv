@@ -31,18 +31,18 @@ private:
 	FrontendThreadList frontend_threads;
 	
 public:
-	void initialise(const Glib::ustring& text_encoding, guint timeout, gboolean ignore_teletext);
+	void initialise(const String& text_encoding, guint timeout, gboolean ignore_teletext);
 	~StreamManager();
 			
 	FrontendThreadList& get_frontend_threads() { return frontend_threads; };
 
-	void start_broadcasting(Channel& channel, int client_id, const Glib::ustring& interface, const Glib::ustring& address, int port);
+	void start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port);
 	void stop_broadcasting(int client_id);
 
 	void start_recording(const ScheduledRecording& scheduled_recording);
 	void stop_recording(const Channel& channel);
 
-	gboolean is_broadcasting(const Glib::ustring& device);
+	gboolean is_broadcasting(const String& device);
 
 	void start();
 	void stop();

@@ -21,7 +21,7 @@
 #ifndef __CHANNELS_DIALOG_H__
 #define __CHANNELS_DIALOG_H__
 
-#include <gtkmm.h>
+#include "me-tv-client.h"
 
 class ChannelsDialog : public Gtk::Dialog
 {
@@ -46,7 +46,7 @@ private:
 		}
 
 		Gtk::TreeModelColumn<guint>				column_id;
-		Gtk::TreeModelColumn<Glib::ustring>		column_name;
+		Gtk::TreeModelColumn<String>		column_name;
 		Gtk::TreeModelColumn<gint>				column_record_extra_before;
 		Gtk::TreeModelColumn<gint>				column_record_extra_after;
 	};

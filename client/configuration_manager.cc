@@ -39,14 +39,14 @@ void ConfigurationManager::initialise()
 	}
 }
 
-Glib::ustring ConfigurationManager::get_path(const Glib::ustring& key)
+String ConfigurationManager::get_path(const String& key)
 {
-	return Glib::ustring::compose(GCONF_PATH"/%1", key);
+	return String::compose(GCONF_PATH"/%1", key);
 }
 
-void ConfigurationManager::set_string_default(const Glib::ustring& key, const Glib::ustring& value)
+void ConfigurationManager::set_string_default(const String& key, const String& value)
 {
-	Glib::ustring path = get_path(key);
+	String path = get_path(key);
 	Gnome::Conf::Value v = gconf_client->get(path);
 	if (v.get_type() == Gnome::Conf::VALUE_INVALID)
 	{
@@ -55,9 +55,9 @@ void ConfigurationManager::set_string_default(const Glib::ustring& key, const Gl
 	}
 }
 
-void ConfigurationManager::set_int_default(const Glib::ustring& key, gint value)
+void ConfigurationManager::set_int_default(const String& key, gint value)
 {
-	Glib::ustring path = get_path(key);
+	String path = get_path(key);
 	Gnome::Conf::Value v = gconf_client->get(path);
 	if (v.get_type() == Gnome::Conf::VALUE_INVALID)
 	{
@@ -66,9 +66,9 @@ void ConfigurationManager::set_int_default(const Glib::ustring& key, gint value)
 	}
 }
 
-void ConfigurationManager::set_boolean_default(const Glib::ustring& key, gboolean value)
+void ConfigurationManager::set_boolean_default(const String& key, gboolean value)
 {
-	Glib::ustring path = get_path(key);
+	String path = get_path(key);
 	Gnome::Conf::Value v = gconf_client->get(path);
 	if (v.get_type() == Gnome::Conf::VALUE_INVALID)
 	{
@@ -77,42 +77,42 @@ void ConfigurationManager::set_boolean_default(const Glib::ustring& key, gboolea
 	}
 }
 
-StringList ConfigurationManager::get_string_list_value(const Glib::ustring& key)
+StringList ConfigurationManager::get_string_list_value(const String& key)
 {
 	return gconf_client->get_string_list(get_path(key));
 }
 
-Glib::ustring ConfigurationManager::get_string_value(const Glib::ustring& key)
+String ConfigurationManager::get_string_value(const String& key)
 {
 	return gconf_client->get_string(get_path(key));
 }
 
-gint ConfigurationManager::get_int_value(const Glib::ustring& key)
+gint ConfigurationManager::get_int_value(const String& key)
 {
 	return gconf_client->get_int(get_path(key));
 }
 
-gint ConfigurationManager::get_boolean_value(const Glib::ustring& key)
+gint ConfigurationManager::get_boolean_value(const String& key)
 {
 	return gconf_client->get_bool(get_path(key));
 }
 
-void ConfigurationManager::set_string_list_value(const Glib::ustring& key, const StringList& value)
+void ConfigurationManager::set_string_list_value(const String& key, const StringList& value)
 {
 	gconf_client->set_string_list(get_path(key), value);
 }
 
-void ConfigurationManager::set_string_value(const Glib::ustring& key, const Glib::ustring& value)
+void ConfigurationManager::set_string_value(const String& key, const String& value)
 {
 	gconf_client->set(get_path(key), value);
 }
 
-void ConfigurationManager::set_int_value(const Glib::ustring& key, gint value)
+void ConfigurationManager::set_int_value(const String& key, gint value)
 {
 	gconf_client->set(get_path(key), (gint)value);
 }
 
-void ConfigurationManager::set_boolean_value(const Glib::ustring& key, gboolean value)
+void ConfigurationManager::set_boolean_value(const String& key, gboolean value)
 {
 	gconf_client->set(get_path(key), (bool)value);
 }
