@@ -322,7 +322,8 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		}
 		else if (command == "stop_broadcasting")
 		{
-			stream_manager.stop_broadcasting(client_id);
+
+                    stream_manager.stop_broadcasting(client_id);
 		}
 		else if (command == "add_scheduled_recording")
 		{

@@ -45,7 +45,13 @@ void FrontendThread::open() {
 	
 	g_debug("FrontendThread created (%s)", frontend.get_path().c_str());
 }
-void FrontendThread::close() { ::close(dvr_fd); frontend.ref( 0 ); printf( "frontend::close\n" ); }
+
+void FrontendThread::close() {
+    ::close(dvr_fd);
+    stop_epg_thread();
+    frontend.ref(0);
+    printf("frontend::close\n");
+}
 
 FrontendThread::~FrontendThread()
 {
@@ -54,17 +60,17 @@ FrontendThread::~FrontendThread()
 	g_debug("About to close input channel ...");
 	::close(dvr_fd);
 	
-	stop();
 	stop_epg_thread();
+	stop();
 	
 	g_debug("FrontendThread destroyed (%s)", frontend.get_path().c_str());
 }
 
 void FrontendThread::start()
 {
-	if (is_terminated())
+	if (is_terminated() && !streams.empty())
 	{
-                if (!streams.empty()) open();
+                open();
 		g_debug("Starting frontend thread (%s)", frontend.get_path().c_str());
 		Thread::start();
 	}
@@ -72,10 +78,12 @@ void FrontendThread::start()
 
 void FrontendThread::stop()
 {
+    if (! is_terminated()) {
 	g_debug("Stopping frontend thread (%s)", frontend.get_path().c_str());
 	join(true);
 	g_debug("Frontend thread stopped and joined (%s)", frontend.get_path().c_str());
         close();
+    }
 }
 
 void FrontendThread::run()

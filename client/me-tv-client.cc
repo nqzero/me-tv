@@ -341,6 +341,7 @@ int main (int argc, char *argv[])
 			}
 			else
 			{
+                                client.stop_broadcasting();
 				client.unregister_client();
 			}
 		}
