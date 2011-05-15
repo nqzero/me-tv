@@ -19,7 +19,6 @@
  */
 
 #include "network_server_thread.h"
-#include "global.h"
 #include "exception.h"
 #include "common.h"
 #include <sys/types.h> 

@@ -21,7 +21,6 @@
 #include "scheduled_recording_manager.h"
 #include "exception.h"
 #include "i18n.h"
-#include "global.h"
 #include "epg_events.h"
 #include "common.h"
 

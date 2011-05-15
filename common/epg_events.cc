@@ -20,7 +20,6 @@
 
 #include "epg_events.h"
 #include "data.h"
-#include "global.h"
 #include "common.h"
 #include "exception.h"
 

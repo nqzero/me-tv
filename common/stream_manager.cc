@@ -20,7 +20,7 @@
 
 #include <glibmm.h>
 #include "stream_manager.h"
-#include "global.h"
+#include "common.h"
 #include "device_manager.h"
 #include "dvb_transponder.h"
 #include "dvb_si.h"

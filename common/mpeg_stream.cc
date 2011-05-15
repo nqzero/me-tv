@@ -21,7 +21,7 @@
 #include <glibmm.h>
 #include "mpeg_stream.h"
 #include "exception.h"
-#include "global.h"
+#include "common.h"
 #include "crc32.h"
 
 Mpeg::Stream::Stream()

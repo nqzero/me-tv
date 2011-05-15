@@ -19,7 +19,7 @@
  */
 
 #include "channel_manager.h"
-#include "global.h"
+#include "common.h"
 #include "i18n.h"
 #include "exception.h"
 

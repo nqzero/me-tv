@@ -20,9 +20,8 @@
 
 #include "request_handler.h"
 #include "exception.h"
-#include "common.h"
 #include "epg_events.h"
-#include "global.h"
+#include "common.h"
 #include "channels_conf_line.h"
 
 using namespace xmlpp;

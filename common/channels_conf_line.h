@@ -21,7 +21,7 @@
 #ifndef CHANNELS_CONF_LINE
 #define CHANNELS_CONF_LINE
 
-#include "global.h"
+#include "common.h"
 #include <linux/dvb/frontend.h>
 
 struct StringTable
