@@ -163,6 +163,7 @@ void FrontendThread::setup_dvb(ChannelStream& channel_stream)
 		stop_epg_thread();
 		frontend.tune_to(channel.transponder);
 	}
+        frontend.tune_to(channel.transponder);
 	start_epg_thread();
 	
 	g_debug("Reading PAT");
