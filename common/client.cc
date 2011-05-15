@@ -115,7 +115,6 @@ Client::~Client()
 {
 	if (client_id != 0)
 	{
-		stop_broadcasting();
 		unregister_client();
 	}
 }
@@ -450,8 +449,8 @@ gboolean Client::register_client()
 
 void Client::unregister_client()
 {
-	send_request("unregister");
 	stop_broadcasting();
+	send_request("unregister");
 	client_id = 0;
 }
 
