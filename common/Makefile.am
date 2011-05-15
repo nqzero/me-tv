@@ -63,4 +63,6 @@ libmetvcommon_a_SOURCES = \
 	thread.cc \
 	thread.h \
 	network_server_thread.cc \
-	network_server_thread.h
+	network_server_thread.h \
+	server.cc \
+	server.h

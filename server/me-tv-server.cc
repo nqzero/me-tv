@@ -23,13 +23,10 @@
 #endif /* HAVE_CONFIG_H */
 
 #include "me-tv-server.h"
-#include "../common/data.h"
-#include "../common/crc32.h"
-#include "../common/i18n.h"
-#include "../common/exception.h"
 #include "../common/common.h"
-#include "../common/global.h"
-#include "../common/network_server_thread.h"
+#include "../common/server.h"
+#include <glibmm.h>
+#include <giomm.h>
 
 #define ME_TV_SUMMARY _("Me TV is a digital television viewer for GTK")
 #define ME_TV_DESCRIPTION _("Me TV was developed for the modern digital lounge room with a PC for a media centre that is capable "\
@@ -40,7 +37,7 @@ int main(int argc, char** argv)
 	try
 	{
 		Glib::init();
-		Gnome::Gda::init();
+		Gio::init();
 		
 		signal_error.connect(sigc::ptr_fun(&on_error));
 
@@ -54,9 +51,6 @@ int main(int argc, char** argv)
 		{
 			Glib::thread_init();
 		}
-
-		Crc32::init();
-		Gio::init();
 
 		broadcast_address = "127.0.0.1";
 		gint server_port = 1999;
@@ -102,23 +96,14 @@ int main(int argc, char** argv)
 
 		option_context.parse(argc, argv);
 
-		data_connection = Data::create_connection();
-
-		recording_directory = Data::get_scalar("configuration", "value", "name", "recording_directory");
-		preferred_language = Data::get_scalar("configuration", "value", "name", "preferred_language");
-		
-		device_manager.initialise(devices);
-		stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
-		stream_manager.start();
-
-		NetworkServerThread server_thread(server_port);
-		server_thread.start();
+		Server server(server_port);
+		server.start();
 
 		g_message("Me TV Server entering main loop");
 		Glib::RefPtr<Glib::MainLoop> main_loop = Glib::MainLoop::create();
 		main_loop->run();
 
-		server_thread.terminate();
+		server.stop();
 
 		g_message("Me TV Server exiting");
 	}

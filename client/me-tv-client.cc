@@ -28,7 +28,7 @@
 #include "main_window.h"
 #include "me-tv-client.h"
 #include "configuration_manager.h"
-#include "../common/network_server_thread.h"
+#include "../common/server.h"
 
 #define ME_TV_SUMMARY _("Me TV is a digital television viewer for GTK")
 #define ME_TV_DESCRIPTION _("Me TV was developed for the modern digital lounge room with a PC for a media centre that is capable "\
@@ -457,21 +457,11 @@ int main (int argc, char *argv[])
 
 			configuration_manager.initialise();
 
-			NetworkServerThread* network_server_thread = NULL;
+			Server* server = NULL;
 			if (server_host.empty())
 			{
-				Gnome::Gda::init();
-				data_connection = Data::create_connection();
-
-				recording_directory = Data::get_scalar("configuration", "value", "name", "recording_directory");
-				preferred_language = Data::get_scalar("configuration", "value", "name", "preferred_language");
-
-				device_manager.initialise(devices);
-				stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
-				stream_manager.start();
-
-				network_server_thread = new NetworkServerThread (server_port);
-				network_server_thread->start();
+				server = new Server(server_port);
+				server->start();
 			}
 
 			client.register_client();
@@ -497,9 +487,10 @@ int main (int argc, char *argv[])
 			Gtk::Main::run();
 
 			g_debug("Main loop exited");
-			if (network_server_thread != NULL)
+			if (server != NULL)
 			{
 				client.terminate();
+				server->stop();
 			}
 			else
 			{
