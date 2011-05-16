@@ -36,6 +36,7 @@ private:
 	guint				timeout;
 	gboolean			ignore_teletext;
         Glib::ustring input_path;
+        int count;
 		
 	void write(Glib::RefPtr<Glib::IOChannel> channel, guchar* buffer, gsize length);
 	void run();

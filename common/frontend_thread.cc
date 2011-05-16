@@ -37,6 +37,9 @@ void FrontendThread::open() {
     printf( "frontend::open\n" );
 
         frontend.ref( 1 );
+        count++;
+        g_debug( "Thread::Frontend::open -- count: %5d\n", count );
+        if (count > 1) return;
 	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
 	{
@@ -47,10 +50,12 @@ void FrontendThread::open() {
 }
 
 void FrontendThread::close() {
-    ::close(dvr_fd);
-    stop_epg_thread();
+    if (--count==0) {
+        ::close(dvr_fd);
+        stop_epg_thread();
+    }
     frontend.ref(0);
-    printf("frontend::close\n");
+    g_debug( "Thread::Frontend::close -- count: %5d\n", count );
 }
 
 FrontendThread::~FrontendThread()
@@ -264,7 +269,6 @@ void FrontendThread::start_broadcasting(Channel& channel, int client_id, const G
 
 void FrontendThread::stop_broadcasting(int client_id)
 {
-	stop();
 	gboolean found = false;
 
 	ChannelStreamList::iterator iterator = streams.begin();
@@ -276,6 +280,7 @@ void FrontendThread::stop_broadcasting(int client_id)
 		{
 			if (((BroadcastingChannelStream*)channel_stream)->get_client_id() == client_id)
 			{
+                                if (found==false) stop();
 				delete channel_stream;
 				iterator = streams.erase(iterator);
 				g_debug("Stopped broadcast stream");
@@ -286,7 +291,7 @@ void FrontendThread::stop_broadcasting(int client_id)
 		iterator++;
 	}
 
-	start();
+	if (found) start();
 }
 
 Glib::ustring make_recording_filename(Channel& channel, const Glib::ustring& description)
