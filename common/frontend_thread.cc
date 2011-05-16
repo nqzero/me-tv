@@ -75,7 +75,6 @@ void FrontendThread::start()
 {
 	if (is_terminated() && !streams.empty())
 	{
-                open();
 		g_debug("Starting frontend thread (%s)", frontend.get_path().c_str());
 		Thread::start();
 	}
@@ -87,7 +86,6 @@ void FrontendThread::stop()
 	g_debug("Stopping frontend thread (%s)", frontend.get_path().c_str());
 	join(true);
 	g_debug("Frontend thread stopped and joined (%s)", frontend.get_path().c_str());
-        close();
     }
 }
 
@@ -263,6 +261,7 @@ void FrontendThread::start_broadcasting(Channel& channel, int client_id, const G
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 
+        open();
 	start();
         frontend.ref(0);
 }
@@ -291,7 +290,7 @@ void FrontendThread::stop_broadcasting(int client_id)
 		iterator++;
 	}
 
-	if (found) start();
+	if (found) { close(); start(); }
 }
 
 Glib::ustring make_recording_filename(Channel& channel, const Glib::ustring& description)
@@ -347,7 +346,7 @@ void FrontendThread::start_recording(Channel& channel,
                                      gboolean scheduled)
 {
         frontend.ref(1);
-	stop();	
+	stop();	// fixme -- can this wait till we're ready to add/delete streams ???
 
 	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
 	ChannelStreamType current_type = CHANNEL_STREAM_TYPE_NONE;
@@ -398,6 +397,8 @@ void FrontendThread::start_recording(Channel& channel,
 					ChannelStream* channel_stream = *iterator;
 					delete channel_stream;
 					iterator = streams.erase(iterator);
+                                        // fixme - shouldn't we add a stream for the new channel ???
+                                        //   need to keep this in sync with open() ???
 				}
 			}
 
@@ -410,6 +411,7 @@ void FrontendThread::start_recording(Channel& channel,
 	
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
 
+        open();
 	start();
         frontend.ref(0);
 }
@@ -417,6 +419,7 @@ void FrontendThread::start_recording(Channel& channel,
 void FrontendThread::stop_recording(const Channel& channel)
 {
 	stop();
+        gboolean found = false;
 
 	ChannelStreamList::iterator iterator = streams.begin();
 
@@ -427,6 +430,7 @@ void FrontendThread::stop_recording(const Channel& channel)
 		{
 			delete channel_stream;
 			iterator = streams.erase(iterator);
+                        found = true;
 		}
 		else
 		{
@@ -434,6 +438,7 @@ void FrontendThread::stop_recording(const Channel& channel)
 		}
 	}
 
+        if (found) close();
 	start();
 }
 
