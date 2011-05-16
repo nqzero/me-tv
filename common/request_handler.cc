@@ -238,6 +238,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 		else if (command == "get_channels")
 		{
 			ChannelList channels = ChannelManager::get_all();
+			ScheduledRecordingList scheduled_recordings = ScheduledRecordingManager::get_all();
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
@@ -255,7 +256,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 						encode_xml(epg_event.get_title()),
 						encode_xml(epg_event.get_subtitle()),
 						encode_xml(epg_event.get_description()),
-						ScheduledRecordingManager::is_recording(epg_event));
+						ScheduledRecordingManager::is_recording(epg_event, scheduled_recordings));
 				}
 				body += "</channel>";
 			}
@@ -280,6 +281,8 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			guint end_time = get_int_attribute_value(root_node, "parameter[@name=\"end_time\"]/@value");
 
 			ChannelList channels = ChannelManager::get_all();
+			ScheduledRecordingList scheduled_recordings = ScheduledRecordingManager::get_all();
+
 			for (ChannelList::iterator i = channels.begin(); i != channels.end(); i++)
 			{
 				Channel& channel = *i;
@@ -301,7 +304,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 							encode_xml(epg_event.get_title()),
 							encode_xml(epg_event.get_subtitle()),
 							encode_xml(epg_event.get_description()),
-							ScheduledRecordingManager::is_recording(epg_event));
+							ScheduledRecordingManager::is_recording(epg_event, scheduled_recordings));
 					}
 				}
 
@@ -461,6 +464,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			String text = get_attribute_value(root_node, "parameter[@name=\"text\"]/@value");
 			gboolean include_description = get_bool_attribute_value(root_node, "parameter[@name=\"include_description\"]/@value");
 
+			ScheduledRecordingList scheduled_recordings = ScheduledRecordingManager::get_all();
 			EpgEventList epg_events = EpgEvents::search(text, include_description);
 			for (EpgEventList::iterator i = epg_events.begin(); i != epg_events.end(); i++)
 			{
@@ -474,7 +478,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 					encode_xml(epg_event.get_title()),
 					encode_xml(epg_event.get_subtitle()),
 					encode_xml(epg_event.get_description()),
-					ScheduledRecordingManager::is_recording(epg_event));
+					ScheduledRecordingManager::is_recording(epg_event, scheduled_recordings));
 			}
 		}
 		else if (command == "get_auto_record_list")

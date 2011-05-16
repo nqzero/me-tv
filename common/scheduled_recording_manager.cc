@@ -24,11 +24,11 @@
 #include "epg_events.h"
 #include "common.h"
 
-gboolean ScheduledRecordingManager::is_device_available(const String& device, const ScheduledRecording& scheduled_recording)
+gboolean ScheduledRecordingManager::is_device_available(const String& device,
+	const ScheduledRecording& scheduled_recording, ScheduledRecordingList& scheduled_recordings)
 {
 	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
-	ScheduledRecordingList scheduled_recordings = get_all();
 	for (ScheduledRecordingList::iterator i = scheduled_recordings.begin(); i != scheduled_recordings.end(); i++)
 	{
 		ScheduledRecording& current = *i;
@@ -52,7 +52,7 @@ gboolean ScheduledRecordingManager::is_device_available(const String& device, co
 	return true;
 }
 
-void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_recording)
+void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_recording, ScheduledRecordingList& scheduled_recordings)
 {
 	g_debug("Looking for an available device for scheduled recording");
 	
@@ -70,7 +70,7 @@ void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_reco
 		}
 		else
 		{
-			if (is_device_available(device_path, scheduled_recording))
+			if (is_device_available(device_path, scheduled_recording, scheduled_recordings))
 			{
 				scheduled_recording.device = device_path;
 				if (!stream_manager.is_broadcasting(device_path))
@@ -113,9 +113,11 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 	
 	Channel channel = ChannelManager::get(scheduled_recording.channel_id);
 
+	ScheduledRecordingList scheduled_recordings = get_all();
+	
 	if (scheduled_recording.device.empty())
 	{
-		select_device(scheduled_recording);
+		select_device(scheduled_recording, scheduled_recordings);
 
 		if (scheduled_recording.device.empty())
 		{
@@ -128,7 +130,6 @@ void ScheduledRecordingManager::add_scheduled_recording(ScheduledRecording& sche
 		g_debug("Device selected: '%s'", scheduled_recording.device.c_str());
 	}
 
-	ScheduledRecordingList scheduled_recordings = get_all();
 	for (ScheduledRecordingList::iterator i = scheduled_recordings.begin(); i != scheduled_recordings.end(); i++)
 	{
 		ScheduledRecording& current = *i;
@@ -275,7 +276,7 @@ void ScheduledRecordingManager::check_scheduled_recordings()
 			for (ChannelStreamList::iterator j = streams.begin(); j != streams.end(); j++)
 			{
 				ChannelStream& channel_stream = **j;
-				guint scheduled_recording_id = is_recording(channel_stream.channel);
+				guint scheduled_recording_id = is_recording(channel_stream.channel, scheduled_recordings);
 				if (channel_stream.type == CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING && scheduled_recording_id == -1)
 				{
 					stream_manager.stop_recording(channel_stream.channel);
@@ -304,7 +305,7 @@ ScheduledRecordingList ScheduledRecordingManager::get_all()
 	ScheduledRecordingList scheduled_recordings;
 	
 	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(
-		String::compose("select * from scheduled_recording where ((start_time + duration) > %1 OR recurring_type != 0)", time(NULL)));
+		String::compose("select * from scheduled_recording where (start_time + duration) > %1", time(NULL)));
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
 	
 	while (iter->move_next())
@@ -336,10 +337,8 @@ ScheduledRecording ScheduledRecordingManager::get(guint scheduled_recording_id)
 	return scheduled_recording;
 }
 
-gint ScheduledRecordingManager::is_recording(const Channel& channel)
+gint ScheduledRecordingManager::is_recording(const Channel& channel, ScheduledRecordingList& scheduled_recordings)
 {
-	ScheduledRecordingList scheduled_recordings = get_all();
-
 	guint now = time(NULL);
 	for (ScheduledRecordingList::iterator i = scheduled_recordings.begin(); i != scheduled_recordings.end(); i++)
 	{			
@@ -353,9 +352,8 @@ gint ScheduledRecordingManager::is_recording(const Channel& channel)
 	return -1;
 }
 
-gint ScheduledRecordingManager::is_recording(const EpgEvent& epg_event)
+gint ScheduledRecordingManager::is_recording(const EpgEvent& epg_event, ScheduledRecordingList& scheduled_recordings)
 {
-	ScheduledRecordingList scheduled_recordings = get_all();
 	for (ScheduledRecordingList::iterator i = scheduled_recordings.begin(); i != scheduled_recordings.end(); i++)
 	{
 		ScheduledRecording& scheduled_recording = *i;
@@ -377,6 +375,12 @@ void ScheduledRecordingManager::check_auto_recordings()
 		"select title from auto_record order by priority");
 	Glib::RefPtr<DataModelIter> iter_auto_record = model_auto_record->create_iter();
 
+	time_t now = time(NULL);
+
+	g_debug("Now: %d", (int)now);
+
+	ScheduledRecordingList scheduled_recordings = get_all();
+	
 	while (iter_auto_record->move_next())
 	{
 		String title = Data::get(iter_auto_record, "title");
@@ -389,7 +393,8 @@ void ScheduledRecordingManager::check_auto_recordings()
 			String::compose(
 				"select * from epg_event ee, epg_event_text eet "
 				"where ee.id = eet.epg_event_id "
-				"and title like '%%%1%%' order by start_time", title));
+				"and title like '%%%1%%' and (start_time+duration) > %2 "
+				"order by start_time", title, (time_t)now));
 
 		Glib::RefPtr<DataModelIter> iter = model->create_iter();
 
@@ -400,7 +405,7 @@ void ScheduledRecordingManager::check_auto_recordings()
 
 			String title = epg_event.get_title();
 			g_debug("Checking candidate: %s at %d", title.c_str(), (int)epg_event.start_time);
-			gint scheduled_recording_id = is_recording(epg_event);
+			gint scheduled_recording_id = is_recording(epg_event, scheduled_recordings);
 			if (scheduled_recording_id != -1)
 			{
 				g_debug("EPG event '%s' at %d is already being recorded",

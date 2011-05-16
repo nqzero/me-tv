@@ -538,7 +538,10 @@ void Client::set_channel(guint channel_id, const String& name,
 
 void Client::terminate()
 {
-	send_request("terminate");
-	client_id = 0;
+	if (client_id > 0)
+	{
+		send_request("terminate");
+		client_id = 0;
+	}
 }
 

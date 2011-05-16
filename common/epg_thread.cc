@@ -384,7 +384,7 @@ void EpgThread::run()
 									epg_event.start_time -= system_time_table.GPS_UTC_offset;
 								}
 						
-								if (epg_event.get_end_time() >= (time(NULL) - 20*60*60))
+								if (epg_event.get_end_time() >= time(NULL))
 								{
 									for (Dvb::SI::EventTextMap::iterator i = event.texts.begin(); i != event.texts.end(); i++)
 									{
@@ -405,9 +405,9 @@ void EpgThread::run()
 						
 										epg_event.texts.push_back(epg_event_text);
 									}
+									
+									epg_cache.add(epg_event, false);
 								}
-
-								epg_cache.add(epg_event, false);
 							}
 						}
 					}

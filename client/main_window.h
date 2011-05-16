@@ -62,6 +62,7 @@ private:
 	Gtk::Label*							label_epg_page;
 	Gtk::Table*							table_epg;
 	Gtk::ScrolledWindow*				scrolled_window_epg;
+	Client::ChannelList					epg;
 	
 	void stop();
 	void set_view_mode(ViewMode display_mode);
@@ -133,7 +134,7 @@ private:
 	void clear();
 	void update_pages(Client::ChannelList& channels);
 	void update_table(Client::ChannelList& channels);
-	Client::ChannelList get_epg();
+	void get_epg();
 	
 	Gtk::RadioButton& attach_radio_button(Gtk::RadioButtonGroup& group, const String& text, gboolean record, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);
 	Gtk::Button& attach_button(const String& text, gboolean record, gboolean ellipsize, guint left_attach, guint right_attach, guint top_attach, guint bottom_attach, Gtk::AttachOptions attach_options = Gtk::FILL);

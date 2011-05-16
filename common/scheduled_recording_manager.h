@@ -31,8 +31,9 @@ typedef std::list<ScheduledRecording> ScheduledRecordingList;
 class ScheduledRecordingManager
 {
 private:
-	static gboolean is_device_available(const String& device, const ScheduledRecording& scheduled_recording);
-	static void select_device(ScheduledRecording& scheduled_recording);
+	static gboolean is_device_available(const String& device,
+		const ScheduledRecording& scheduled_recording, ScheduledRecordingList& scheduled_recordings);
+	static void select_device(ScheduledRecording& scheduled_recording, ScheduledRecordingList& scheduled_recordings);
 	static void load(Glib::RefPtr<DataModelIter>& iter, ScheduledRecording& scheduled_recording);
 
 public:
@@ -46,8 +47,8 @@ public:
 	static void remove_scheduled_recording(Channel& channel);
 	static ScheduledRecording get(guint scheduled_recording_id);
 	static ScheduledRecordingList get_all();
-	static gint is_recording(const Channel& channel);
-	static gint is_recording(const EpgEvent& epg_event);
+	static gint is_recording(const Channel& channel, ScheduledRecordingList& scheduled_recordings);
+	static gint is_recording(const EpgEvent& epg_event, ScheduledRecordingList& scheduled_recordings);
 };
 
 #endif

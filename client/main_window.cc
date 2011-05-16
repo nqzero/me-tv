@@ -220,6 +220,8 @@ void MainWindow::show_channels_dialog()
 	{
 		channels_dialog.save();	
 	}
+
+	get_epg();
 	signal_update();
 }
 
@@ -356,6 +358,7 @@ void MainWindow::on_timeout()
 		guint seconds = now % 60;
 		if (last_seconds > seconds)
 		{
+			get_epg();
 			signal_update();
 		}
 		last_seconds = seconds;
@@ -389,6 +392,7 @@ void MainWindow::show_scheduled_recordings_dialog()
 	ScheduledRecordingsDialog& scheduled_recordings_dialog = ScheduledRecordingsDialog::create(builder);
 	scheduled_recordings_dialog.run();
 	scheduled_recordings_dialog.hide();
+	get_epg();
 	signal_update();
 }
 
@@ -397,6 +401,7 @@ void MainWindow::show_epg_event_search_dialog()
 	EpgEventSearchDialog& epg_event_search_dialog = EpgEventSearchDialog::get(builder);
 	epg_event_search_dialog.run();
 	epg_event_search_dialog.hide();
+	get_epg();
 	signal_update();
 }
 
@@ -433,6 +438,7 @@ void MainWindow::on_show()
 		throw Exception("Failed to communicate with Me TV server");
 	}
 
+	get_epg();
 	select_channel_to_play();
 }
 
@@ -600,10 +606,9 @@ void MainWindow::on_update()
 	String title = description;
 
 	int broadcasting_channel = client.get_broadcasting_channel_id();
-	Client::ChannelList channels = get_epg();
 	if (broadcasting_channel != -1)
 	{
-		Client::Channel& channel = channels.get_by_id(broadcasting_channel);
+		Client::Channel& channel = epg.get_by_id(broadcasting_channel);
 
 		title = "Me TV - " + channel.name;
 		description = channel.name;
@@ -620,7 +625,10 @@ void MainWindow::on_update()
 	set_status_text(description);
 	set_title(title);
 
-	update(channels);
+	if (property_visible().get_value())
+	{
+		update(epg);
+	}
 	g_debug("UI updated");
 }
 
@@ -641,12 +649,14 @@ void MainWindow::on_channels()
 void MainWindow::on_scheduled_recordings()
 {
 	show_scheduled_recordings_dialog();
+	get_epg();
 	signal_update();
 }
 
 void MainWindow::on_epg_event_search()
 {
 	show_epg_event_search_dialog();
+	get_epg();
 	signal_update();
 }
 
@@ -729,7 +739,7 @@ void MainWindow::on_fullscreen()
 
 void MainWindow::select_channel_to_play()
 {
-	if (get_epg().empty())
+	if (epg.empty())
 	{
 		throw Exception("No channels");
 	}
@@ -759,6 +769,7 @@ void MainWindow::on_start_broadcasting(int channel_id)
 	
 	configuration_manager.set_int_value("last_channel", channel_id);
 
+	get_epg();
 	signal_update();
 }
 
@@ -782,8 +793,8 @@ void MainWindow::on_error(const String& message)
 void MainWindow::set_offset(gint value)
 {
 	offset = value;
-	Client::ChannelList channels = get_epg();
-	update(channels);
+	get_epg();
+	update(epg);
 }
 
 void MainWindow::previous()
@@ -808,15 +819,18 @@ void MainWindow::next_day()
 
 void MainWindow::on_spin_button_epg_page_changed()
 {	
-	Client::ChannelList channels = get_epg();
-	update_table(channels);
+	get_epg();
+	update_table(epg);
 }
 
-Client::ChannelList MainWindow::get_epg()
+void MainWindow::get_epg()
 {
-	int start_time = time(NULL) + offset;
-	int epg_span_hours = configuration_manager.get_int_value("epg_span_hours");
-	return client.get_epg(start_time, start_time + epg_span_hours * 60 * 60);
+	if (client.is_registered())
+	{
+		int start_time = time(NULL) + offset;
+		int epg_span_hours = configuration_manager.get_int_value("epg_span_hours");
+		epg = client.get_epg(start_time, start_time + epg_span_hours * 60 * 60);
+	}
 }
 
 void MainWindow::update(Client::ChannelList& channels)
@@ -1193,6 +1207,7 @@ bool MainWindow::on_program_button_press_event(GdkEventButton* event, Client::Ep
 			client.add_scheduled_recording(epg_event.id);
 		}
 
+		get_epg();
 		signal_update();
 	}
 
@@ -1203,4 +1218,3 @@ void MainWindow::on_program_button_clicked(Client::EpgEvent& epg_event)
 {
 	EpgEventDialog::create(builder).show_epg_event(epg_event);
 }
-
