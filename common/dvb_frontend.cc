@@ -29,6 +29,7 @@ Frontend::Frontend(const Adapter& frontend_adapter, guint frontend_index)
 	: adapter(frontend_adapter)
 {
 	fd = -1;
+        count = 0;
 	memset(&frontend_parameters, 0, sizeof(struct dvb_frontend_parameters));
 	frontend = frontend_index;
 }
@@ -37,6 +38,15 @@ Frontend::~Frontend()
 {
 	close();
 	g_debug("Frontend destroyed");
+}
+
+void Frontend::ref(int add) {
+    g_debug( "Dvb::Frontend -- ref %5d, %5d\n", count, add );
+    if (add) { if (count++==0) open(); }
+    else     { if (--count==0) close(); }
+    if (count < 0) {
+        g_assert( false );
+    }
 }
 
 void Frontend::open()

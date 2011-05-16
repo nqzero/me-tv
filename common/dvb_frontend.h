@@ -71,11 +71,14 @@ namespace Dvb
 		void diseqc(int satellite_number, int polarisation, int hi_band);
 		guint frontend;
 		struct dvb_frontend_parameters frontend_parameters;
+                int count;
 		
 	public:
 		Frontend(const Adapter& adapter, guint frontend);
 		~Frontend();
+                
 
+                void ref(int add);
 		void open();
 		void close();
 		void tune_to(const Transponder& transponder, guint timeout = 2000);

@@ -460,6 +460,7 @@ int main (int argc, char *argv[])
 			Server* server = NULL;
 			if (server_host.empty())
 			{
+                                broadcast_address = "127.0.0.1";
 				server = new Server(server_port);
 				server->start();
 			}
@@ -498,6 +499,7 @@ int main (int argc, char *argv[])
 			}
 			else
 			{
+                                client.stop_broadcasting();
 				client.unregister_client();
 			}
 		}

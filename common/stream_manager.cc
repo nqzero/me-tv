@@ -102,7 +102,7 @@ void StreamManager::start()
 	{
 		g_debug("Starting frontend thread");
 		FrontendThread& frontend_thread = **i;
-		frontend_thread.start();
+//		frontend_thread.start();
 	}
 }
 

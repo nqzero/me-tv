@@ -35,9 +35,13 @@ private:
 	int					dvr_fd;
 	guint				timeout;
 	gboolean			ignore_teletext;
+        String input_path;
+        int count;
 		
 	void write(Glib::RefPtr<Glib::IOChannel> channel, guchar* buffer, gsize length);
 	void run();
+	void open();
+	void close();
 	void setup_dvb(ChannelStream& stream);
 	void start_epg_thread();
 	void stop_epg_thread();

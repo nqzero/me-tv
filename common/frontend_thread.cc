@@ -29,9 +29,16 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t
 	g_debug("Creating FrontendThread (%s)", frontend.get_path().c_str());
 	
 	epg_thread = NULL;
+        count = 0;
 
-	String input_path = frontend.get_adapter().get_dvr_path();
+	input_path = frontend.get_adapter().get_dvr_path();
+}
 
+void FrontendThread::open() {
+        frontend.ref( 1 );
+        count++;
+        g_debug( "Thread::Frontend::open -- count: %5d\n", count );
+        if (count > 1) return;
 	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
 	{
@@ -41,6 +48,15 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t
 	g_debug("FrontendThread created (%s)", frontend.get_path().c_str());
 }
 
+void FrontendThread::close() {
+    if (--count==0) {
+        ::close(dvr_fd);
+        stop_epg_thread();
+    }
+    frontend.ref(0);
+    g_debug( "Thread::Frontend::close -- count: %5d\n", count );
+}
+
 FrontendThread::~FrontendThread()
 {
 	g_debug("Destroying FrontendThread (%s)", frontend.get_path().c_str());
@@ -48,8 +64,8 @@ FrontendThread::~FrontendThread()
 	g_debug("About to close input channel ...");
 	::close(dvr_fd);
 	
-	stop();
 	stop_epg_thread();
+	stop();
 	
 	g_debug("FrontendThread destroyed (%s)", frontend.get_path().c_str());
 }
@@ -145,8 +161,8 @@ void FrontendThread::setup_dvb(ChannelStream& channel_stream)
 	if (channel.transponder != frontend.get_frontend_parameters())
 	{
 		stop_epg_thread();
-		frontend.tune_to(channel.transponder);
 	}
+        frontend.tune_to(channel.transponder);
 	start_epg_thread();
 	
 	g_debug("Reading PAT");
@@ -232,6 +248,7 @@ void FrontendThread::stop_epg_thread()
 
 void FrontendThread::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
 {
+        frontend.ref(1);
 	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
 	stop();
 	
@@ -241,12 +258,13 @@ void FrontendThread::start_broadcasting(Channel& channel, int client_id, const S
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 
+        open();
 	start();
+        frontend.ref(0);
 }
 
 void FrontendThread::stop_broadcasting(int client_id)
 {
-	stop();
 	gboolean found = false;
 
 	ChannelStreamList::iterator iterator = streams.begin();
@@ -258,6 +276,7 @@ void FrontendThread::stop_broadcasting(int client_id)
 		{
 			if (((BroadcastingChannelStream*)channel_stream)->get_client_id() == client_id)
 			{
+                                if (found==false) stop();
 				delete channel_stream;
 				iterator = streams.erase(iterator);
 				g_debug("Stopped broadcast stream");
@@ -268,7 +287,7 @@ void FrontendThread::stop_broadcasting(int client_id)
 		iterator++;
 	}
 
-	start();
+	if (found) { close(); start(); }
 }
 
 String make_recording_filename(Channel& channel, const String& description)
@@ -323,7 +342,8 @@ void FrontendThread::start_recording(Channel& channel,
                                      const String& description,
                                      gboolean scheduled)
 {
-	stop();	
+        frontend.ref(1);
+	stop();	// fixme -- can this wait till we're ready to add/delete streams ???
 
 	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
 	ChannelStreamType current_type = CHANNEL_STREAM_TYPE_NONE;
@@ -374,6 +394,8 @@ void FrontendThread::start_recording(Channel& channel,
 					ChannelStream* channel_stream = *iterator;
 					delete channel_stream;
 					iterator = streams.erase(iterator);
+                                        // fixme - shouldn't we add a stream for the new channel ???
+                                        //   need to keep this in sync with open() ???
 				}
 			}
 
@@ -386,12 +408,15 @@ void FrontendThread::start_recording(Channel& channel,
 	
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
 
+        open();
 	start();
+        frontend.ref(0);
 }
 
 void FrontendThread::stop_recording(const Channel& channel)
 {
 	stop();
+        gboolean found = false;
 
 	ChannelStreamList::iterator iterator = streams.begin();
 
@@ -402,6 +427,7 @@ void FrontendThread::stop_recording(const Channel& channel)
 		{
 			delete channel_stream;
 			iterator = streams.erase(iterator);
+                        found = true;
 		}
 		else
 		{
@@ -409,6 +435,7 @@ void FrontendThread::stop_recording(const Channel& channel)
 		}
 	}
 
+        if (found) close();
 	start();
 }
 
