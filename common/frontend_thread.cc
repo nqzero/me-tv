@@ -29,6 +29,7 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const Glib::ustring& encoding, 
 	g_debug("Creating FrontendThread (%s)", frontend.get_path().c_str());
 	
 	epg_thread = NULL;
+        count = 0;
 
 	input_path = frontend.get_adapter().get_dvr_path();
 }

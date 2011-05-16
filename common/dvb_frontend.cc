@@ -29,6 +29,7 @@ Frontend::Frontend(const Adapter& frontend_adapter, guint frontend_index)
 	: adapter(frontend_adapter)
 {
 	fd = -1;
+        count = 0;
 	memset(&frontend_parameters, 0, sizeof(struct dvb_frontend_parameters));
 	frontend = frontend_index;
 }
