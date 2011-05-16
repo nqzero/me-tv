@@ -161,7 +161,6 @@ void FrontendThread::setup_dvb(ChannelStream& channel_stream)
 	if (channel.transponder != frontend.get_frontend_parameters())
 	{
 		stop_epg_thread();
-		frontend.tune_to(channel.transponder);
 	}
         frontend.tune_to(channel.transponder);
 	start_epg_thread();
@@ -342,6 +341,7 @@ void FrontendThread::start_recording(Channel& channel,
                                      const Glib::ustring& description,
                                      gboolean scheduled)
 {
+        frontend.ref(1);
 	stop();	
 
 	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
@@ -406,6 +406,7 @@ void FrontendThread::start_recording(Channel& channel,
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
 
 	start();
+        frontend.ref(0);
 }
 
 void FrontendThread::stop_recording(const Channel& channel)
