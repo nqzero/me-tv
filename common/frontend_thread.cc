@@ -35,17 +35,17 @@ FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t
 }
 
 void FrontendThread::open() {
-        frontend.ref( 1 );
-        count++;
-        g_debug( "Thread::Frontend::open -- count: %5d\n", count );
-        if (count > 1) return;
+    if (count==0) {
 	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
 	{
 		throw SystemException("Failed to open dvr device");
 	}
-	
 	g_debug("FrontendThread created (%s)", frontend.get_path().c_str());
+    }
+    frontend.ref( 1 );
+    count++;
+    g_debug( "Thread::Frontend::open -- count: %5d\n", count );
 }
 
 void FrontendThread::close() {
@@ -348,7 +348,8 @@ void FrontendThread::start_recording(Channel& channel,
                                      const String& description,
                                      gboolean scheduled)
 {
-        frontend.ref(1);
+    frontend.ref(1);
+    try {
 	stop();	// fixme -- can this wait till we're ready to add/delete streams ???
 
 	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
@@ -407,7 +408,7 @@ void FrontendThread::start_recording(Channel& channel,
 
 			RecordingChannelStream* channel_stream = new RecordingChannelStream(
 				channel, scheduled, make_recording_filename(channel, description), description);
-			setup_dvb(*channel_stream);
+                        setup_dvb(*channel_stream);
 			streams.push_back(channel_stream);
 		}
 	}
@@ -416,7 +417,9 @@ void FrontendThread::start_recording(Channel& channel,
 
         open();
 	start();
-        frontend.ref(0);
+    }
+    catch (...) { frontend.ref(0); throw; }
+    frontend.ref(0);
 }
 
 void FrontendThread::stop_recording(const Channel& channel)
