@@ -248,25 +248,18 @@ void FrontendThread::stop_epg_thread()
 
 void FrontendThread::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
 {
-    frontend.ref(1);
-    try {
 	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
 	stop();
 	
 	g_debug("Creating new stream output");
 
 	BroadcastingChannelStream* channel_stream = new BroadcastingChannelStream(channel, client_id, interface, address, port);
-	setup_dvb(*channel_stream);
+        open();
+        try { setup_dvb(*channel_stream); }
+        catch (...) { close(); throw; }
 	streams.push_back(channel_stream);
 
-        open();
 	start();
-    }
-    catch(...) {
-        frontend.ref(0);
-        throw;
-    }
-    frontend.ref(0);
 }
 
 void FrontendThread::stop_broadcasting(int client_id)
@@ -348,8 +341,6 @@ void FrontendThread::start_recording(Channel& channel,
                                      const String& description,
                                      gboolean scheduled)
 {
-    frontend.ref(1);
-    try {
 	stop();	// fixme -- can this wait till we're ready to add/delete streams ???
 
 	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
@@ -409,17 +400,14 @@ void FrontendThread::start_recording(Channel& channel,
 
 			RecordingChannelStream* channel_stream = new RecordingChannelStream(
 				channel, scheduled, make_recording_filename(channel, description), description);
-                        setup_dvb(*channel_stream);
+                        try { setup_dvb(*channel_stream); }
+                        catch (...) { close(); throw; }
 			streams.push_back(channel_stream);
 		}
 	}
 	
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
-
 	start();
-    }
-    catch (...) { frontend.ref(0); throw; }
-    frontend.ref(0);
 }
 
 void FrontendThread::stop_recording(const Channel& channel)
