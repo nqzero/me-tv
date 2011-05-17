@@ -248,7 +248,8 @@ void FrontendThread::stop_epg_thread()
 
 void FrontendThread::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
 {
-        frontend.ref(1);
+    frontend.ref(1);
+    try {
 	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
 	stop();
 	
@@ -260,7 +261,12 @@ void FrontendThread::start_broadcasting(Channel& channel, int client_id, const S
 
         open();
 	start();
+    }
+    catch(...) {
         frontend.ref(0);
+        throw;
+    }
+    frontend.ref(0);
 }
 
 void FrontendThread::stop_broadcasting(int client_id)
