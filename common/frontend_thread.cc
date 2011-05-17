@@ -282,18 +282,18 @@ void FrontendThread::stop_broadcasting(int client_id)
 		{
 			if (((BroadcastingChannelStream*)channel_stream)->get_client_id() == client_id)
 			{
-                                if (found==false) stop();
+                                stop();
+                                close();
 				delete channel_stream;
 				iterator = streams.erase(iterator);
 				g_debug("Stopped broadcast stream");
 				found = true;
+                                start();
 			}
 		}
 
 		iterator++;
 	}
-
-	if (found) { close(); start(); }
 }
 
 String make_recording_filename(Channel& channel, const String& description)
@@ -389,7 +389,7 @@ void FrontendThread::start_recording(Channel& channel,
 		else
 		{
 			g_debug("Channel '%s' is not currently being recorded", channel.name.c_str());
-
+                        open();
 			if (channel.transponder != frontend.get_frontend_parameters())
 			{
 				g_debug("Need to change transponders to record this channel");
@@ -400,6 +400,7 @@ void FrontendThread::start_recording(Channel& channel,
 				{
 					ChannelStream* channel_stream = *iterator;
 					delete channel_stream;
+                                        close();
 					iterator = streams.erase(iterator);
                                         // fixme - shouldn't we add a stream for the new channel ???
                                         //   need to keep this in sync with open() ???
@@ -415,7 +416,6 @@ void FrontendThread::start_recording(Channel& channel,
 	
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
 
-        open();
 	start();
     }
     catch (...) { frontend.ref(0); throw; }
@@ -436,6 +436,7 @@ void FrontendThread::stop_recording(const Channel& channel)
 		{
 			delete channel_stream;
 			iterator = streams.erase(iterator);
+                        close();
                         found = true;
 		}
 		else
@@ -443,8 +444,6 @@ void FrontendThread::stop_recording(const Channel& channel)
 			iterator++;
 		}
 	}
-
-        if (found) close();
 	start();
 }
 
