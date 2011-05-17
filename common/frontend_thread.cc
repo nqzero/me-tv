@@ -26,31 +26,12 @@
 FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t, gboolean i)
 	: Thread("Frontend"), frontend(f), text_encoding(encoding), timeout(t), ignore_teletext(i)
 {
-	g_debug("Creating FrontendThread (%s)", frontend.get_path().c_str());
-	
 	epg_thread = NULL;
-
-	String input_path = frontend.get_adapter().get_dvr_path();
-
-	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
-	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
-	{
-		throw SystemException("Failed to open dvr device");
-	}
-	
 	g_debug("FrontendThread created (%s)", frontend.get_path().c_str());
 }
 
 FrontendThread::~FrontendThread()
 {
-	g_debug("Destroying FrontendThread (%s)", frontend.get_path().c_str());
-	
-	g_debug("About to close input channel ...");
-	::close(dvr_fd);
-	
-	stop();
-	stop_epg_thread();
-	
 	g_debug("FrontendThread destroyed (%s)", frontend.get_path().c_str());
 }
 
@@ -73,6 +54,14 @@ void FrontendThread::stop()
 void FrontendThread::run()
 {
 	g_debug("Frontend thread running (%s)", frontend.get_path().c_str());
+
+	String input_path = frontend.get_adapter().get_dvr_path();
+
+	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
+	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
+	{
+		throw SystemException("Failed to open dvr device");
+	}
 
 	struct pollfd pfds[1];
 	pfds[0].fd = dvr_fd;
@@ -130,6 +119,10 @@ void FrontendThread::run()
 	}
 		
 	g_debug("FrontendThread loop exited (%s)", frontend.get_path().c_str());
+
+	stop_epg_thread();
+
+	::close(dvr_fd);
 }
 
 void FrontendThread::setup_dvb(ChannelStream& channel_stream)
