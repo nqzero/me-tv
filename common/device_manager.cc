@@ -78,6 +78,7 @@ void DeviceManager::initialise(const String& devices)
 							frontend_type.c_str(),
 							frontend->get_path().c_str());
 					}
+					frontend->close();
 				}
 				catch(...)
 				{

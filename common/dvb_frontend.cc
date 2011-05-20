@@ -73,12 +73,17 @@ void Frontend::tune_to(const Transponder& transponder, guint timeout)
 {
 	g_message(_("Frontend::tune_to(%d)"), transponder.frontend_parameters.frequency);
 
+	if (fd == -1)
+	{
+		throw Exception("Frontend has not been opened");
+	}
+
 	frontend_parameters.frequency = 0;
 	
 	struct dvb_frontend_parameters parameters = transponder.frontend_parameters;
 	struct dvb_frontend_event ev;
 	
-	if(frontend_info.type == FE_QPSK)
+	if (frontend_info.type == FE_QPSK)
 	{
 		guint hi_band = 0;
 		
@@ -87,7 +92,7 @@ void Frontend::tune_to(const Transponder& transponder, guint timeout)
 			hi_band = 1;
 		}
 		
-		diseqc(0, transponder.polarisation, hi_band); // Note that satellite_number is constant 0. Maybe this should be configurable? I don't fully understand it's use, but it has something to do with being able to tune to different satellites.
+		diseqc(0, transponder.polarisation, hi_band);
 		
 		if(hi_band == 1)
 		{

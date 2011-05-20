@@ -48,6 +48,11 @@ void FrontendThread::stop()
 {
 	g_debug("Stopping frontend thread (%s)", frontend.get_path().c_str());
 	join(true);
+	if (streams.empty())
+	{
+		stop_epg_thread();
+		frontend.close();
+	}
 	g_debug("Frontend thread stopped and joined (%s)", frontend.get_path().c_str());
 }
 
@@ -129,18 +134,27 @@ void FrontendThread::setup_dvb(ChannelStream& channel_stream)
 {
 	g_debug("Setting up DVB");
 
-	String demux_path = frontend.get_adapter().get_demux_path();
-
 	Buffer buffer;
 	const Channel& channel = channel_stream.channel;
-	
-	channel_stream.clear_demuxers();
-	if (channel.transponder != frontend.get_frontend_parameters())
+
+	for (ChannelStreamList::iterator i = streams.begin(); i != streams.end(); i++)
 	{
-		stop_epg_thread();
-		frontend.tune_to(channel.transponder);
+		ChannelStream* existing_channel_stream = *i;
+
+		if (existing_channel_stream->channel.transponder != channel.transponder)
+		{
+			throw Exception("Failed to add a channel stream on a different transponder");
+		}
 	}
-	start_epg_thread();
+
+	String demux_path = frontend.get_adapter().get_demux_path();
+
+	if (streams.empty())
+	{
+		frontend.open();
+		frontend.tune_to(channel.transponder);
+		start_epg_thread();
+	}
 	
 	g_debug("Reading PAT");
 	Dvb::Demuxer demuxer_pat(demux_path);
