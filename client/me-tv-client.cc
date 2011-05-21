@@ -284,6 +284,7 @@ int main (int argc, char *argv[])
 	Glib::add_exception_handler(&handle_error);
 	signal_error.connect(sigc::ptr_fun(&on_error_gtk));
 
+	String broadcast_address;
 	gint server_port = 1999;
 	String server_host;
 	gboolean non_unique = false;
@@ -305,7 +306,7 @@ int main (int argc, char *argv[])
 	Glib::OptionEntry minimised_option_entry;
 	minimised_option_entry.set_long_name("minimised");
 	minimised_option_entry.set_short_name('m');
-	minimised_option_entry.set_description(_("Start minimised in notification area."));
+	minimised_option_entry.set_description(_("Start minimised."));
 
 	Glib::OptionEntry non_unique_option_entry;
 	non_unique_option_entry.set_long_name("non-unique");
@@ -348,6 +349,10 @@ int main (int argc, char *argv[])
 	Glib::OptionEntry read_timeout_option_entry;
 	read_timeout_option_entry.set_long_name("read-timeout");
 	read_timeout_option_entry.set_description(_("How long to wait (in seconds) before timing out while waiting for data from demuxer. (default 5)"));
+
+	Glib::OptionEntry broadcast_address_option_entry;
+	broadcast_address_option_entry.set_long_name("broadcast-address");
+	broadcast_address_option_entry.set_description(_("The network broadcast address to send video streams for clients to display (default 127.0.0.1)."));
 	
 	Glib::OptionGroup option_group(PACKAGE_NAME, "", _("Show Me TV help options"));
 	option_group.add_entry(verbose_option_entry, verbose_logging);
@@ -363,6 +368,7 @@ int main (int argc, char *argv[])
 	option_group.add_entry(engine_option_entry, engine_type);
 	option_group.add_entry(non_unique_option_entry, non_unique);
 	option_group.add_entry(quit_on_close_option_entry, quit_on_close);
+	option_group.add_entry(broadcast_address_option_entry, broadcast_address);
 
 	Glib::OptionContext option_context;
 	option_context.set_summary(ME_TV_SUMMARY);
@@ -460,7 +466,7 @@ int main (int argc, char *argv[])
 			Server* server = NULL;
 			if (server_host.empty())
 			{
-				server = new Server(server_port);
+				server = new Server(server_port, broadcast_address);
 				server->start();
 			}
 			else

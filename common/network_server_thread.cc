@@ -25,7 +25,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Server")
+NetworkServerThread::NetworkServerThread(guint server_port, const String& broadcast_address) : Thread("Network Server")
 {
 	request_handler.set_broadcast_address(broadcast_address);
 

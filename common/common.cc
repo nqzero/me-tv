@@ -41,7 +41,6 @@ String		devices;
 gboolean	ignore_teletext = true;
 String		recording_directory;
 int			read_timeout = 5000;
-String		broadcast_address;
 String		text_encoding;
 
 void replace_text(String& text, const String& from, const String& to)

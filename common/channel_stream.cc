@@ -63,7 +63,7 @@ BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const S
 
 	recvaddr.sin_family = AF_INET;
 	recvaddr.sin_port = htons(port);
-	recvaddr.sin_addr.s_addr = inet_addr(address.c_str());
+	recvaddr.sin_addr.s_addr = inet_addr(address.empty() ? "127.0.0.1" : address.c_str());
 	memset(recvaddr.sin_zero,'\0',sizeof recvaddr.sin_zero);
 
 	g_debug("Added new channel stream '%s' -> '%s:%d'", channel.name.c_str(), address.c_str(), port);

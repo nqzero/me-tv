@@ -36,7 +36,7 @@ protected:
 	void run();
 
 public:
-	NetworkServerThread(guint server_port);
+	NetworkServerThread(guint server_port, const String& broadcast_address);
 };
 
 #endif

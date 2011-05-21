@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 			Glib::thread_init();
 		}
 
-		broadcast_address = "127.0.0.1";
+		String broadcast_address;
 		gint server_port = 1999;
 		String server_host;
 
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 
 		option_context.parse(argc, argv);
 
-		Server server(server_port);
+		Server server(server_port, broadcast_address);
 		server.start();
 
 		g_message("Me TV Server entering main loop");

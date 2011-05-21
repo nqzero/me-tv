@@ -37,7 +37,6 @@ extern String						recording_directory;
 extern guint						record_extra_before;
 extern guint						record_extra_after;
 extern gboolean						ignore_teletext;
-extern String						broadcast_address;
 extern String						text_encoding;
 
 extern DeviceManager				device_manager;
