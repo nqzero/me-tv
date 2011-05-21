@@ -48,11 +48,6 @@ void FrontendThread::stop()
 {
 	g_debug("Stopping frontend thread (%s)", frontend.get_path().c_str());
 	join(true);
-	if (streams.empty())
-	{
-		stop_epg_thread();
-		frontend.close();
-	}
 	g_debug("Frontend thread stopped and joined (%s)", frontend.get_path().c_str());
 }
 
@@ -275,6 +270,11 @@ void FrontendThread::stop_broadcasting(int client_id)
 		iterator++;
 	}
 
+	if (streams.empty())
+	{
+		frontend.close();
+	}
+
 	start();
 }
 
@@ -414,6 +414,11 @@ void FrontendThread::stop_recording(const Channel& channel)
 		{
 			iterator++;
 		}
+	}
+
+	if (streams.empty())
+	{
+		frontend.close();
 	}
 
 	start();
