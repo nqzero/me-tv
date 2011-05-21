@@ -471,6 +471,7 @@ int main (int argc, char *argv[])
 			}
 			else
 			{
+				client.set_server(server_host, server_port);
 				quit_on_close = true;
 			}
 
