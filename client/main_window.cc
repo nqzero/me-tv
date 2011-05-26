@@ -35,8 +35,8 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
-#define MINUTES_PER_COLUMN	1
-#define COLUMNS_PER_HOUR	(60 * MINUTES_PER_COLUMN)
+#define MINUTES_PER_COLUMN				1
+#define COLUMNS_PER_HOUR				(60 * MINUTES_PER_COLUMN)
 #define UPDATE_INTERVAL					60
 #define SECONDS_UNTIL_CHANNEL_CHANGE	3
 
@@ -358,10 +358,11 @@ void MainWindow::on_timeout()
 		guint seconds = now % 60;
 		if (last_seconds > seconds)
 		{
+			last_seconds = seconds;
+			
 			get_epg();
 			signal_update();
 		}
-		last_seconds = seconds;
 	}
 	catch(...)
 	{
