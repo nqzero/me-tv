@@ -58,7 +58,6 @@ String get_local_time_text(const gchar* format);
 String get_local_time_text(time_t t, const gchar* format);
 
 void log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
-void start_server(const String& server_host);
 
 extern Glib::RefPtr<Gtk::ToggleAction> toggle_action_fullscreen;
 extern Glib::RefPtr<Gtk::ToggleAction> toggle_action_mute;
@@ -75,11 +74,10 @@ extern Glib::RefPtr<Gtk::Action> action_increase_volume;
 extern Glib::RefPtr<Gtk::Action> action_preferences;
 extern Glib::RefPtr<Gtk::Action> action_present;
 extern Glib::RefPtr<Gtk::Action> action_quit;
-extern Glib::RefPtr<Gtk::Action> action_restart_server;
 extern Glib::RefPtr<Gtk::Action> action_scheduled_recordings;
 
-extern sigc::signal<void, int> signal_start_broadcasting;
-extern sigc::signal<void> signal_stop_broadcasting;
+extern sigc::signal<void, int> signal_start_rtsp;
+extern sigc::signal<void> signal_stop_rtsp;
 extern sigc::signal<void, int> signal_add_scheduled_recording;
 extern sigc::signal<void, int> signal_remove_scheduled_recording;
 

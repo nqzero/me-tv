@@ -73,7 +73,7 @@ private:
 	void set_mute_state(gboolean state);
 	void set_status_text(const String& text);
 	void select_channel_to_play();
-	void stop_broadcasting();
+	void stop_rtsp();
 
 	void play(const String& mrl);
 
@@ -92,8 +92,8 @@ private:
 	bool on_key_press_event(GdkEventKey* event);
 	bool on_event_box_video_button_pressed(GdkEventButton* event);
 
-	void on_start_broadcasting(int channel_id);
-	void on_stop_broadcasting();
+	void on_start_rtsp(int channel_id);
+	void on_stop_rtsp();
 	void on_update();
 	void on_error(const String& message);
 

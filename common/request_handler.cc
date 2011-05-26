@@ -552,8 +552,3 @@ gboolean RequestHandler::handle_request(int sockfd)
 	return result;
 }
 
-void RequestHandler::set_broadcast_address(const String& address)
-{
-	broadcast_address = address;
-}
-

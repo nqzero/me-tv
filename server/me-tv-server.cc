@@ -53,7 +53,6 @@ int main(int argc, char** argv)
 			Glib::thread_init();
 		}
 
-		String broadcast_address;
 		gint server_port = 1999;
 		String server_host;
 
@@ -74,10 +73,6 @@ int main(int argc, char** argv)
 		read_timeout_option_entry.set_long_name("read-timeout");
 		read_timeout_option_entry.set_description(_("How long to wait (in seconds) before timing out while waiting for data from demuxer (default 5)."));
 
-		Glib::OptionEntry broadcast_address_option_entry;
-		broadcast_address_option_entry.set_long_name("broadcast-address");
-		broadcast_address_option_entry.set_description(_("The network broadcast address to send video streams for clients to display (default 127.0.0.1)."));
-
 		Glib::OptionEntry server_port_option_entry;
 		server_port_option_entry.set_long_name("server-port");
 		server_port_option_entry.set_description(_("The network port for clients to connect to (default 1999)."));
@@ -87,7 +82,6 @@ int main(int argc, char** argv)
 		option_group.add_entry(disable_epg_thread_option_entry, disable_epg_thread);
 		option_group.add_entry(devices_option_entry, devices);
 		option_group.add_entry(read_timeout_option_entry, read_timeout);
-		option_group.add_entry(broadcast_address_option_entry, broadcast_address);
 		option_group.add_entry(server_port_option_entry, server_port);
 
 		Glib::OptionContext option_context;
@@ -95,7 +89,7 @@ int main(int argc, char** argv)
 		option_context.set_description(ME_TV_DESCRIPTION);
 		option_context.set_main_group(option_group);
 
-		Server server(server_port, broadcast_address);
+		Server server(server_port);
 		server.start();
 
 		gst_init(&argc, &argv);

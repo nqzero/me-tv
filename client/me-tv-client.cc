@@ -58,11 +58,10 @@ Glib::RefPtr<Gtk::Action> action_increase_volume;
 Glib::RefPtr<Gtk::Action> action_preferences;
 Glib::RefPtr<Gtk::Action> action_present;
 Glib::RefPtr<Gtk::Action> action_quit;
-Glib::RefPtr<Gtk::Action> action_restart_server;
 Glib::RefPtr<Gtk::Action> action_scheduled_recordings;
 
-sigc::signal<void, int> signal_start_broadcasting;
-sigc::signal<void> signal_stop_broadcasting;
+sigc::signal<void, int> signal_start_rtsp;
+sigc::signal<void> signal_stop_rtsp;
 sigc::signal<void, int> signal_add_scheduled_recording;
 sigc::signal<void, int> signal_remove_scheduled_recording;
 
@@ -284,7 +283,6 @@ int main (int argc, char *argv[])
 	Glib::add_exception_handler(&handle_error);
 	signal_error.connect(sigc::ptr_fun(&on_error_gtk));
 
-	String broadcast_address;
 	gint server_port = 1999;
 	String server_host;
 	gboolean non_unique = false;
@@ -350,10 +348,6 @@ int main (int argc, char *argv[])
 	read_timeout_option_entry.set_long_name("read-timeout");
 	read_timeout_option_entry.set_description(_("How long to wait (in seconds) before timing out while waiting for data from demuxer. (default 5)"));
 
-	Glib::OptionEntry broadcast_address_option_entry;
-	broadcast_address_option_entry.set_long_name("broadcast-address");
-	broadcast_address_option_entry.set_description(_("The network broadcast address to send video streams for clients to display (default 127.0.0.1)."));
-	
 	Glib::OptionGroup option_group(PACKAGE_NAME, "", _("Show Me TV help options"));
 	option_group.add_entry(verbose_option_entry, verbose_logging);
 	option_group.add_entry(safe_mode_option_entry, safe_mode);
@@ -368,7 +362,6 @@ int main (int argc, char *argv[])
 	option_group.add_entry(engine_option_entry, engine_type);
 	option_group.add_entry(non_unique_option_entry, non_unique);
 	option_group.add_entry(quit_on_close_option_entry, quit_on_close);
-	option_group.add_entry(broadcast_address_option_entry, broadcast_address);
 
 	Glib::OptionContext option_context;
 	option_context.set_summary(ME_TV_SUMMARY);
@@ -409,7 +402,6 @@ int main (int argc, char *argv[])
 			action_epg_event_search = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_epg_event_search"));
 			action_preferences = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_preferences"));
 			action_present = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_present"));
-			action_restart_server = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_restart_server"));
 			action_quit = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_quit"));
 			action_scheduled_recordings = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_scheduled_recordings"));
 			action_increase_volume = Glib::RefPtr<Gtk::Action>::cast_dynamic(builder->get_object("action_increase_volume"));
@@ -428,7 +420,6 @@ int main (int argc, char *argv[])
 			action_group->add(action_epg_event_search);
 			action_group->add(action_preferences);
 			action_group->add(action_present);
-			action_group->add(action_restart_server);
 			action_group->add(action_quit);
 			action_group->add(action_scheduled_recordings);
 			action_group->add(action_increase_volume, Gtk::AccelKey("plus"));
@@ -466,7 +457,7 @@ int main (int argc, char *argv[])
 			Server* server = NULL;
 			if (server_host.empty())
 			{
-				server = new Server(server_port, broadcast_address);
+				server = new Server(server_port);
 				server->start();
 			}
 			else

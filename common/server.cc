@@ -24,7 +24,7 @@
 #include "data.h"
 #include "crc32.h"
 
-Server::Server(int port, const String& broadcast_address) : server_thread(port, broadcast_address)
+Server::Server(int port) : server_thread(port)
 {
 	Gnome::Gda::init();
 	Crc32::init();

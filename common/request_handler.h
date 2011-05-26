@@ -35,7 +35,6 @@ private:
 
 		int id;
 		time_t last;
-		int broadcast_port;
 	};
 
 	class ClientList : public std::list<Client>
@@ -54,8 +53,6 @@ private:
 		void remove(int client_id);
 	};
 
-	String broadcast_address;
-
 	xmlpp::Node* get_attribute(const xmlpp::Node* node, const String& xpath);
 	String get_attribute_value(const xmlpp::Node* node, const String& xpath);
 	int get_int_attribute_value(const xmlpp::Node* node, const String& xpath);
@@ -70,7 +67,6 @@ public:
 	ClientList clients;
 
 	gboolean handle_request(int sockfd);
-	void set_broadcast_address(const String& broadcast_address);
 };
 
 #endif

@@ -1738,9 +1738,6 @@ found in /usr/share/common-licenses/GPL file.</property>
   <object class="GtkAction" id="action_present">
     <property name="label">Present</property>
   </object>
-  <object class="GtkAction" id="action_restart_server">
-    <property name="label">Restart Server</property>
-  </object>
   <object class="GtkToggleAction" id="toggle_action_visibility">
     <property name="label">Toggle Visibility</property>
   </object>

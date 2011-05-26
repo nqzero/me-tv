@@ -85,7 +85,7 @@ void EpgEventDialog::show_epg_event(Client::EpgEvent& epg_event)
 		break;
 			
 	case 3: // Watch Now
-		signal_start_broadcasting(epg_event.channel_id);
+		signal_start_rtsp(epg_event.channel_id);
 		break;
 
 	default:

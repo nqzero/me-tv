@@ -29,7 +29,7 @@ private:
 	NetworkServerThread server_thread;
 	
 public:
-	Server(int port, const String& broadcast_address);
+	Server(int port);
 	
 	void start();
 	void stop();

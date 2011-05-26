@@ -44,8 +44,6 @@ String ui_info =
 	"<ui>"
 	"	<menubar name='menu_bar'>"
 	"		<menu action='action_file'>"
-	"			<menuitem action='action_restart_server'/>"
-	"			<separator/>"
 	"			<menuitem action='action_quit'/>"
 	"		</menu>"
 	"		<menu action='action_view'>"
@@ -170,12 +168,11 @@ MainWindow::MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>
 	action_increase_volume->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_increase_volume));
 	action_preferences->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_preferences));
 	action_present->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_present));
-	action_restart_server->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_restart_server));
 	action_quit->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::hide));
 	action_scheduled_recordings->signal_activate().connect(sigc::mem_fun(*this, &MainWindow::on_scheduled_recordings));
 
-	signal_start_broadcasting.connect(sigc::mem_fun(*this, &MainWindow::on_start_broadcasting));
-	signal_stop_broadcasting.connect(sigc::mem_fun(*this, &MainWindow::on_stop_broadcasting));
+	signal_start_rtsp.connect(sigc::mem_fun(*this, &MainWindow::on_start_rtsp));
+	signal_stop_rtsp.connect(sigc::mem_fun(*this, &MainWindow::on_stop_rtsp));
 	signal_update.connect(sigc::mem_fun(*this, &MainWindow::on_update));
 	signal_error.connect(sigc::mem_fun(*this, &MainWindow::on_error));
 
@@ -445,7 +442,7 @@ void MainWindow::on_show()
 
 void MainWindow::on_hide()
 {
-	stop_broadcasting();
+	stop_rtsp();
 	save_geometry();
 	client.unregister_client();
 	Gtk::Window::on_hide();
@@ -578,9 +575,9 @@ void MainWindow::create_engine()
 	g_debug("Engine created");
 }
 
-void MainWindow::stop_broadcasting()
+void MainWindow::stop_rtsp()
 {
-	signal_stop_broadcasting();
+	signal_stop_rtsp();
 }
 
 void MainWindow::play(const String& mrl)
@@ -606,10 +603,10 @@ void MainWindow::on_update()
 	String description = "Me TV - It's TV for me computer";
 	String title = description;
 
-	int broadcasting_channel = client.get_broadcasting_channel_id();
-	if (broadcasting_channel != -1)
+	int rtsp_channel = client.get_rtsp_channel_id();
+	if (rtsp_channel != -1)
 	{
-		Client::Channel& channel = epg.get_by_id(broadcasting_channel);
+		Client::Channel& channel = epg.get_by_id(rtsp_channel);
 
 		title = "Me TV - " + channel.name;
 		description = channel.name;
@@ -669,11 +666,6 @@ void MainWindow::on_preferences()
 void MainWindow::on_present()
 {
 	present();
-}
-
-void MainWindow::on_restart_server()
-{
-	throw Exception("Not implemented");
 }
 
 void MainWindow::on_about()
@@ -751,11 +743,17 @@ void MainWindow::select_channel_to_play()
 
 void MainWindow::on_start_rtsp(int channel_id)
 {
-	stop_broadcasting();
+	stop_rtsp();
 
 	Client::RtspStream stream = client.start_rtsp(channel_id);
 
-	String mrl = String::compose("rtsp://%1:8554/%2", client.id);
+	String host = client.get_server_host();
+	if (host.empty())
+	{
+		host = "localhost";
+	}
+
+	String mrl = String::compose("rtsp://%1:8554/%2", host, client.get_client_id());
 
 	play(mrl);
 	
@@ -765,7 +763,7 @@ void MainWindow::on_start_rtsp(int channel_id)
 	signal_update();
 }
 
-void MainWindow::on_stop_broadcasting()
+void MainWindow::on_stop_rtsp()
 {
 	if (engine != NULL)
 	{
@@ -967,7 +965,7 @@ void MainWindow::create_channel_row(Gtk::RadioButtonGroup& group, Client::Channe
 		
 	Gtk::RadioButton& channel_button = attach_radio_button(group, channel_text, false, 0, 1, table_row, table_row + 1);
 
-	gboolean selected = client.get_broadcasting_channel_id() == channel.id;
+	gboolean selected = client.get_rtsp_channel_id() == channel.id;
 	if (selected)
 	{
 		Gtk::HBox* hbox = dynamic_cast<Gtk::HBox*>(channel_button.get_child());
@@ -1182,7 +1180,7 @@ void MainWindow::on_channel_button_toggled(Gtk::RadioButton* button, int channel
 {
 	if (button->get_active())
 	{
-		signal_start_broadcasting(channel_id);
+		signal_start_rtsp(channel_id);
 	}
 }
 

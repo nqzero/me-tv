@@ -25,10 +25,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-NetworkServerThread::NetworkServerThread(guint server_port, const String& broadcast_address) : Thread("Network Server")
+NetworkServerThread::NetworkServerThread(guint server_port) : Thread("Network Server")
 {
-	request_handler.set_broadcast_address(broadcast_address);
-
 	g_message("Starting socket service on port %d", server_port);
 
 	socket_server = socket(AF_INET, SOCK_STREAM, 0);

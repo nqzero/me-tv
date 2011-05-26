@@ -148,6 +148,7 @@ public:
 	~Client();
 
 	void set_server(const String& server_host, int server_port);
+	String get_server_host() const { return host; }
 
 	int get_client_id() const { return client_id; }
 	int get_rtsp_channel_id() const { return rtsp_channel_id; }
