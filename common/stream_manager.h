@@ -36,13 +36,12 @@ public:
 			
 	FrontendThreadList& get_frontend_threads() { return frontend_threads; };
 
-	void start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port);
-	void stop_broadcasting(int client_id);
+	void start_rtsp(Channel& channel, int client_id);
+	void stop_rtsp(int client_id);
+	gboolean is_rtsp(const String& device);
 
 	void start_recording(const ScheduledRecording& scheduled_recording);
 	void stop_recording(const Channel& channel);
-
-	gboolean is_broadcasting(const String& device);
 
 	void start();
 	void stop();

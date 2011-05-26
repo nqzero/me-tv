@@ -55,9 +55,9 @@ public:
 	void start_recording(Channel& channel, const String& description, gboolean scheduled);
 	void stop_recording(const Channel& channel);
 
-	gboolean is_broadcasting();
-	void start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port);
-	void stop_broadcasting(int client_id);
+	gboolean is_rtsp();
+	void start_rtsp(Channel& channel, int client_id);
+	void stop_rtsp(int client_id);
 
 	void start();
 	void stop();

@@ -73,11 +73,11 @@ void ScheduledRecordingManager::select_device(ScheduledRecording& scheduled_reco
 			if (is_device_available(device_path, scheduled_recording, scheduled_recordings))
 			{
 				scheduled_recording.device = device_path;
-				if (!stream_manager.is_broadcasting(device_path))
+				if (!stream_manager.is_rtsp(device_path))
 				{
 					return;
 				}
-				g_debug("Device '%s' is currently broadcasting, looking for something better", device_path.c_str());
+				g_debug("Device '%s' is currently transmitting, looking for something better", device_path.c_str());
 			}
 		}
 	}

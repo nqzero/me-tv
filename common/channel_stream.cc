@@ -39,34 +39,15 @@ ChannelStream::ChannelStream(ChannelStreamType t, Channel& c) : channel(c)
 	last_insert_time = 0;
 }
 
-String BroadcastingChannelStream::get_description()
+String RtspChannelStream::get_description()
 {
 	return channel.get_text();
 }
 
-BroadcastingChannelStream::BroadcastingChannelStream(Channel& c, int id, const String& i, const String& a, int p) :
-	ChannelStream(CHANNEL_STREAM_TYPE_BROADCAST, c), client_id(id), interface(i), address(a), port(p)
+RtspChannelStream::RtspChannelStream(Channel& c, int id) :
+	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id)
 {
-	int broadcast = 1;
-
-	sd = socket(AF_INET, SOCK_DGRAM, 0);
-
-	if (sd < 0)
-	{
-		throw SystemException("Failed to create socket");
-	}
-
-	if ((setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast)) == -1)
-	{
-		throw SystemException("Failed to set broadcasting option");
-	}
-
-	recvaddr.sin_family = AF_INET;
-	recvaddr.sin_port = htons(port);
-	recvaddr.sin_addr.s_addr = inet_addr(address.empty() ? "127.0.0.1" : address.c_str());
-	memset(recvaddr.sin_zero,'\0',sizeof recvaddr.sin_zero);
-
-	g_debug("Added new channel stream '%s' -> '%s:%d'", channel.name.c_str(), address.c_str(), port);
+	g_debug("Added new RTSP channel stream '%s' -> 'rtsp://server:8554/%d'", channel.name.c_str(), id);
 }
 
 RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
@@ -75,7 +56,7 @@ RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, c
 	mrl = m;
 	description = d;
 
-	g_debug("Added new channel stream '%s' -> '%s'", channel.name.c_str(), mrl.c_str());
+	g_debug("Added new recording channel stream '%s' -> '%s'", channel.name.c_str(), mrl.c_str());
 }
 
 String RecordingChannelStream::get_description()
@@ -117,12 +98,8 @@ Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint
 	return *demuxer;
 }
 
-void BroadcastingChannelStream::write_data(guchar* buffer, gsize length)
+void RtspChannelStream::write_data(guchar* buffer, gsize length)
 {
-	if (::sendto(sd, buffer, length, 0, (struct sockaddr*)&recvaddr, sizeof(recvaddr)) < 0)
-	{
-		throw SystemException("Failed to send data");
-	}
 }
 
 void RecordingChannelStream::write_data(guchar* buffer, gsize length)
@@ -139,9 +116,8 @@ void RecordingChannelStream::write_data(guchar* buffer, gsize length)
 	output_channel->write((const gchar*)buffer, length, bytes_written);
 }
 
-BroadcastingChannelStream::~BroadcastingChannelStream()
+RtspChannelStream::~RtspChannelStream()
 {
-	::close(sd);
 }
 
 RecordingChannelStream::~RecordingChannelStream()

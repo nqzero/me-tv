@@ -170,6 +170,7 @@ PKG_CHECK_MODULES(ME_TV_SERVER, [
 	libgda-sqlite-4.0
 	libgdamm-4.0
 	libxml++-2.6
+	gst-rtsp-server-0.10
 ])
 AC_SUBST(ME_TV_COMMON_CFLAGS)
 AC_SUBST(ME_TV_COMMON_LIBS)

@@ -746,25 +746,16 @@ void MainWindow::select_channel_to_play()
 	}
 	
 	int channel_id = configuration_manager.get_int_value("last_channel");
-	signal_start_broadcasting(channel_id);
+	signal_start_rtsp(channel_id);
 }
 
-void MainWindow::on_start_broadcasting(int channel_id)
+void MainWindow::on_start_rtsp(int channel_id)
 {
 	stop_broadcasting();
 
-	gboolean multicast = configuration_manager.get_boolean_value("multicast");
-	Client::BroadcastingStream stream = client.start_broadcasting(channel_id, multicast);
+	Client::RtspStream stream = client.start_rtsp(channel_id);
 
-	String mrl;
-	if (engine_type == "vlc")
-	{
-		mrl = String::compose("%1://@0.0.0.0:%2/", stream.protocol, stream.port);
-	}
-	else
-	{
-		mrl = String::compose("%1://%2:%3/", stream.protocol, stream.address, stream.port);
-	}
+	String mrl = String::compose("rtsp://%1:8554/%2", client.id);
 
 	play(mrl);
 	

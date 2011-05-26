@@ -108,7 +108,7 @@ Client::Client()
 {
 	client_id = 0;
 	port = 1999;
-	broadcasting_channel_id = -1;
+	rtsp_channel_id = -1;
 }
 
 Client::~Client()
@@ -334,39 +334,34 @@ void Client::remove_scheduled_recording(int scheduled_recording_id)
 	send_request("remove_scheduled_recording", parameters);
 }
 
-Client::BroadcastingStream Client::start_broadcasting(int channel_id, gboolean multicast)
+Client::RtspStream Client::start_rtsp(int channel_id)
 {
-	Client::BroadcastingStream result;
+	Client::RtspStream result;
 
-	if (broadcasting_channel_id == channel_id)
+	if (rtsp_channel_id == channel_id)
 	{
-		g_debug("Already broadcasting channel %d", broadcasting_channel_id);
+		g_debug("Already transmitting channel %d", rtsp_channel_id);
 	}
 	else
 	{
-		stop_broadcasting();
+		stop_rtsp();
 
 		ParameterList parameters;
 		parameters.add("channel", channel_id);
-		parameters.add("multicast", multicast ? "true" : "false");
-		Node* node = send_request("start_broadcasting", parameters);
+		Node* node = send_request("start_rtsp", parameters);
 
-		result.protocol = get_attribute_value(node, "stream/@protocol");
-		result.address = get_attribute_value(node, "stream/@address");
-		result.port = get_int_attribute_value(node, "stream/@port");
-
-		broadcasting_channel_id = channel_id;
+		rtsp_channel_id = channel_id;
 	}
 
 	return result;
 }
 
-void Client::stop_broadcasting()
+void Client::stop_rtsp()
 {
-	if (broadcasting_channel_id != -1)
+	if (rtsp_channel_id != -1)
 	{
-		send_request("stop_broadcasting");
-		broadcasting_channel_id = -1;
+		send_request("stop_rtsp");
+		rtsp_channel_id = -1;
 	}
 }
 
@@ -448,7 +443,7 @@ void Client::unregister_client()
 {
 	if (client_id != 0)
 	{
-		stop_broadcasting();
+		stop_rtsp();
 		send_request("unregister");
 		client_id = 0;
 	}

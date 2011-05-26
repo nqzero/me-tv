@@ -56,7 +56,7 @@ gboolean RequestHandler::get_bool_attribute_value(const Node* node, const String
 
 RequestHandler::Client::~Client()
 {
-	stream_manager.stop_broadcasting(id);
+	stream_manager.stop_rtsp(id);
 }
 
 void RequestHandler::ClientList::remove(int client_id)
@@ -79,7 +79,6 @@ int RequestHandler::ClientList::add()
 	Client client;
 	client.id = ++client_id;
 	client.last = time(NULL);
-	client.broadcast_port = get_free_port();
 	push_back(client);
 
 	return client.id;
@@ -119,45 +118,6 @@ RequestHandler::Client& RequestHandler::ClientList::get(int client_id)
 void RequestHandler::ClientList::update(int client_id)
 {
 	get(client_id).last = time(NULL);
-}
-
-bool RequestHandler::ClientList::is_port_used(int port)
-{
-	for (ClientList::iterator i = begin(); i != end(); i++)
-	{
-		Client& client = *i;
-		if (client.broadcast_port == port)
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
-
-int RequestHandler::ClientList::get_free_port()
-{
-	bool found = false;
-	int port = 2005;
-
-	while (!found)
-	{
-		if (port >= 3000)
-		{
-			throw Exception("Port is too high");
-		}
-
-		if (!is_port_used(port))
-		{
-			found = true;
-		}
-		else
-		{
-			port++;
-		}
-	}
-
-	return port;
 }
 
 gboolean RequestHandler::handle_connection(int sockfd)
@@ -311,20 +271,17 @@ gboolean RequestHandler::handle_connection(int sockfd)
 				body += "</channel>";
 			}
 		}
-		else if (command == "start_broadcasting")
+		else if (command == "start_rtsp")
 		{
 			int channel_id = ::atoi(get_attribute_value(root_node, "parameter[@name=\"channel\"]/@value").c_str());
 			Channel channel = ChannelManager::get(channel_id);
-			String protocol = "udp";
 
 			RequestHandler::Client& client = clients.get(client_id);
-			stream_manager.start_broadcasting(channel, client_id, "", broadcast_address, client.broadcast_port);
-			body += String::compose("<stream protocol=\"%1\" address=\"%2\" port=\"%3\" />",
-				protocol, broadcast_address, client.broadcast_port);
+			stream_manager.start_rtsp(channel, client_id);
 		}
-		else if (command == "stop_broadcasting")
+		else if (command == "stop_rtsp")
 		{
-			stream_manager.stop_broadcasting(client_id);
+			stream_manager.stop_rtsp(client_id);
 		}
 		else if (command == "add_scheduled_recording")
 		{

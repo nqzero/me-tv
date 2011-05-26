@@ -116,7 +116,7 @@ void StreamManager::stop()
 	}
 }
 
-void StreamManager::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
+void StreamManager::start_rtsp(Channel& channel, int client_id)
 {
 	gboolean found = false;
 
@@ -131,10 +131,10 @@ void StreamManager::start_broadcasting(Channel& channel, int client_id, const St
 			
 		if (frontend_thread.is_available(channel))
 		{
-			g_debug("Selected frontend '%s' (%s) for broadcast",
+			g_debug("Selected frontend '%s' (%s) for RTSP",
 				frontend_thread.frontend.get_name().c_str(),
 				frontend_thread.frontend.get_path().c_str());
-			frontend_thread.start_broadcasting(channel, client_id, interface, address, port);
+			frontend_thread.start_rtsp(channel, client_id);
 			found = true;
 			break;
 		}
@@ -146,22 +146,22 @@ void StreamManager::start_broadcasting(Channel& channel, int client_id, const St
 	}
 }
 
-void StreamManager::stop_broadcasting(int client_id)
+void StreamManager::stop_rtsp(int client_id)
 {
 	for (FrontendThreadList::iterator i = frontend_threads.begin(); i != frontend_threads.end(); i++)
 	{
-		(*i)->stop_broadcasting(client_id);
+		(*i)->stop_rtsp(client_id);
 	}
 }
 
-gboolean StreamManager::is_broadcasting(const String& device)
+gboolean StreamManager::is_rtsp(const String& device)
 {
 	for (FrontendThreadList::iterator i = frontend_threads.begin(); i != frontend_threads.end(); i++)
 	{
 		FrontendThread* frontend_thread = *i;
 		if (frontend_thread->frontend.get_path() == device)
 		{
-			return frontend_thread->is_broadcasting();
+			return frontend_thread->is_rtsp();
 		}
 	}
 

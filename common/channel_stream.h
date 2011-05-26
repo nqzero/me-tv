@@ -31,7 +31,7 @@
 typedef enum
 {
 	CHANNEL_STREAM_TYPE_NONE = -1,
-	CHANNEL_STREAM_TYPE_BROADCAST = 0,
+	CHANNEL_STREAM_TYPE_RTSP = 0,
 	CHANNEL_STREAM_TYPE_RECORDING = 1,
 	CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING = 2
 } ChannelStreamType;
@@ -67,22 +67,17 @@ public:
 	virtual String get_description() = 0;
 };
 
-class BroadcastingChannelStream : public ChannelStream
+class RtspChannelStream : public ChannelStream
 {
 private:
-	int					sd;
-	struct sockaddr_in	recvaddr;
-	String				address;
-	String				interface;
-	int					port;
-	int					client_id;
+	int	client_id;
 
 	void write_data(guchar* buffer, gsize length);
 	String get_description();
 			
 public:
-	BroadcastingChannelStream(Channel& channel, int client_id, const String& interface, const String& address, int port);
-	~BroadcastingChannelStream();
+	RtspChannelStream(Channel& channel, int client_id);
+	~RtspChannelStream();
 
 	int get_client_id() const { return client_id; }
 };

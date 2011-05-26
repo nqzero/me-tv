@@ -232,21 +232,21 @@ void FrontendThread::stop_epg_thread()
 	}
 }
 
-void FrontendThread::start_broadcasting(Channel& channel, int client_id, const String& interface, const String& address, int port)
+void FrontendThread::start_rtsp(Channel& channel, int client_id)
 {
-	g_debug("FrontendThread::start_broadcast(%s)", channel.name.c_str());
+	g_debug("FrontendThread::start_rtsp(%s)", channel.name.c_str());
 	stop();
 	
 	g_debug("Creating new stream output");
 
-	BroadcastingChannelStream* channel_stream = new BroadcastingChannelStream(channel, client_id, interface, address, port);
+	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id);
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 
 	start();
 }
 
-void FrontendThread::stop_broadcasting(int client_id)
+void FrontendThread::stop_rtsp(int client_id)
 {
 	stop();
 	gboolean found = false;
@@ -256,13 +256,13 @@ void FrontendThread::stop_broadcasting(int client_id)
 	while (iterator != streams.end() && !found)
 	{
 		ChannelStream* channel_stream = *iterator;
-		if (channel_stream->type == CHANNEL_STREAM_TYPE_BROADCAST)
+		if (channel_stream->type == CHANNEL_STREAM_TYPE_RTSP)
 		{
-			if (((BroadcastingChannelStream*)channel_stream)->get_client_id() == client_id)
+			if (((RtspChannelStream*)channel_stream)->get_client_id() == client_id)
 			{
 				delete channel_stream;
 				iterator = streams.erase(iterator);
-				g_debug("Stopped broadcast stream");
+				g_debug("Stopped RTSP stream");
 				found = true;
 			}
 		}
@@ -448,12 +448,12 @@ gboolean FrontendThread::is_available(const Channel& channel)
 	return true;
 }
 
-gboolean FrontendThread::is_broadcasting()
+gboolean FrontendThread::is_rtsp()
 {
 	for (ChannelStreamList::iterator i = streams.begin(); i != streams.end(); i++)
 	{
 		ChannelStream* channel_stream = *i;
-		if (channel_stream->type == CHANNEL_STREAM_TYPE_BROADCAST)
+		if (channel_stream->type == CHANNEL_STREAM_TYPE_RTSP)
 		{
 			return true;
 		}

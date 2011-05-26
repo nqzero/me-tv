@@ -64,12 +64,9 @@ public:
 		Channel& get_by_id(int channel_id);
 	};
 
-	class BroadcastingStream
+	class RtspStream
 	{
 	public:
-		String protocol;
-		String address;
-		int port;
 	};
 
 	class ScheduledRecording
@@ -140,7 +137,7 @@ private:
 	String host;
 	int port;
 	int client_id;
-	int broadcasting_channel_id;
+	int rtsp_channel_id;
 	xmlpp::DomParser parser;
 	xmlpp::Node* send_request(const String& command);
 	xmlpp::Node* send_request(const String& command, ParameterList& parameters);
@@ -153,7 +150,7 @@ public:
 	void set_server(const String& server_host, int server_port);
 
 	int get_client_id() const { return client_id; }
-	int get_broadcasting_channel_id() const { return broadcasting_channel_id; }
+	int get_rtsp_channel_id() const { return rtsp_channel_id; }
 
 	void terminate();
 
@@ -168,8 +165,8 @@ public:
 	void add_scheduled_recording(int epg_event_id);
 	void remove_scheduled_recording(int scheduled_recording_id);
 
-	BroadcastingStream start_broadcasting(int channel_id, gboolean multicast);
-	void stop_broadcasting();
+	RtspStream start_rtsp(int channel_id);
+	void stop_rtsp();
 
 	EpgEventList search_epg(const String& text, gboolean include_description);
 	FrontendList get_status();
