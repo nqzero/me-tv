@@ -47,8 +47,28 @@ String RtspChannelStream::get_description()
 RtspChannelStream::RtspChannelStream(Channel& c, int id, GstRTSPServer* rtsp_server) :
 	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id)
 {
+	fifo_path = String::compose("/tmp/me-tv-%1", id);
+
+	if (Glib::file_test(fifo_path, Glib::FILE_TEST_EXISTS))
+	{
+		::unlink(fifo_path.c_str());
+	}
+
+	if (mkfifo(fifo_path.c_str(), S_IRUSR|S_IWUSR) != 0)
+	{
+		throw SystemException(String::compose("Failed to create FIFO '%1'", fifo_path));
+	}
+
+        // Fudge the channel open.  Allows Glib::IO_FLAG_NONBLOCK
+	int fd = open(fifo_path.c_str(), O_RDONLY | O_NONBLOCK);
+	if (fd == -1)
+	{
+		throw SystemException(Glib::ustring::compose(_("Failed to open FIFO for reading '%1'"), fifo_path));
+        }
+
 	GstRTSPMediaFactory* factory = gst_rtsp_media_factory_new();
-	gst_rtsp_media_factory_set_launch(factory, "( videotestsrc ! x264enc ! rtph264pay pt=96 name=pay0 )");
+	String launch = String::compose("( filesrc location=\"%1\" )", fifo_path);
+	gst_rtsp_media_factory_set_launch(factory, launch.c_str());
 	String url = String::compose("/%1", id);
 	GstRTSPMediaMapping* mapping = gst_rtsp_server_get_media_mapping(rtsp_server);
 	gst_rtsp_media_mapping_add_factory(mapping, url.c_str(), factory);
@@ -108,6 +128,16 @@ Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint
 
 void RtspChannelStream::write_data(guchar* buffer, gsize length)
 {
+	if (!output_channel)
+	{
+		output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
+		output_channel->set_encoding("");
+		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
+		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
+	}
+
+	gsize bytes_written = 0;
+	output_channel->write((const gchar*)buffer, length, bytes_written);
 }
 
 void RecordingChannelStream::write_data(guchar* buffer, gsize length)

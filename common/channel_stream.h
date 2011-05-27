@@ -71,6 +71,8 @@ class RtspChannelStream : public ChannelStream
 {
 private:
 	int	client_id;
+	String				fifo_path;
+	Glib::RefPtr<Glib::IOChannel>	output_channel;
 
 	void write_data(guchar* buffer, gsize length);
 	String get_description();
