@@ -232,14 +232,14 @@ void FrontendThread::stop_epg_thread()
 	}
 }
 
-void FrontendThread::start_rtsp(Channel& channel, int client_id)
+void FrontendThread::start_rtsp(Channel& channel, int client_id, GstRTSPServer* rtsp_server)
 {
 	g_debug("FrontendThread::start_rtsp(%s)", channel.name.c_str());
 	stop();
 	
 	g_debug("Creating new stream output");
 
-	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id);
+	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id, rtsp_server);
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 

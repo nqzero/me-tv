@@ -26,6 +26,13 @@
 
 using namespace xmlpp;
 
+RequestHandler::RequestHandler()
+{
+	rtsp_server = gst_rtsp_server_new();
+	gst_rtsp_server_attach(rtsp_server, NULL);
+	g_debug("Created RTSP server");
+}
+
 Node* RequestHandler::get_attribute(const Node* node, const String& xpath)
 {
 	NodeSet result = node->find(xpath);
@@ -277,7 +284,7 @@ gboolean RequestHandler::handle_connection(int sockfd)
 			Channel channel = ChannelManager::get(channel_id);
 
 			RequestHandler::Client& client = clients.get(client_id);
-			stream_manager.start_rtsp(channel, client_id);
+			stream_manager.start_rtsp(channel, client_id, rtsp_server);
 		}
 		else if (command == "stop_rtsp")
 		{

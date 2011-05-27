@@ -27,7 +27,7 @@ class Server
 {
 private:
 	NetworkServerThread server_thread;
-	
+
 public:
 	Server(int port);
 	

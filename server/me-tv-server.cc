@@ -27,7 +27,6 @@
 #include "../common/server.h"
 #include <glibmm.h>
 #include <giomm.h>
-#include <gst/rtsp-server/rtsp-server.h>
 
 #define ME_TV_SUMMARY _("Me TV is a digital television viewer for GTK")
 #define ME_TV_DESCRIPTION _("Me TV was developed for the modern digital lounge room with a PC for a media centre that is capable "\
@@ -39,6 +38,7 @@ int main(int argc, char** argv)
 	{
 		Glib::init();
 		Gio::init();
+		gst_init(&argc, &argv);
 		
 		signal_error.connect(sigc::ptr_fun(&on_error));
 
@@ -88,23 +88,12 @@ int main(int argc, char** argv)
 		option_context.set_summary(ME_TV_SUMMARY);
 		option_context.set_description(ME_TV_DESCRIPTION);
 		option_context.set_main_group(option_group);
+		option_context.parse(argc, argv);
 
 		Server server(server_port);
 		server.start();
 
-		gst_init(&argc, &argv);
-
-//		GMainLoop* loop = g_main_loop_new(NULL, FALSE);
-		GstRTSPServer* rtsp_server = gst_rtsp_server_new();
-		gst_rtsp_server_attach(rtsp_server, NULL);
-		GstRTSPMediaFactory* factory = gst_rtsp_media_factory_new();
-		gst_rtsp_media_factory_set_launch(factory, "( videotestsrc ! x264enc ! rtph264pay pt=96 name=pay0 )");
-		GstRTSPMediaMapping* mapping = gst_rtsp_server_get_media_mapping(rtsp_server);
-		gst_rtsp_media_mapping_add_factory(mapping, "/test", factory);
-		g_object_unref(mapping);
-
 		g_message("Me TV Server entering main loop");
-		//g_main_loop_run(loop);
 		Glib::RefPtr<Glib::MainLoop> main_loop = Glib::MainLoop::create();
 		main_loop->run();
 

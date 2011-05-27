@@ -44,9 +44,17 @@ String RtspChannelStream::get_description()
 	return channel.get_text();
 }
 
-RtspChannelStream::RtspChannelStream(Channel& c, int id) :
+RtspChannelStream::RtspChannelStream(Channel& c, int id, GstRTSPServer* rtsp_server) :
 	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id)
 {
+	GstRTSPMediaFactory* factory = gst_rtsp_media_factory_new();
+	gst_rtsp_media_factory_set_launch(factory, "( videotestsrc ! x264enc ! rtph264pay pt=96 name=pay0 )");
+	String url = String::compose("/%1", id);
+	GstRTSPMediaMapping* mapping = gst_rtsp_server_get_media_mapping(rtsp_server);
+	gst_rtsp_media_mapping_add_factory(mapping, url.c_str(), factory);
+	g_object_unref(mapping);
+	g_debug("Added RTSP mapping %s", url.c_str());
+
 	g_debug("Added new RTSP channel stream '%s' -> 'rtsp://server:8554/%d'", channel.name.c_str(), id);
 }
 

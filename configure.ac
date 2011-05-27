@@ -142,12 +142,14 @@ PKG_CHECK_MODULES(ME_TV_COMMON, [
 	gthread-2.0 >= $GTHREAD_REQUIRED
 	libxml++-2.6
 	libgdamm-4.0 >= $LIBGDAMM_REQUIRED
+	gst-rtsp-server-0.10
 ])
 PKG_CHECK_MODULES(ME_TV_CONSOLE, [
 	giomm-2.4 >= $GIOMM_REQUIRED
 	libxml++-2.6
 	libgda-sqlite-4.0
 	libgdamm-4.0
+	gst-rtsp-server-0.10
 ])
 PKG_CHECK_MODULES(ME_TV_CLIENT, [
 	gtkmm-2.4 >= $GTKMM_REQUIRED
@@ -160,7 +162,7 @@ PKG_CHECK_MODULES(ME_TV_CLIENT, [
 	dbus-1 dbus-glib-1
 	libxine >= $LIBXINE_REQUIRED
 	libvlc
-	gstreamer-0.10 gstreamer-interfaces-0.10
+	gstreamer-0.10 gstreamer-interfaces-0.10 gst-rtsp-server-0.10
 	libgda-sqlite-4.0
 	libgdamm-4.0
 ])
