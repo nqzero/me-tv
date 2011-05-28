@@ -466,13 +466,6 @@ int main (int argc, char *argv[])
 				quit_on_close = true;
 			}
 
-			client.register_client();
-
-			if (!client.is_registered())
-			{
-				throw Exception("Failed to communicate with Me TV server");
-			}
-
 			MainWindow* main_window = MainWindow::create(builder);
 
 			if (!minimised_mode)
