@@ -56,17 +56,12 @@ me_tv_client_CXXFLAGS = \
 	-I/usr/include/UsageEnvironment
 
 me_tv_client_LDFLAGS = \
-	-L. \
 	-Wl,--as-needed `getconf \
 	LFS_LDFLAGS` `getconf \
 	LFS64_LDFLAGS`
 
 me_tv_client_LDADD = \
 	../common/libmetvcommon.a \
-	/usr/lib/libliveMedia.a \
-	/usr/lib/libgroupsock.a \
-	/home/danielle/Projects/live555/liblivemedia-2010.11.17/UsageEnvironment/libUsageEnvironment.a \
-	/home/danielle/Projects/live555/liblivemedia-2010.11.17/BasicUsageEnvironment/libBasicUsageEnvironment.a \
 	$(ME_TV_CLIENT_LIBS) \
 	-lX11
 
