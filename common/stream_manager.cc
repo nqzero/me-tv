@@ -116,7 +116,7 @@ void StreamManager::stop()
 	}
 }
 
-void StreamManager::start_rtsp(Channel& channel, int client_id, GstRTSPServer* rtsp_server)
+void StreamManager::start_rtsp(Channel& channel, int client_id)
 {
 	gboolean found = false;
 
@@ -134,7 +134,7 @@ void StreamManager::start_rtsp(Channel& channel, int client_id, GstRTSPServer* r
 			g_debug("Selected frontend '%s' (%s) for RTSP",
 				frontend_thread.frontend.get_name().c_str(),
 				frontend_thread.frontend.get_path().c_str());
-			frontend_thread.start_rtsp(channel, client_id, rtsp_server);
+			frontend_thread.start_rtsp(channel, client_id);
 			found = true;
 			break;
 		}

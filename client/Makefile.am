@@ -49,6 +49,12 @@ me_tv_client_SOURCES = \
 	scheduled_recordings_dialog.cc \
 	scheduled_recordings_dialog.h
 
+me_tv_client_CXXFLAGS = \
+	-I/usr/include/liveMedia \
+	-I/usr/include/groupsock \
+	-I/usr/include/BasicUsageEnvironment \
+	-I/usr/include/UsageEnvironment
+
 me_tv_client_LDFLAGS = \
 	-Wl,--as-needed `getconf \
 	LFS_LDFLAGS` `getconf \
@@ -57,7 +63,11 @@ me_tv_client_LDFLAGS = \
 me_tv_client_LDADD = \
 	../common/libmetvcommon.a \
 	$(ME_TV_CLIENT_LIBS) \
-	-lX11
+	-lX11 \
+	/usr/lib/libliveMedia.a \
+	/usr/lib/libgroupsock.a \
+	/usr/lib/libUsageEnvironment.a \
+	/usr/lib/libBasicUsageEnvironment.a
 
 EXTRA_DIST = $(glade_DATA)
 

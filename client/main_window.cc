@@ -753,7 +753,7 @@ void MainWindow::on_start_rtsp(int channel_id)
 		host = "localhost";
 	}
 
-	String mrl = String::compose("rtsp://%1:8554/%2", host, client.get_client_id());
+	String mrl = String::compose("rtsp://%1:8554/me-tv-%2.ts", host, client.get_client_id());
 
 	play(mrl);
 	

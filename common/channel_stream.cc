@@ -44,38 +44,14 @@ String RtspChannelStream::get_description()
 	return channel.get_text();
 }
 
-RtspChannelStream::RtspChannelStream(Channel& c, int id, GstRTSPServer* rtsp_server) :
-	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id)
+RtspChannelStream::RtspChannelStream(Channel& c, int id, const String& path) :
+	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id), fifo_path(path)
 {
-	fifo_path = String::compose("/tmp/me-tv-%1", id);
-
-	if (Glib::file_test(fifo_path, Glib::FILE_TEST_EXISTS))
-	{
-		::unlink(fifo_path.c_str());
-	}
-
-	if (mkfifo(fifo_path.c_str(), S_IRUSR|S_IWUSR) != 0)
-	{
-		throw SystemException(String::compose("Failed to create FIFO '%1'", fifo_path));
-	}
-
-        // Fudge the channel open.  Allows Glib::IO_FLAG_NONBLOCK
-	int fd = open(fifo_path.c_str(), O_RDONLY | O_NONBLOCK);
-	if (fd == -1)
-	{
-		throw SystemException(Glib::ustring::compose(_("Failed to open FIFO for reading '%1'"), fifo_path));
-        }
-
-	GstRTSPMediaFactory* factory = gst_rtsp_media_factory_new();
-	String launch = String::compose("( filesrc location=\"%1\" )", fifo_path);
-	gst_rtsp_media_factory_set_launch(factory, launch.c_str());
-	String url = String::compose("/%1", id);
-	GstRTSPMediaMapping* mapping = gst_rtsp_server_get_media_mapping(rtsp_server);
-	gst_rtsp_media_mapping_add_factory(mapping, url.c_str(), factory);
-	g_object_unref(mapping);
-	g_debug("Added RTSP mapping %s", url.c_str());
-
-	g_debug("Added new RTSP channel stream '%s' -> 'rtsp://server:8554/%d'", channel.name.c_str(), id);
+	output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
+	output_channel->set_encoding("");
+	output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
+	output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
+	g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
 }
 
 RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
@@ -108,7 +84,7 @@ void ChannelStream::clear_demuxers()
 
 Dvb::Demuxer& ChannelStream::add_pes_demuxer(const String& demux_path,
 	guint pid, dmx_pes_type_t pid_type, const gchar* type_text)
-{	
+{
 	Lock lock(mutex, "ChannelStream::add_pes_demuxer()");
 	Dvb::Demuxer* demuxer = new Dvb::Demuxer(demux_path);
 	demuxers.push_back(demuxer);
@@ -118,7 +94,7 @@ Dvb::Demuxer& ChannelStream::add_pes_demuxer(const String& demux_path,
 }
 
 Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint pid, guint id)
-{	
+{
 	Lock lock(mutex, "FrontendThread::add_section_demuxer()");
 	Dvb::Demuxer* demuxer = new Dvb::Demuxer(demux_path);
 	demuxers.push_back(demuxer);
@@ -128,14 +104,6 @@ Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint
 
 void RtspChannelStream::write_data(guchar* buffer, gsize length)
 {
-	if (!output_channel)
-	{
-		output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
-		output_channel->set_encoding("");
-		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
-		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
-	}
-
 	gsize bytes_written = 0;
 	output_channel->write((const gchar*)buffer, length, bytes_written);
 }
@@ -149,13 +117,16 @@ void RecordingChannelStream::write_data(guchar* buffer, gsize length)
 		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
 		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
 	}
-
+	
 	gsize bytes_written = 0;
 	output_channel->write((const gchar*)buffer, length, bytes_written);
 }
 
 RtspChannelStream::~RtspChannelStream()
 {
+	g_debug("Destroying RTSP channel");
+	output_channel->close();
+	g_debug("RTSP channel destroyed");
 }
 
 RecordingChannelStream::~RecordingChannelStream()
@@ -188,7 +159,8 @@ void ChannelStream::write(guchar* buffer, gsize length)
 	}
 	catch(...)
 	{
-		g_debug("Failed to write");
+		handle_error();
+//		g_debug("Failed to write");
 	}
 }
 

@@ -22,6 +22,7 @@
 #include "dvb_si.h"
 #include "exception.h"
 #include "common.h"
+#include <sys/stat.h>
 
 FrontendThread::FrontendThread(Dvb::Frontend& f, const String& encoding, guint t, gboolean i)
 	: Thread("Frontend"), frontend(f), text_encoding(encoding), timeout(t), ignore_teletext(i)
@@ -57,7 +58,7 @@ void FrontendThread::run()
 
 	String input_path = frontend.get_adapter().get_dvr_path();
 
-	g_debug("Opening frontend device '%s' for reading ...", input_path.c_str());
+	g_debug("Opening dvr device '%s' for reading ...", input_path.c_str());
 	if ( (dvr_fd = ::open(input_path.c_str(), O_RDONLY | O_NONBLOCK) ) < 0 )
 	{
 		throw SystemException("Failed to open dvr device");
@@ -232,14 +233,34 @@ void FrontendThread::stop_epg_thread()
 	}
 }
 
-void FrontendThread::start_rtsp(Channel& channel, int client_id, GstRTSPServer* rtsp_server)
+void FrontendThread::start_rtsp(Channel& channel, int client_id)
 {
 	g_debug("FrontendThread::start_rtsp(%s)", channel.name.c_str());
 	stop();
 	
 	g_debug("Creating new stream output");
 
-	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id, rtsp_server);
+	String fifo_path = String::compose("/tmp/me-tv-%1.ts", client_id);
+
+	if (Glib::file_test(fifo_path, Glib::FILE_TEST_EXISTS))
+	{
+		unlink(fifo_path.c_str());
+	}
+
+	if (mkfifo(fifo_path.c_str(), S_IRUSR|S_IWUSR) != 0)
+	{
+		throw Exception(Glib::ustring::compose(_("Failed to create FIFO '%1'"), fifo_path));
+	}
+
+	// Fudge the channel open.  Allows Glib::IO_FLAG_NONBLOCK
+	int fd = open(fifo_path.c_str(), O_RDONLY | O_NONBLOCK);
+	if (fd == -1)
+	{
+		throw SystemException(Glib::ustring::compose(_("Failed to open FIFO for reading '%1'"), fifo_path));
+	}
+
+	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id, fifo_path);
+	close(fd);
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 

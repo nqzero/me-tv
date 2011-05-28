@@ -36,7 +36,7 @@ public:
 			
 	FrontendThreadList& get_frontend_threads() { return frontend_threads; };
 
-	void start_rtsp(Channel& channel, int client_id, GstRTSPServer* rtsp_server);
+	void start_rtsp(Channel& channel, int client_id);
 	void stop_rtsp(int client_id);
 	gboolean is_rtsp(const String& device);
 

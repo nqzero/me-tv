@@ -1,7 +1,6 @@
 noinst_LIBRARIES = libmetvcommon.a
 
-AM_CPPFLAGS = \
-        $(ME_TV_COMMON_CFLAGS)
+AM_CPPFLAGS = 
 
 libmetvcommon_a_SOURCES = \
 	atsc_text.cc \
@@ -65,4 +64,12 @@ libmetvcommon_a_SOURCES = \
 	network_server_thread.cc \
 	network_server_thread.h \
 	server.cc \
-	server.h
+	server.h \
+	rtsp_server_thread.cc \
+	rtsp_server_thread.h
+
+libmetvcommon_a_CXXFLAGS = \
+	-I/usr/include/liveMedia \
+	-I/usr/include/groupsock \
+	-I/usr/include/BasicUsageEnvironment \
+	-I/usr/include/UsageEnvironment

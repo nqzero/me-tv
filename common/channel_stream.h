@@ -26,7 +26,6 @@
 #include "channel.h"
 #include "me-tv-types.h"
 #include <giomm.h>
-#include <gst/rtsp-server/rtsp-server.h>
 
 typedef enum
 {
@@ -70,15 +69,15 @@ public:
 class RtspChannelStream : public ChannelStream
 {
 private:
-	int	client_id;
-	String				fifo_path;
+	int								client_id;
+	String							fifo_path;
 	Glib::RefPtr<Glib::IOChannel>	output_channel;
 
 	void write_data(guchar* buffer, gsize length);
 	String get_description();
 			
 public:
-	RtspChannelStream(Channel& channel, int client_id, GstRTSPServer* rtsp_server);
+	RtspChannelStream(Channel& channel, int client_id, const String& fifo_path);
 	~RtspChannelStream();
 
 	int get_client_id() const { return client_id; }

@@ -500,7 +500,7 @@ int main (int argc, char *argv[])
 			}
 		}
 	}
-	catch (const Glib::Exception& exception)
+	catch (...)
 	{
 		handle_error();
 	}

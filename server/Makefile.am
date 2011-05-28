@@ -14,6 +14,12 @@ me_tv_server_SOURCES = \
 	../config.h \
 	me-tv-server.cc 
 
+me_tv_server_CXXFLAGS = \
+	-I/usr/include/liveMedia \
+	-I/usr/include/groupsock \
+	-I/usr/include/BasicUsageEnvironment \
+	-I/usr/include/UsageEnvironment
+
 me_tv_server_LDFLAGS = 
 
 me_tv_server_LDADD = \

@@ -22,11 +22,13 @@
 #define __SERVER_H__
 
 #include "network_server_thread.h"
+#include "rtsp_server_thread.h"
 
 class Server
 {
 private:
 	NetworkServerThread server_thread;
+	RTSPServerThread rtsp_server_thread;
 
 public:
 	Server(int port);

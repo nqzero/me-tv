@@ -24,7 +24,6 @@
 #include <giomm/socketconnection.h>
 #include <libxml++/libxml++.h>
 #include "data.h"
-#include <gst/rtsp-server/rtsp-server.h>
 
 class RequestHandler
 {
@@ -62,7 +61,6 @@ private:
 		const String& error_message, const String& body);
 	gboolean handle_connection(int sockfd);
 
-	GstRTSPServer* rtsp_server;
 public:
 	RequestHandler();
 

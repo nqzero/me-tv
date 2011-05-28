@@ -38,7 +38,6 @@ int main(int argc, char** argv)
 	{
 		Glib::init();
 		Gio::init();
-		gst_init(&argc, &argv);
 		
 		signal_error.connect(sigc::ptr_fun(&on_error));
 

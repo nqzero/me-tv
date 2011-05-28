@@ -56,7 +56,7 @@ public:
 	void stop_recording(const Channel& channel);
 
 	gboolean is_rtsp();
-	void start_rtsp(Channel& channel, int client_id, GstRTSPServer* server);
+	void start_rtsp(Channel& channel, int client_id);
 	void stop_rtsp(int client_id);
 
 	void start();

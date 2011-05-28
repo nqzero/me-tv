@@ -23,7 +23,7 @@
 #include "exception.h"
 #include <glib/gprintf.h>
 
-#define BLOCK_SIZE	1024
+#define BLOCK_SIZE		1024
 #define MAX_BUFFER_SIZE	1000 * BLOCK_SIZE
 
 DeviceManager				device_manager;
@@ -182,12 +182,12 @@ void handle_error()
 	}
 	catch (const Exception& exception)
 	{
-		g_debug("Signal error '%s'", exception.what().c_str());
+		g_message("Signal error '%s'", exception.what().c_str());
 		signal_error(exception.what());
 	}
 	catch (const Glib::Error& exception)
 	{
-		g_debug("Signal error '%s'", exception.what().c_str());
+		g_message("Signal error '%s'", exception.what().c_str());
 		signal_error(exception.what());
 	}
 	catch (...)
