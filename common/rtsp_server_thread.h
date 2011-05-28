@@ -25,7 +25,7 @@
 //#include <RTSPServer.hh>
 #include "thread.h"
 
-class RTSPServerThread : Thread
+class RTSPServerThread : public Thread
 {
 private:
 	//TaskScheduler*		scheduler;

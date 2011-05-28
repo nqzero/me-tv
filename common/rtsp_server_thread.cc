@@ -48,8 +48,17 @@ ServerMediaSession* RTSPServerThread::lookupServerMediaSession(char const* strea
 void RTSPServerThread::run()
 {
 	std::vector<String> args;
-	args.push_back("live555MediaServer");
+
+	g_debug("Killing existing live555MediaServer processes");
+	args.push_back("/usr/bin/killall");
+	args.push_back("/usr/bin/live555MediaServer");
+	Glib::spawn_sync(".", args);
+
+	args.clear();
+
 	g_debug("Spawning live555MediaServer");
+	args.push_back("/usr/bin/live555MediaServer");
 	Glib::spawn_sync("/tmp", args);
+
 //	env->taskScheduler().doEventLoop();
 }

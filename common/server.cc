@@ -40,7 +40,7 @@ void Server::start()
 	device_manager.initialise(devices);
 	stream_manager.initialise(text_encoding, read_timeout, ignore_teletext);
 	stream_manager.start();
-
+	rtsp_server_thread.start();
 	server_thread.start();
 }
 

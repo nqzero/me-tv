@@ -47,11 +47,6 @@ String RtspChannelStream::get_description()
 RtspChannelStream::RtspChannelStream(Channel& c, int id, const String& path) :
 	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id), fifo_path(path)
 {
-	output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
-	output_channel->set_encoding("");
-	output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
-	output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
-	g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
 }
 
 RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
@@ -104,6 +99,15 @@ Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint
 
 void RtspChannelStream::write_data(guchar* buffer, gsize length)
 {
+	if (!output_channel)
+	{
+		output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
+		output_channel->set_encoding("");
+		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
+		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
+		g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
+	}
+
 	gsize bytes_written = 0;
 	output_channel->write((const gchar*)buffer, length, bytes_written);
 }

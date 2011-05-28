@@ -260,7 +260,7 @@ void FrontendThread::start_rtsp(Channel& channel, int client_id)
 	}
 
 	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id, fifo_path);
-	close(fd);
+	::close(fd);
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 
