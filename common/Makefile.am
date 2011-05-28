@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libmetvcommon.a
 
-AM_CPPFLAGS = 
+AM_CPPFLAGS = \
+	$(ME_TV_COMMON_CFLAGS)
 
 libmetvcommon_a_SOURCES = \
 	atsc_text.cc \
@@ -73,3 +74,4 @@ libmetvcommon_a_CXXFLAGS = \
 	-I/usr/include/groupsock \
 	-I/usr/include/BasicUsageEnvironment \
 	-I/usr/include/UsageEnvironment
+
