@@ -44,7 +44,7 @@ private:
 		int get_free_port();
 		bool is_port_used(int port);
 	public:
-		ClientList() : client_id((int)time(NULL)) {}
+		ClientList() : client_id(0) {}
 
 		Client& get(int client_id);
 		int add();
