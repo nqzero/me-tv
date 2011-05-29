@@ -252,20 +252,11 @@ void FrontendThread::start_rtsp(Channel& channel, int client_id)
 		throw Exception(Glib::ustring::compose(_("Failed to create FIFO '%1'"), fifo_path));
 	}
 
-	// Fudge the channel open.  Allows Glib::IO_FLAG_NONBLOCK
-	int fd = open(fifo_path.c_str(), O_RDONLY | O_NONBLOCK);
-	if (fd == -1)
-	{
-		throw SystemException(Glib::ustring::compose(_("Failed to open FIFO for reading '%1'"), fifo_path));
-	}
-
 	RtspChannelStream* channel_stream = new RtspChannelStream(channel, client_id, fifo_path);
 	setup_dvb(*channel_stream);
 	streams.push_back(channel_stream);
 
 	start();
-
-	::close(fd);
 }
 
 void FrontendThread::stop_rtsp(int client_id)

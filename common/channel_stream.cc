@@ -47,6 +47,7 @@ String RtspChannelStream::get_description()
 RtspChannelStream::RtspChannelStream(Channel& c, int id, const String& path) :
 	ChannelStream(CHANNEL_STREAM_TYPE_RTSP, c), client_id(id), fifo_path(path)
 {
+	g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
 }
 
 RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
@@ -97,17 +98,26 @@ Dvb::Demuxer& ChannelStream::add_section_demuxer(const String& demux_path, guint
 	return *demuxer;
 }
 
+time_t last_log = 0;
+
 void RtspChannelStream::write_data(guchar* buffer, gsize length)
 {
 	if (!output_channel)
 	{
+		g_debug("Opening FIFO");
 		output_channel = Glib::IOChannel::create_from_file(fifo_path, "w");
 		output_channel->set_encoding("");
 		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
 		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
-		g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
+		g_debug("FIFO Opened");
 	}
 
+	time_t now = time(NULL);
+	if (now != last_log)
+	{
+		g_debug("Writing data");
+		last_log = now;
+	}
 	gsize bytes_written = 0;
 	output_channel->write((const gchar*)buffer, length, bytes_written);
 }
@@ -116,10 +126,12 @@ void RecordingChannelStream::write_data(guchar* buffer, gsize length)
 {
 	if (!output_channel)
 	{
+		g_debug("Opening recording file");
 		output_channel = Glib::IOChannel::create_from_file(mrl, "w");
 		output_channel->set_encoding("");
 		output_channel->set_flags(output_channel->get_flags() & Glib::IO_FLAG_NONBLOCK);
 		output_channel->set_buffer_size(TS_PACKET_SIZE * PACKET_BUFFER_SIZE);
+		g_debug("Recording file opened");
 	}
 	
 	gsize bytes_written = 0;
@@ -129,7 +141,10 @@ void RecordingChannelStream::write_data(guchar* buffer, gsize length)
 RtspChannelStream::~RtspChannelStream()
 {
 	g_debug("Destroying RTSP channel");
-	output_channel->close();
+	if (output_channel)
+	{
+		output_channel->close();
+	}
 	g_debug("RTSP channel destroyed");
 }
 
@@ -163,8 +178,7 @@ void ChannelStream::write(guchar* buffer, gsize length)
 	}
 	catch(...)
 	{
-		handle_error();
-//		g_debug("Failed to write");
+		g_debug("Failed to write");
 	}
 }
 
