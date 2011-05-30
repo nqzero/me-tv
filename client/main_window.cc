@@ -754,7 +754,6 @@ void MainWindow::on_start_rtsp(int channel_id)
 	}
 
 	String mrl = String::compose("rtsp://%1:8554/me-tv-%2.ts", host, client.get_client_id());
-	//String mrl = String::compose("rtsp://%1:8554/test.ts", host);
 
 	play(mrl);
 	
@@ -768,6 +767,8 @@ void MainWindow::on_stop_rtsp()
 {
 	if (engine != NULL)
 	{
+		client.stop_rtsp();
+
 		g_debug("Stopping engine");
 		engine->stop();
 		delete engine;
