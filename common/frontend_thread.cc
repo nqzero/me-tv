@@ -336,17 +336,12 @@ String make_recording_filename(Channel& channel, const String& description)
 
 bool is_recording_stream(ChannelStream* channel_stream)
 {
-	return channel_stream->type == CHANNEL_STREAM_TYPE_RECORDING || channel_stream->type == CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING;
+	return channel_stream->type == CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING;
 }
 
-void FrontendThread::start_recording(Channel& channel,
-                                     const String& description,
-                                     gboolean scheduled)
+void FrontendThread::start_recording(Channel& channel, const String& description)
 {
 	stop();	
-
-	ChannelStreamType requested_type = scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING;
-	ChannelStreamType current_type = CHANNEL_STREAM_TYPE_NONE;
 
 	ChannelStreamList::iterator iterator = streams.begin();
 	
@@ -355,54 +350,32 @@ void FrontendThread::start_recording(Channel& channel,
 		ChannelStream* channel_stream = *iterator;
 		if (channel_stream->channel == channel && is_recording_stream(channel_stream))
 		{
-			current_type = channel_stream->type;
-			break;
+			g_debug("Channel '%s' is currently being recorded", channel.name.c_str());
+			return;
 		}
 		iterator++;
 	}
 
-	// No change required
-	if (current_type == requested_type)
+	g_debug("Channel '%s' is not currently being recorded", channel.name.c_str());
+
+	if (channel.transponder != frontend.get_frontend_parameters())
 	{
-		g_debug("Channel '%s' is currently being recorded (%s)",
-		    channel.name.c_str(), scheduled ? "scheduled" : "manual");
-	}
-	else
-	{
-		// If SR requested but recording is currently manual then stop the current manual one
-		if (requested_type == CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING && current_type == CHANNEL_STREAM_TYPE_RECORDING)
+		g_debug("Need to change transponders to record this channel");
+
+		// Need to kill all current streams
+		ChannelStreamList::iterator iterator = streams.begin();
+		while (iterator != streams.end())
 		{
-			stop_recording(channel);
-		}
-
-		if (requested_type == CHANNEL_STREAM_TYPE_RECORDING && current_type == CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING)
-		{
-			g_debug("Ignoring request to manually record a channel that is currently scheduled for recording");
-		}
-		else
-		{
-			g_debug("Channel '%s' is not currently being recorded", channel.name.c_str());
-
-			if (channel.transponder != frontend.get_frontend_parameters())
-			{
-				g_debug("Need to change transponders to record this channel");
-
-				// Need to kill all current streams
-				ChannelStreamList::iterator iterator = streams.begin();
-				while (iterator != streams.end())
-				{
-					ChannelStream* channel_stream = *iterator;
-					delete channel_stream;
-					iterator = streams.erase(iterator);
-				}
-			}
-
-			RecordingChannelStream* channel_stream = new RecordingChannelStream(
-				channel, scheduled, make_recording_filename(channel, description), description);
-			setup_dvb(*channel_stream);
-			streams.push_back(channel_stream);
+			ChannelStream* channel_stream = *iterator;
+			delete channel_stream;
+			iterator = streams.erase(iterator);
 		}
 	}
+
+	RecordingChannelStream* channel_stream = new RecordingChannelStream(
+		channel, make_recording_filename(channel, description), description);
+	setup_dvb(*channel_stream);
+	streams.push_back(channel_stream);
 	
 	g_debug("New recording channel created (%s)", frontend.get_path().c_str());
 

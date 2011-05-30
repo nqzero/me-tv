@@ -31,8 +31,7 @@ typedef enum
 {
 	CHANNEL_STREAM_TYPE_NONE = -1,
 	CHANNEL_STREAM_TYPE_RTSP = 0,
-	CHANNEL_STREAM_TYPE_RECORDING = 1,
-	CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING = 2
+	CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING = 1
 } ChannelStreamType;
 
 class ChannelStream
@@ -94,7 +93,7 @@ private:
 	String get_description();
 
 public:
-	RecordingChannelStream(Channel& channel, gboolean scheduled, const String& mrl, const String& description);
+	RecordingChannelStream(Channel& channel, const String& mrl, const String& description);
 	~RecordingChannelStream();
 };
 

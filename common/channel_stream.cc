@@ -50,8 +50,8 @@ RtspChannelStream::RtspChannelStream(Channel& c, int id, const String& path) :
 	g_debug("Added new RTSP channel stream '%s' -> '%s'", channel.name.c_str(), fifo_path.c_str());
 }
 
-RecordingChannelStream::RecordingChannelStream(Channel& c, gboolean scheduled, const String& m, const String& d) :
-	ChannelStream(scheduled ? CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING : CHANNEL_STREAM_TYPE_RECORDING, c)
+RecordingChannelStream::RecordingChannelStream(Channel& c, const String& m, const String& d) :
+	ChannelStream(CHANNEL_STREAM_TYPE_SCHEDULED_RECORDING, c)
 {
 	mrl = m;
 	description = d;

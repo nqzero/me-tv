@@ -52,7 +52,7 @@ public:
 	gboolean is_available(const Channel& channel);
 
 	gboolean is_recording(const Channel& channel);
-	void start_recording(Channel& channel, const String& description, gboolean scheduled);
+	void start_recording(Channel& channel, const String& description);
 	void stop_recording(const Channel& channel);
 
 	gboolean is_rtsp();

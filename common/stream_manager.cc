@@ -67,7 +67,7 @@ void StreamManager::start_recording(const ScheduledRecording& scheduled_recordin
 		{
 			if (!frontend_thread.is_recording(channel))
 			{
-				frontend_thread.start_recording(channel, scheduled_recording.description, true);
+				frontend_thread.start_recording(channel, scheduled_recording.description);
 			}
 			else
 			{
