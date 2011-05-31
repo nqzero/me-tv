@@ -87,7 +87,6 @@ gboolean NetworkServerThread::on_timeout()
 			request_handler.clients.check();
 			ScheduledRecordingManager::check_auto_recordings();
 			ScheduledRecordingManager::check_scheduled_recordings();
-			signal_update();
 		}
 	}
 	catch(...)

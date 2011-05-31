@@ -355,11 +355,10 @@ void MainWindow::on_timeout()
 		guint seconds = now % 60;
 		if (last_seconds > seconds)
 		{
-			last_seconds = seconds;
-			
 			get_epg();
 			signal_update();
 		}
+		last_seconds = seconds;
 	}
 	catch(...)
 	{
