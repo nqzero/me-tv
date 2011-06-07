@@ -195,17 +195,17 @@ public:
 		}
 	}
 	
-	gint get(guint event_id, guint channel_id)
+	gint get(EpgEvent & e2)
 	{
 		for (std::list<EpgEntry>::iterator i = events.begin(); i != events.end(); i++)
 		{
 			EpgEntry& epg_entry = *i;
-			if (epg_entry.epg_event.event_id == event_id && epg_entry.epg_event.channel_id == channel_id)
-			{
-				return epg_entry.epg_event.version_number;
+                        EpgEvent& e1 = epg_entry.epg_event;
+			if (e1.event_id == e2.event_id  && e1.channel_id == e2.channel_id) {
+                            if ((guint) e1.start_time == (guint)e2.start_time)
+				return e1.version_number;
 			}
 		}
-		
 		return -1;
 	}
 
@@ -367,22 +367,19 @@ void EpgThread::run()
 						{
 							Dvb::SI::Event& event	= section.events[k];
 
-							guint version_number = epg_cache.get(event.event_id, channel_id);
-							if (version_number == -1)
-							{
-								EpgEvent epg_event;
+                                                        EpgEvent epg_event;
+                                                        epg_event.channel_id		= channel_id;
+                                                        epg_event.event_id		= event.event_id;
+                                                        epg_event.start_time		= event.start_time;
+                                                        if (is_atsc)
+                                                                epg_event.start_time -= system_time_table.GPS_UTC_offset;
+							guint version_number = epg_cache.get(epg_event);
+                                                        if (version_number == -1) {
 
 								epg_event.id				= 0;
-								epg_event.channel_id		= channel_id;
 								epg_event.version_number	= event.version_number;
-								epg_event.event_id			= event.event_id;
-								epg_event.start_time		= event.start_time;
 								epg_event.duration			= event.duration;
 						
-								if (is_atsc)
-								{
-									epg_event.start_time -= system_time_table.GPS_UTC_offset;
-								}
 						
 								if (epg_event.get_end_time() >= time(NULL))
 								{

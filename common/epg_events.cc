@@ -52,16 +52,19 @@ void EpgEvents::add_epg_event(Glib::RefPtr<Batch>& batch, const EpgEvent& epg_ev
 	    replace_text(title, "'", "''");
 	    replace_text(subtitle, "'", "''");
 		replace_text(description, "'", "''");
-		
-		Glib::RefPtr<Statement> statement = parser->parse_string(
+
+                String cmd = 
 			String::compose(
 				"insert into epg_event_text ("
 			    "epg_event_id, language, title, subtitle, description"
 				") values ("
-				"(select id from epg_event where channel_id = %1 and event_id = %2), '%3', '%4', '%5', '%6');",
+				"(select id from epg_event where channel_id = %1 and event_id = %2 and start_time = %7),"
+                                " '%3', '%4', '%5', '%6');",
 			    epg_event.channel_id, epg_event.event_id,
-			    epg_event_text.language, title, subtitle, description
-			));
+			    epg_event_text.language, title, subtitle, description,
+                            epg_event.start_time
+			);
+		Glib::RefPtr<Statement> statement = parser->parse_string( cmd );
 		batch->add_statement(statement);
 	}			
 }
@@ -125,7 +128,7 @@ EpgEventList EpgEvents::get_all(time_t start_time, time_t end_time)
 			start_time, end_time);
 	}
 	statement += " order by start_time";
-	
+        
 	Glib::RefPtr<DataModel> model = data_connection->statement_execute_select(statement);
 	Glib::RefPtr<DataModelIter> iter = model->create_iter();
 	

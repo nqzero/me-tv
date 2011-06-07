@@ -56,7 +56,7 @@ Glib::RefPtr<Connection> Data::create_connection()
             "guard_interval INTEGER, hierarchy_information INTEGER, symbol_rate INTEGER, fec_inner INTEGER, modulation INTEGER,"
 		    "polarisation INTEGER, record_extra_before INTEGER, record_extra_after INTEGER, UNIQUE (name));");
 		connection->statement_execute("CREATE TABLE configuration (id INTEGER PRIMARY KEY AUTOINCREMENT, name CHAR(200) NOT NULL, value CHAR(1024) NOT NULL, UNIQUE (name));");
-		connection->statement_execute("CREATE TABLE epg_event (id INTEGER PRIMARY KEY AUTOINCREMENT, channel_id INTEGER NOT NULL, version_number INTEGER NOT NULL, event_id INTEGER NOT NULL, start_time INTEGER NOT NULL, duration INTEGER NOT NULL, UNIQUE (channel_id, event_id));");
+		connection->statement_execute("CREATE TABLE epg_event (id INTEGER PRIMARY KEY AUTOINCREMENT, channel_id INTEGER NOT NULL, version_number INTEGER NOT NULL, event_id INTEGER NOT NULL, start_time INTEGER NOT NULL, duration INTEGER NOT NULL, UNIQUE (channel_id, event_id, start_time));");
 		connection->statement_execute("CREATE TABLE epg_event_text (id INTEGER PRIMARY KEY AUTOINCREMENT, epg_event_id INTEGER NOT NULL, language CHAR(3) NOT NULL, title CHAR(200) NOT NULL, subtitle CHAR(200) NOT NULL, description CHAR(1000) NOT NULL, UNIQUE (epg_event_id, language));");
 		connection->statement_execute("CREATE TABLE scheduled_recording (id INTEGER PRIMARY KEY AUTOINCREMENT, description CHAR(200) NOT NULL, recurring_type INTEGER NOT NULL, action_after INTEGER NOT NULL, channel_id INTEGER NOT NULL, start_time INTEGER NOT NULL, duration INTEGER NOT NULL, device CHAR(200) NOT NULL);");
 		connection->statement_execute("CREATE TABLE version (value INTEGER NOT NULL);");
